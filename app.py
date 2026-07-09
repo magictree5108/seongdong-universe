@@ -8,6 +8,7 @@
 파일(json/npy)이므로, 이 앱은 디딤 백엔드나 원본 데이터 없이 완전히
 독립적으로 동작한다.
 """
+import html
 import json
 from pathlib import Path
 
@@ -248,6 +249,13 @@ def build_figure(nodes, edges, visible_mask: np.ndarray,
 
 # ── 상황판 카드 ──────────────────────────────────────────────────
 
+def _safe_url(url: str | None) -> str | None:
+    """href 주입 방지 — http(s) 스킴만 허용한다 (javascript: 등 차단)."""
+    if url and url.startswith(("http://", "https://")):
+        return url
+    return None
+
+
 def render_board(nodes, ranked: list[tuple[int, float]]):
     if not ranked:
         st.markdown(
@@ -259,15 +267,21 @@ def render_board(nodes, ranked: list[tuple[int, float]]):
     for rank, (i, score) in enumerate(ranked, start=1):
         n = nodes[i]
         style = CATEGORY_STYLE[n["category"]]
-        link = (f'<a href="{n["url"]}" target="_blank" rel="noreferrer">원문 보기 ↗</a>'
-                if n["url"] else '<span style="color:#4a5578;">원문 링크 없음</span>')
+        # 크롤링 원문(제목·발췌)을 그대로 HTML에 삽입하므로 반드시 이스케이프한다
+        title = html.escape(n["title"])
+        source_label = html.escape(n["source_label"])
+        date = html.escape(n["date"]) if n["date"] else "날짜 미상"
+        snippet = html.escape(n["snippet"])
+        safe_url = _safe_url(n["url"])
+        link = (f'<a href="{html.escape(safe_url)}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>'
+                if safe_url else '<span style="color:#4a5578;">원문 링크 없음</span>')
         st.markdown(f"""
         <div class="board-card">
           <span class="rank">#{rank:02d}</span>
           <span class="cat-pill" style="color:{style['color']};">{style['short']}</span>
-          <div class="title">{n['title']}</div>
-          <div class="meta">{n['source_label']} · {n['date'] or '날짜 미상'}</div>
-          <div class="snippet">{n['snippet']}</div>
+          <div class="title">{title}</div>
+          <div class="meta">{source_label} · {date}</div>
+          <div class="snippet">{snippet}</div>
           <div class="simbar-track"><div class="simbar-fill" style="width:{max(score,0)*100:.0f}%;"></div></div>
           <div style="margin-top:6px;">{link}</div>
         </div>
