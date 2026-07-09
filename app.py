@@ -33,6 +33,7 @@ CATEGORY_STYLE = {
     "notice":     {"label": "성동구 고시공고",       "color": "#4fd8ff", "short": "공고"},
     "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff", "short": "조례"},
     "org":        {"label": "조직·업무분장",         "color": "#2dd4bf", "short": "부서"},
+    "news":       {"label": "보도·소식·감사결과",    "color": "#f472b6", "short": "소식"},
 }
 ENTITY_STYLE = {
     "dept":  {"label": "담당 부서",        "color": "#6ee7a8", "short": "부서"},
@@ -251,6 +252,59 @@ def _api_key() -> str | None:
         return None
 
 
+def _law_oc() -> str | None:
+    """법제처 국가법령정보센터 Open API 인증키 (없으면 국가법령 섹션 생략)."""
+    key = os.environ.get("LAW_OC")
+    if key:
+        return key
+    try:
+        return st.secrets["LAW_OC"]
+    except Exception:  # noqa: BLE001
+        return None
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def national_laws(query: str, expanded: tuple[str, ...]) -> list[dict]:
+    """법제처 실시간 국가 법령 검색 — 자치법규만으로 부족한 상위법 질의 보완.
+
+    질의·확장 키워드로 법령명을 검색해 상위 4건을 반환한다. 실패는 조용히
+    빈 결과 (검색 자체를 막으면 안 된다)."""
+    oc = _law_oc()
+    if not oc:
+        return []
+    import httpx
+    results, seen = [], set()
+    for term in [query] + list(expanded)[:3]:
+        try:
+            res = httpx.get("https://www.law.go.kr/DRF/lawSearch.do", params={
+                "OC": oc, "target": "law", "type": "JSON",
+                "query": term, "display": 3,
+            }, timeout=6.0, follow_redirects=True)
+            res.raise_for_status()
+            data = res.json()
+        except Exception:  # noqa: BLE001
+            continue
+        items = data.get("LawSearch", {}).get("law", [])
+        if isinstance(items, dict):
+            items = [items]
+        for it in items:
+            law_id = str(it.get("법령ID", ""))
+            if not law_id or law_id in seen:
+                continue
+            seen.add(law_id)
+            link = str(it.get("법령상세링크") or "")
+            results.append({
+                "title": str(it.get("법령명한글", "")),
+                "kind": str(it.get("법령구분명", "")),
+                "dept": str(it.get("소관부처명", "")),
+                "date": str(it.get("시행일자", "")),
+                "url": f"https://www.law.go.kr{link}" if link.startswith("/") else link,
+            })
+        if len(results) >= 4:
+            break
+    return results[:4]
+
+
 @st.cache_data(show_spinner="연관 키워드를 확장하는 중…", ttl=3600)
 def ai_expand(query: str, model: str = DEFAULT_MODEL) -> list[str] | None:
     """Claude가 질의를 연관 행정용어로 확장한다 ('마음건강'→심리상담·정신건강).
@@ -366,23 +420,51 @@ def ai_select(query: str, cand_key: tuple[int, ...],
         return None
 
 
+def _dept_routing(query: str) -> list[int]:
+    """질의에 부서명이 들어 있으면 그 부서의 업무분장 문서·개체를 찾는다.
+
+    '건축과 담당자', '기초복지과 전화번호' 같은 부서 질의는 공고보다
+    조직·업무분장이 정답이므로 결정적 규칙으로 최상단에 고정한다."""
+    nodes, *_rest = load_data()
+    qflat = re.sub(r"\s+", "", query).lower()
+    org_hits, entity_hits = [], []
+    for n in nodes:
+        if n["category"] == "org":
+            name = n["title"].split()[0]           # "기초복지과 조직·업무분장"
+            if len(name) >= 3 and name.lower() in qflat:
+                org_hits.append(n["id"])
+        elif n.get("etype") == "dept":
+            if len(n["title"]) >= 3 and n["title"].lower() in qflat:
+                entity_hits.append(n["id"])
+    return org_hits + entity_hits
+
+
 def run_search(query: str,
                model: str = DEFAULT_MODEL) -> tuple[list[tuple[int, float]], str, list[str]]:
     """(결과 [(노드, 로컬점수)], 모드 ai|fallback|local|none, 확장 키워드)."""
     expanded = ai_expand(query, model) or []
     cands, n_gated = local_candidates(query, tuple(expanded))
+    routed = _dept_routing(query)
+
+    def _with_routing(results: list[tuple[int, float]]) -> list[tuple[int, float]]:
+        have = {i for i, _s in results}
+        head = [(i, 1.0) for i in routed if i not in have]
+        return (head + results)[:TOP_K]
+
     if not cands:
-        return [], "none", expanded
+        out = _with_routing([])
+        return out, ("ai" if out else "none"), expanded
     if not _api_key():
         # AI 없이는 어휘 일치 후보만 보여준다 (의미 후보는 잡음 위험)
-        return cands[:n_gated][:TOP_K], ("local" if n_gated else "none"), expanded
+        out = _with_routing(cands[:n_gated])
+        return out, ("local" if out else "none"), expanded
     sel = ai_select(query, tuple(i for i, _s in cands), model)
     if sel is None:
-        return cands[:n_gated][:TOP_K], ("fallback" if n_gated else "none"), expanded
-    if not sel:
-        return [], "none", expanded
+        out = _with_routing(cands[:n_gated])
+        return out, ("fallback" if out else "none"), expanded
     score = dict(cands)
-    return [(i, score[i]) for i in sel][:TOP_K], "ai", expanded
+    out = _with_routing([(i, score[i]) for i in sel])
+    return out, ("ai" if out else "none"), expanded
 
 
 # ── 3D 도형 ──────────────────────────────────────────────────────
@@ -875,6 +957,21 @@ def main():
         else:
             count = f" — {len(ranked)}건" if ranked else ""
             st.markdown(f"#### ▣ 상황판{count}")
+            if query.strip():
+                laws = national_laws(query.strip(), tuple(expanded))
+                if laws:
+                    items = "".join(
+                        f'<div class="stat-line">§ <a href="{html.escape(l["url"])}" '
+                        f'target="_blank" rel="noopener noreferrer" '
+                        f'style="color:#ffd166;">{html.escape(l["title"])}</a>'
+                        f' <span style="color:#7d8bb0;">— {html.escape(l["kind"])}'
+                        f' · {html.escape(l["dept"])} · 시행 {html.escape(l["date"])}'
+                        f'</span></div>' for l in laws)
+                    st.markdown(
+                        f'<div class="board-card" style="border-color:rgba(255,209,102,0.35);">'
+                        f'<div class="meta" style="color:#ffd166;">국가 법령 '
+                        f'(법제처 국가법령정보센터 실시간)</div>{items}</div>',
+                        unsafe_allow_html=True)
             render_board(nodes, ranked, query_active=bool(query.strip()))
         render_case_file(nodes)
 
