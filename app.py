@@ -125,6 +125,16 @@ def inject_css():
 
     html, body, [class*="css"] { font-family: 'JetBrains Mono', monospace; }
 
+    /* 크고 잘 보이는 스크롤바 — 3D 화면이 높아 스크롤 이동이 잦다 */
+    ::-webkit-scrollbar { width: 16px; height: 16px; }
+    ::-webkit-scrollbar-track { background: rgba(8,11,20,0.9); }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(120,150,255,0.45); border-radius: 8px;
+        border: 3px solid rgba(8,11,20,0.9);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(79,216,255,0.75); }
+    * { scrollbar-width: auto; scrollbar-color: rgba(120,150,255,0.55) rgba(8,11,20,0.9); }
+
     .stApp {
         background:
             radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.55) 0, transparent 60%),
@@ -946,9 +956,12 @@ def main():
             st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
         with zc3:
             st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
+        # scrollZoom=False: 차트 위에서도 마우스 휠이 페이지 스크롤로 동작한다
+        # (확대·축소는 ＋/－ 버튼과 드래그 회전으로)
         fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
                           zoom=st.session_state.zoom)
-        st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
+        st.plotly_chart(fig, width="stretch",
+                       config={"displaylogo": False, "scrollZoom": False})
 
     with panel_box:
         if sel_id is not None:
