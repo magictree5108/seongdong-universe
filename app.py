@@ -47,7 +47,11 @@ EDGE_COLOR = {
 HIGHLIGHT_COLOR = "#fff3b0"
 TOP_K = 14
 CANDIDATES_K = 36          # AI 선별에 넘길 로컬 후보 수
-AI_MODEL = os.environ.get("NEO_LLM_MODEL", "claude-haiku-4-5-20251001")
+MODEL_OPTIONS = {          # 사이드바에서 선택 (질의 확장·관련성 선별 공용)
+    "haiku 4.5 — 빠름": "claude-haiku-4-5-20251001",
+    "sonnet 5 — 정밀": "claude-sonnet-5",
+}
+DEFAULT_MODEL = os.environ.get("NEO_LLM_MODEL", "claude-haiku-4-5-20251001")
 
 EXPAND_SYSTEM = (
     "너는 한국 지방자치단체 행정문서(고시공고·자치법규·감사 사례) 검색을 돕는 "
@@ -247,7 +251,7 @@ def _api_key() -> str | None:
 
 
 @st.cache_data(show_spinner="연관 키워드를 확장하는 중…", ttl=3600)
-def ai_expand(query: str) -> list[str] | None:
+def ai_expand(query: str, model: str = DEFAULT_MODEL) -> list[str] | None:
     """Claude가 질의를 연관 행정용어로 확장한다 ('마음건강'→심리상담·정신건강).
 
     문자 n-gram 임베딩은 동의어를 모르므로, 어휘 검색의 회수(recall)를
@@ -264,7 +268,7 @@ def ai_expand(query: str) -> list[str] | None:
     try:
         client = anthropic.Anthropic(api_key=key, timeout=15.0, max_retries=1)
         resp = client.messages.parse(
-            model=AI_MODEL, max_tokens=300, temperature=0, system=EXPAND_SYSTEM,
+            model=model, max_tokens=300, system=EXPAND_SYSTEM,
             messages=[{"role": "user", "content": f"질의: {query}"}],
             output_format=_Kw)
         parsed = resp.parsed_output
@@ -319,7 +323,8 @@ def local_candidates(query: str,
 
 
 @st.cache_data(show_spinner="AI가 관련 자료를 선별하는 중…", ttl=3600)
-def ai_select(query: str, cand_key: tuple[int, ...]) -> list[int] | None:
+def ai_select(query: str, cand_key: tuple[int, ...],
+              model: str = DEFAULT_MODEL) -> list[int] | None:
     """Claude가 후보 중 질의와 실제로 관련된 자료만 관련도순으로 고른다.
 
     반환 id는 후보의 부분집합으로 강제하며, 실패 시 None(호출부가 로컬
@@ -340,7 +345,7 @@ def ai_select(query: str, cand_key: tuple[int, ...]) -> list[int] | None:
     try:
         client = anthropic.Anthropic(api_key=key, timeout=25.0, max_retries=1)
         resp = client.messages.parse(
-            model=AI_MODEL, max_tokens=800, temperature=0, system=AI_SYSTEM,
+            model=model, max_tokens=800, system=AI_SYSTEM,
             messages=[{"role": "user", "content":
                        f"질의: {query}\n\n<candidates>\n"
                        f"{json.dumps(items, ensure_ascii=False)}\n</candidates>"}],
@@ -360,16 +365,17 @@ def ai_select(query: str, cand_key: tuple[int, ...]) -> list[int] | None:
         return None
 
 
-def run_search(query: str) -> tuple[list[tuple[int, float]], str, list[str]]:
+def run_search(query: str,
+               model: str = DEFAULT_MODEL) -> tuple[list[tuple[int, float]], str, list[str]]:
     """(결과 [(노드, 로컬점수)], 모드 ai|fallback|local|none, 확장 키워드)."""
-    expanded = ai_expand(query) or []
+    expanded = ai_expand(query, model) or []
     cands, n_gated = local_candidates(query, tuple(expanded))
     if not cands:
         return [], "none", expanded
     if not _api_key():
         # AI 없이는 어휘 일치 후보만 보여준다 (의미 후보는 잡음 위험)
         return cands[:n_gated][:TOP_K], ("local" if n_gated else "none"), expanded
-    sel = ai_select(query, tuple(i for i, _s in cands))
+    sel = ai_select(query, tuple(i for i, _s in cands), model)
     if sel is None:
         return cands[:n_gated][:TOP_K], ("fallback" if n_gated else "none"), expanded
     if not sel:
@@ -792,6 +798,11 @@ def main():
                             label_visibility="collapsed")
         include_undated = st.checkbox("날짜 미상 포함", value=True)
         st.markdown("---")
+        st.markdown("### 검색 AI")
+        model_choice = st.radio("검색 AI 모델", list(MODEL_OPTIONS),
+                                index=0, label_visibility="collapsed")
+        ai_model = MODEL_OPTIONS[model_choice]
+        st.markdown("---")
         st.markdown(f'<div class="stat-line">데이터 빌드: {meta["built_at"][:16]}</div>',
                    unsafe_allow_html=True)
         st.markdown(
@@ -825,7 +836,7 @@ def main():
     ranked = []
     expanded: list[str] = []
     if query.strip():
-        result, ai_mode, expanded = run_search(query.strip())
+        result, ai_mode, expanded = run_search(query.strip(), ai_model)
         ranked = [(i, s) for i, s in result if visible_mask[i]]
     ex_sp, zc1, zc2, zc3 = st.columns([8.3, 0.55, 0.55, 0.55])
     with ex_sp:
@@ -854,7 +865,7 @@ def main():
                        if visible_mask[i] and n["kind"] == "entity"))
     sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
     q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
-    ai_label = {"ai": f"AI 선별({AI_MODEL.split('-2')[0]})",
+    ai_label = {"ai": f"AI 선별({model_choice.split(' ')[0]})",
                 "fallback": "로컬 유사도(AI 실패)",
                 "local": "로컬 유사도(키 없음)",
                 "none": "일치 없음", "idle": "—"}[ai_mode]
