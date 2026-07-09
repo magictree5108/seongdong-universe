@@ -1,0 +1,17 @@
+{
+  "built_at": "2026-07-09T23:46:28+09:00",
+  "embedder": "hash-ngram-idf-v2 (neo-seongdong 독립 재구현)",
+  "dim": 1024,
+  "total_nodes": 2671,
+  "total_edges": 7100,
+  "categories": {
+    "consulting": 793,
+    "notice": 1234,
+    "ordinance": 644
+  },
+  "didim_index_built_at": {
+    "consulting": "2026-07-09T16:28:34+09:00",
+    "notice": "2026-07-09T16:28:35+09:00",
+    "ordinance": "2026-07-09T16:28:39+09:00"
+  }
+}
