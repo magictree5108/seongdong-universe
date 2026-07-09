@@ -36,6 +36,7 @@ SOURCES = [
     ("사전컨설팅·면책 선례 (감사원·자체감사기구)", "consulting", "audit_cases"),
     ("성동구 고시공고", "notice", "seongdong_notices"),
     ("성동구 자치법규", "ordinance", "seongdong_ordin"),
+    ("성동구 조직·업무분장", "org", "seongdong_org"),
 ]
 
 MAX_CHUNKS_PER_DOC = 2       # 문서당 결합할 청크 수 (임베딩·본문·개체추출용)
@@ -78,6 +79,12 @@ def extract_entities(doc: dict) -> list[tuple[str, str]]:
         name = _clean(m.group(1))
         if name.endswith(("과", "국", "소", "센터", "단")):
             found.add(("dept", name))
+
+    # 조직·업무분장 문서는 그 자체가 부서 문서다 — 제목에서 부서 개체를 잇는다
+    if doc["category"] == "org":
+        m = re.match(r"^(\S+)\s+조직·업무분장", title)
+        if m and m.group(1).endswith(("과", "국", "소", "센터", "단", "담당관", "동", "실")):
+            found.add(("dept", m.group(1)))
 
     for m in _LAW_RE.finditer(f"{title} {text}"):
         name = _clean(m.group(1))
@@ -165,9 +172,14 @@ def build_ontology(docs: list[dict], coords: np.ndarray,
             linked[(etype, name)].append(di)
 
     kept = {k: v for k, v in linked.items() if len(v) >= MIN_ENTITY_LINKS}
-    ranked = sorted(kept.items(), key=lambda kv: -len(kv[1]))[:MAX_ENTITIES]
+    # 부서 개체는 온톨로지의 축이므로 캡과 무관하게 전부 채택하고,
+    # 나머지(법령·동네)는 연결 수 상위로 캡을 채운다
+    dept_items = [kv for kv in kept.items() if kv[0][0] == "dept"]
+    other_items = sorted((kv for kv in kept.items() if kv[0][0] != "dept"),
+                         key=lambda kv: -len(kv[1]))
+    ranked = dept_items + other_items[:max(0, MAX_ENTITIES - len(dept_items))]
     print(f"개체 후보 {len(linked)}종 → 채택 {len(ranked)}종 "
-          f"(연결 {MIN_ENTITY_LINKS}건 이상, 상위 {MAX_ENTITIES}종)")
+          f"(부서 {len(dept_items)} 전부 + 기타 상위, 연결 {MIN_ENTITY_LINKS}건 이상)")
 
     etype_labels = {"dept": "담당 부서", "law": "법령·자치법규 참조", "place": "성동구 동네"}
     entity_nodes: list[dict] = []

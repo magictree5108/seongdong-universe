@@ -32,6 +32,7 @@ CATEGORY_STYLE = {
     "consulting": {"label": "사전컨설팅·면책 선례", "color": "#ff9d45", "short": "선례"},
     "notice":     {"label": "성동구 고시공고",       "color": "#4fd8ff", "short": "공고"},
     "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff", "short": "조례"},
+    "org":        {"label": "조직·업무분장",         "color": "#2dd4bf", "short": "부서"},
 }
 ENTITY_STYLE = {
     "dept":  {"label": "담당 부서",        "color": "#6ee7a8", "short": "부서"},

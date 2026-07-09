@@ -1,24 +1,26 @@
 {
-  "built_at": "2026-07-10T00:50:51+09:00",
+  "built_at": "2026-07-10T01:13:48+09:00",
   "embedder": "hash-ngram-idf-v2 (neo-seongdong 독립 재구현)",
   "dim": 1024,
-  "total_nodes": 2791,
-  "total_docs": 2671,
+  "total_nodes": 2832,
+  "total_docs": 2712,
   "total_entities": 120,
-  "total_edges": 9279,
+  "total_edges": 9527,
   "categories": {
     "consulting": 793,
     "notice": 1234,
-    "ordinance": 644
+    "ordinance": 644,
+    "org": 41
   },
   "entity_types": {
-    "dept": 31,
-    "law": 79,
-    "place": 10
+    "dept": 40,
+    "law": 68,
+    "place": 12
   },
   "didim_index_built_at": {
     "consulting": "2026-07-09T16:28:34+09:00",
-    "notice": "2026-07-09T16:28:35+09:00",
-    "ordinance": "2026-07-09T16:28:39+09:00"
+    "notice": "2026-07-10T01:11:49+09:00",
+    "ordinance": "2026-07-10T01:11:53+09:00",
+    "org": "2026-07-10T01:12:06+09:00"
   }
 }
