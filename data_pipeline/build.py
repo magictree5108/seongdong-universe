@@ -40,6 +40,7 @@ SOURCES = [
 
 MAX_CHUNKS_PER_DOC = 2       # 문서당 결합할 청크 수 (임베딩·본문·개체추출용)
 SNIPPET_LEN = 260            # 화면 표시용 발췌 길이
+GATE_LEN = 800               # 어휘 게이트용 본문 길이 (검색어 실존 확인)
 KNN_K = 4                    # 문서 노드당 최대 이웃 수
 SIM_FLOOR = 0.18             # 이 아래 유사도는 애초에 이웃 후보에서 제외
 MAX_SIM_EDGES = 7000         # 유사도 엣지 총량 상한 (렌더 성능)
@@ -198,6 +199,7 @@ def build_ontology(docs: list[dict], coords: np.ndarray,
             "date": None,
             "year": None,
             "snippet": f"규칙 기반 추출 개체. 문서 {len(doc_idx)}건과 연결.",
+            "gate_text": name.lower(),
             "x": round(float(centroid[0]), 4),
             "y": round(float(centroid[1]), 4),
             "z": round(float(centroid[2]), 4),
@@ -264,6 +266,7 @@ def main() -> None:
             "date": d["date"],
             "year": _year_of(d["date"]),
             "snippet": (d["text"][:SNIPPET_LEN] + "…") if len(d["text"]) > SNIPPET_LEN else d["text"],
+            "gate_text": f'{d["title"]} {d["text"][:GATE_LEN]}'.lower(),
             "x": round(float(coords[i, 0]), 4),
             "y": round(float(coords[i, 1]), 4),
             "z": round(float(coords[i, 2]), 4),
