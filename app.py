@@ -184,20 +184,20 @@ def inject_css():
     .board-card, .obj-card {
         border: 1px solid rgba(120,150,255,0.28);
         background: linear-gradient(180deg, rgba(16,20,36,0.75), rgba(10,13,24,0.75));
-        border-radius: 6px; padding: 10px 12px; margin-bottom: 4px;
+        border-radius: 6px; padding: 14px 18px; margin-bottom: 4px;
         box-shadow: 0 0 10px rgba(60,90,200,0.08);
     }
-    .board-card .rank { color: #4fd8ff; font-weight: 700; font-size: 0.78rem; }
+    .board-card .rank { color: #4fd8ff; font-weight: 700; font-size: 0.85rem; }
     .cat-pill {
-        display: inline-block; font-size: 0.68rem; padding: 1px 7px; border-radius: 10px;
-        margin-left: 6px; border: 1px solid currentColor;
+        display: inline-block; font-size: 0.7rem; padding: 1px 8px; border-radius: 10px;
+        margin-left: 7px; border: 1px solid currentColor;
     }
-    .board-card .title, .obj-card .title { color: #eaf1ff; font-weight: 700; font-size: 0.92rem; margin: 4px 0 2px; }
-    .board-card .meta, .obj-card .meta { color: #8291b8; font-size: 0.72rem; margin-bottom: 5px; }
-    .board-card .snippet, .obj-card .snippet { color: #b9c4e0; font-size: 0.78rem; line-height: 1.45; }
-    .simbar-track { background: rgba(255,255,255,0.08); border-radius: 3px; height: 4px; margin-top: 7px; }
+    .board-card .title, .obj-card .title { color: #eaf1ff; font-weight: 700; font-size: 1.04rem; margin: 6px 0 3px; }
+    .board-card .meta, .obj-card .meta { color: #8291b8; font-size: 0.76rem; margin-bottom: 7px; }
+    .board-card .snippet, .obj-card .snippet { color: #b9c4e0; font-size: 0.85rem; line-height: 1.6; }
+    .simbar-track { background: rgba(255,255,255,0.08); border-radius: 3px; height: 4px; margin-top: 9px; }
     .simbar-fill { background: linear-gradient(90deg, #4fd8ff, #fff3b0); height: 4px; border-radius: 3px; }
-    .board-card a, .obj-card a { color: #4fd8ff; text-decoration: none; font-size: 0.72rem; }
+    .board-card a, .obj-card a { color: #4fd8ff; text-decoration: none; font-size: 0.76rem; }
     .board-card a:hover, .obj-card a:hover { text-decoration: underline; }
 
     .obj-header { color: #4fd8ff; font-size: 0.72rem; letter-spacing: 0.25em; margin: 10px 0 4px; }
@@ -558,7 +558,7 @@ def build_figure(nodes, edges, visible_mask, search_ranked, sel_id, zoom: float 
                    bgcolor="rgba(6,9,18,0.55)", bordercolor="rgba(120,150,255,0.25)",
                    borderwidth=1, x=0.01, y=0.99),
         uirevision=f"focus::{sel_id}::{bool(search_ranked)}::{zoom:.2f}",
-        height=640,
+        height=720,
     )
     return fig
 
@@ -612,14 +612,12 @@ def _card_html(n, rank: int | None = None, score: float | None = None) -> str:
 
 
 def _card_buttons(i: int, key_prefix: str):
-    c1, c2, _sp = st.columns([1.1, 1, 1.8])
-    with c1:
-        st.button("OBJECT 360°", key=f"{key_prefix}_sel_{i}",
-                  on_click=_select_node, args=(i,))
-    with c2:
-        pinned = i in st.session_state.case
-        st.button("PINNED ✓" if pinned else "+ CASE", key=f"{key_prefix}_pin_{i}",
-                  on_click=_pin_node, args=(i,), disabled=pinned)
+    """카드 오른쪽 좁은 열에 세로로 쌓이는 동작 버튼."""
+    st.button("OBJECT 360°", key=f"{key_prefix}_sel_{i}",
+              on_click=_select_node, args=(i,))
+    pinned = i in st.session_state.case
+    st.button("PINNED ✓" if pinned else "+ CASE", key=f"{key_prefix}_pin_{i}",
+              on_click=_pin_node, args=(i,), disabled=pinned)
 
 
 def render_board(nodes, ranked, query_active: bool):
@@ -639,9 +637,12 @@ def render_board(nodes, ranked, query_active: bool):
                 unsafe_allow_html=True)
         return
     for rank, (i, score) in enumerate(ranked, start=1):
-        st.markdown(_card_html(nodes[i], rank=rank, score=score),
-                   unsafe_allow_html=True)
-        _card_buttons(i, "board")
+        c_card, c_btn = st.columns([6.2, 1], gap="small")
+        with c_card:
+            st.markdown(_card_html(nodes[i], rank=rank, score=score),
+                       unsafe_allow_html=True)
+        with c_btn:
+            _card_buttons(i, "board")
 
 
 def _prop_rows(n) -> str:
@@ -664,45 +665,56 @@ def _prop_rows(n) -> str:
 def render_object_360(nodes, sel_id: int):
     n = nodes[sel_id]
     st.button("← 상황판으로", key="close360", on_click=_select_node, args=(None,))
-    st.markdown(_card_html(n), unsafe_allow_html=True)
-    _card_buttons(sel_id, "obj")
-    st.markdown('<div class="obj-header">PROPERTIES</div>', unsafe_allow_html=True)
-    st.markdown(f'<table class="prop-table">{_prop_rows(n)}</table>',
-               unsafe_allow_html=True)
+    c_main, c_side = st.columns([1.6, 1], gap="large")
 
-    sim_nbrs, doc_entities = build_adjacency()
-    if n["kind"] == "doc":
-        ents = doc_entities.get(sel_id, [])
-        if ents:
-            st.markdown('<div class="obj-header">LINKED OBJECTS — 개체</div>',
-                       unsafe_allow_html=True)
-            for e in ents:
-                en = nodes[e]
-                st.button(f'◇ {en["title"]}  [{node_style(en)["short"]} · {en["degree"]}건]',
-                          key=f"piv_ent_{e}", on_click=_select_node, args=(e,))
-        near = sorted(sim_nbrs.get(sel_id, []), key=lambda x: -x[1])[:6]
-        if near:
-            st.markdown('<div class="obj-header">LINKED OBJECTS — 유사 문서</div>',
-                       unsafe_allow_html=True)
-            for j, w in near:
-                jn = nodes[j]
-                title = jn["title"][:30] + ("…" if len(jn["title"]) > 30 else "")
-                st.button(f'○ {title}  [{node_style(jn)["short"]} · {w:.2f}]',
-                          key=f"piv_doc_{j}", on_click=_select_node, args=(j,))
-    else:
-        linked = n["links"]
-        linked_nodes = sorted((nodes[d] for d in linked),
-                              key=lambda x: (x["date"] or ""), reverse=True)
-        st.markdown(
-            f'<div class="obj-header">LINKED OBJECTS — 연결 문서 {len(linked)}건 (최신순)</div>',
-            unsafe_allow_html=True)
-        for jn in linked_nodes[:12]:
-            title = jn["title"][:30] + ("…" if len(jn["title"]) > 30 else "")
-            st.button(f'○ {title}  [{jn["date"] or "날짜 미상"}]',
-                      key=f"piv_link_{jn['id']}", on_click=_select_node, args=(jn["id"],))
-        if len(linked) > 12:
-            st.markdown(f'<div class="stat-line">… 외 {len(linked) - 12}건</div>',
-                       unsafe_allow_html=True)
+    with c_main:
+        c_card, c_btn = st.columns([5.5, 1], gap="small")
+        with c_card:
+            st.markdown(_card_html(n), unsafe_allow_html=True)
+        with c_btn:
+            _card_buttons(sel_id, "obj")
+        st.markdown('<div class="obj-header">PROPERTIES</div>', unsafe_allow_html=True)
+        st.markdown(f'<table class="prop-table">{_prop_rows(n)}</table>',
+                   unsafe_allow_html=True)
+
+    with c_side:
+        sim_nbrs, doc_entities = build_adjacency()
+        if n["kind"] == "doc":
+            ents = doc_entities.get(sel_id, [])
+            if ents:
+                st.markdown('<div class="obj-header">LINKED OBJECTS — 개체</div>',
+                           unsafe_allow_html=True)
+                for e in ents:
+                    en = nodes[e]
+                    st.button(f'◇ {en["title"]}  [{node_style(en)["short"]} · {en["degree"]}건]',
+                              key=f"piv_ent_{e}", on_click=_select_node, args=(e,))
+            near = sorted(sim_nbrs.get(sel_id, []), key=lambda x: -x[1])[:8]
+            if near:
+                st.markdown('<div class="obj-header">LINKED OBJECTS — 유사 문서</div>',
+                           unsafe_allow_html=True)
+                for j, w in near:
+                    jn = nodes[j]
+                    title = jn["title"][:36] + ("…" if len(jn["title"]) > 36 else "")
+                    st.button(f'○ {title}  [{node_style(jn)["short"]} · {w:.2f}]',
+                              key=f"piv_doc_{j}", on_click=_select_node, args=(j,))
+            if not ents and not near:
+                st.markdown('<div class="stat-line">연결된 객체가 없습니다.</div>',
+                           unsafe_allow_html=True)
+        else:
+            linked = n["links"]
+            linked_nodes = sorted((nodes[d] for d in linked),
+                                  key=lambda x: (x["date"] or ""), reverse=True)
+            st.markdown(
+                f'<div class="obj-header">LINKED OBJECTS — 연결 문서 {len(linked)}건 (최신순)</div>',
+                unsafe_allow_html=True)
+            for jn in linked_nodes[:15]:
+                title = jn["title"][:36] + ("…" if len(jn["title"]) > 36 else "")
+                st.button(f'○ {title}  [{jn["date"] or "날짜 미상"}]',
+                          key=f"piv_link_{jn['id']}", on_click=_select_node,
+                          args=(jn["id"],))
+            if len(linked) > 15:
+                st.markdown(f'<div class="stat-line">… 외 {len(linked) - 15}건</div>',
+                           unsafe_allow_html=True)
 
 
 def _case_markdown(nodes, case: list[int]) -> str:
@@ -799,70 +811,71 @@ def main():
 
     visible_mask = np.array([_visible(n) for n in nodes])
 
-    col_viz, col_panel = st.columns([2.5, 1], gap="medium")
-
     def _zoom_by(factor: float):
         st.session_state.zoom = min(4.0, max(0.4, st.session_state.zoom * factor))
 
     def _zoom_reset():
         st.session_state.zoom = 1.0
 
-    with col_viz:
-        query = st.text_input(
-            "검색", placeholder="QUERY ▸ 사업명·키워드 입력 후 Enter — 예: 재개발 · 민간위탁 · 심리상담",
-            label_visibility="collapsed")
-        ai_mode = "idle"
-        ranked = []
-        expanded: list[str] = []
-        if query.strip():
-            result, ai_mode, expanded = run_search(query.strip())
-            ranked = [(i, s) for i, s in result if visible_mask[i]]
+    # ── 상단: 검색 + 전폭 3D 연결망 ──────────────────────────────
+    query = st.text_input(
+        "검색", placeholder="QUERY ▸ 사업명·키워드 입력 후 Enter — 예: 재개발 · 민간위탁 · 심리상담",
+        label_visibility="collapsed")
+    ai_mode = "idle"
+    ranked = []
+    expanded: list[str] = []
+    if query.strip():
+        result, ai_mode, expanded = run_search(query.strip())
+        ranked = [(i, s) for i, s in result if visible_mask[i]]
+    ex_sp, zc1, zc2, zc3 = st.columns([8.3, 0.55, 0.55, 0.55])
+    with ex_sp:
         if expanded:
             st.markdown(
                 f'<div class="stat-line" style="color:#5c6890;">키워드 확장: '
                 f'{html.escape(" · ".join(expanded))}</div>', unsafe_allow_html=True)
-        sel_id = st.session_state.sel
-        if sel_id is not None and not visible_mask[sel_id]:
-            sel_id = None   # 필터로 가려진 선택은 해제된 것으로 취급
+    with zc1:
+        st.button("－", key="zoom_out", on_click=_zoom_by, args=(1 / 1.35,))
+    with zc2:
+        st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
+    with zc3:
+        st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
 
-        zc_sp, zc1, zc2, zc3 = st.columns([5.4, 0.55, 0.55, 0.55])
-        with zc1:
-            st.button("－", key="zoom_out", on_click=_zoom_by, args=(1 / 1.35,))
-        with zc2:
-            st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
-        with zc3:
-            st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
+    sel_id = st.session_state.sel
+    if sel_id is not None and not visible_mask[sel_id]:
+        sel_id = None   # 필터로 가려진 선택은 해제된 것으로 취급
 
-        fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
-                          zoom=st.session_state.zoom)
-        st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
+    fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
+                      zoom=st.session_state.zoom)
+    st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
 
-        vis_docs = int(sum(1 for i, n in enumerate(nodes)
-                           if visible_mask[i] and n["kind"] == "doc"))
-        vis_ents = int(sum(1 for i, n in enumerate(nodes)
-                           if visible_mask[i] and n["kind"] == "entity"))
-        sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
-        q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
-        ai_label = {"ai": f"AI 선별({AI_MODEL.split('-2')[0]})",
-                    "fallback": "로컬 유사도(AI 실패)",
-                    "local": "로컬 유사도(키 없음)",
-                    "none": "일치 없음", "idle": "—"}[ai_mode]
-        st.markdown(
-            f'<div class="status-bar">SYS <b>▮ ONLINE</b> · 문서 {vis_docs:,}/{meta["total_docs"]:,}'
-            f' · 개체 {vis_ents}/{meta["total_entities"]} · 기간 {y_range[0]}–{y_range[1]}'
-            f' · ZOOM {st.session_state.zoom:.1f}×'
-            f' · QUERY "{q_text}" · 선별 {ai_label} · SELECT {sel_title}'
-            f' · CASE {len(st.session_state.case)}건</div>',
-            unsafe_allow_html=True)
+    vis_docs = int(sum(1 for i, n in enumerate(nodes)
+                       if visible_mask[i] and n["kind"] == "doc"))
+    vis_ents = int(sum(1 for i, n in enumerate(nodes)
+                       if visible_mask[i] and n["kind"] == "entity"))
+    sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
+    q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
+    ai_label = {"ai": f"AI 선별({AI_MODEL.split('-2')[0]})",
+                "fallback": "로컬 유사도(AI 실패)",
+                "local": "로컬 유사도(키 없음)",
+                "none": "일치 없음", "idle": "—"}[ai_mode]
+    st.markdown(
+        f'<div class="status-bar">SYS <b>▮ ONLINE</b> · 문서 {vis_docs:,}/{meta["total_docs"]:,}'
+        f' · 개체 {vis_ents}/{meta["total_entities"]} · 기간 {y_range[0]}–{y_range[1]}'
+        f' · ZOOM {st.session_state.zoom:.1f}×'
+        f' · QUERY "{q_text}" · 선별 {ai_label} · SELECT {sel_title}'
+        f' · CASE {len(st.session_state.case)}건</div>',
+        unsafe_allow_html=True)
 
-    with col_panel:
-        if sel_id is not None:
-            st.markdown("#### ▣ OBJECT 360")
-            render_object_360(nodes, sel_id)
-        else:
-            st.markdown("#### ▣ 상황판")
-            render_board(nodes, ranked, query_active=bool(query.strip()))
-        render_case_file(nodes)
+    # ── 하단: 전폭 패널 (상황판 / OBJECT 360 / 케이스 파일) ──────
+    st.markdown("<br>", unsafe_allow_html=True)
+    if sel_id is not None:
+        st.markdown("#### ▣ OBJECT 360")
+        render_object_360(nodes, sel_id)
+    else:
+        count = f" — {len(ranked)}건" if ranked else ""
+        st.markdown(f"#### ▣ 상황판{count}")
+        render_board(nodes, ranked, query_active=bool(query.strip()))
+    render_case_file(nodes)
 
 
 if __name__ == "__main__":
