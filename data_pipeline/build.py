@@ -37,6 +37,7 @@ SOURCES = [
     ("성동구 고시공고", "notice", "seongdong_notices"),
     ("성동구 자치법규", "ordinance", "seongdong_ordin"),
     ("성동구 조직·업무분장", "org", "seongdong_org"),
+    ("성동구 보도·소식·감사결과", "news", "seongdong_boards"),
 ]
 
 MAX_CHUNKS_PER_DOC = 2       # 문서당 결합할 청크 수 (임베딩·본문·개체추출용)

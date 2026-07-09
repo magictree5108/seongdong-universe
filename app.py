@@ -262,6 +262,19 @@ def _api_key() -> str | None:
         return None
 
 
+def _parse_deterministic(client, **kwargs):
+    """가능하면 temperature=0으로 호출해 검색 결과를 결정적으로 만든다.
+
+    Claude 5 계열은 temperature 파라미터를 거부(400)하므로, 그 경우
+    temperature 없이 재호출한다."""
+    try:
+        return client.messages.parse(temperature=0, **kwargs)
+    except Exception as exc:  # noqa: BLE001
+        if "temperature" in str(exc):
+            return client.messages.parse(**kwargs)
+        raise
+
+
 def _law_oc() -> str | None:
     """법제처 국가법령정보센터 Open API 인증키 (없으면 국가법령 섹션 생략)."""
     key = os.environ.get("LAW_OC")
@@ -332,8 +345,8 @@ def ai_expand(query: str, model: str = DEFAULT_MODEL) -> list[str] | None:
 
     try:
         client = anthropic.Anthropic(api_key=key, timeout=15.0, max_retries=1)
-        resp = client.messages.parse(
-            model=model, max_tokens=300, system=EXPAND_SYSTEM,
+        resp = _parse_deterministic(
+            client, model=model, max_tokens=300, system=EXPAND_SYSTEM,
             messages=[{"role": "user", "content": f"질의: {query}"}],
             output_format=_Kw)
         parsed = resp.parsed_output
@@ -379,7 +392,20 @@ def local_candidates(query: str,
             if matched:
                 scored.append((matched, i, float(sims[i])))
     scored.sort(key=lambda t: (-t[0], -t[2]))
-    gated = [(i, s) for _m2, i, s in scored[:CANDIDATES_K]]
+    # 카테고리 쿼터 — 키워드가 풍부한 대량 코퍼스(보도·소식, 공고)가 후보
+    # 풀을 독식해 조례·선례를 밀어내지 않게 한다
+    cat_cap = {"news": 10, "notice": 12}
+    cat_counts: dict[str, int] = {}
+    gated: list[tuple[int, float]] = []
+    for _m2, i, s in scored:
+        cat = nodes[i]["category"]
+        cap = cat_cap.get(cat)
+        if cap is not None and cat_counts.get(cat, 0) >= cap:
+            continue
+        cat_counts[cat] = cat_counts.get(cat, 0) + 1
+        gated.append((i, s))
+        if len(gated) >= CANDIDATES_K:
+            break
     n_gated = len(gated)
     if not gated:   # 어휘 일치가 전혀 없으면 의미 후보라도 AI에 넘긴다
         order = np.argsort(-sims)[:CANDIDATES_K]
@@ -409,8 +435,8 @@ def ai_select(query: str, cand_key: tuple[int, ...],
               "snippet": nodes[i]["snippet"][:200]} for i in cand_key]
     try:
         client = anthropic.Anthropic(api_key=key, timeout=25.0, max_retries=1)
-        resp = client.messages.parse(
-            model=model, max_tokens=800, system=AI_SYSTEM,
+        resp = _parse_deterministic(
+            client, model=model, max_tokens=800, system=AI_SYSTEM,
             messages=[{"role": "user", "content":
                        f"질의: {query}\n\n<candidates>\n"
                        f"{json.dumps(items, ensure_ascii=False)}\n</candidates>"}],
@@ -430,23 +456,36 @@ def ai_select(query: str, cand_key: tuple[int, ...],
         return None
 
 
+# 비탐욕({2,}?) — 탐욕이면 '환경과대기관리팀소'처럼 한 덩어리로 삼켜버린다
+_DEPT_TOKEN_RE = re.compile(r"[가-힣0-9]{2,}?(?:과|국|단|센터|담당관)")
+
+
 def _dept_routing(query: str) -> list[int]:
     """질의에 부서명이 들어 있으면 그 부서의 업무분장 문서·개체를 찾는다.
 
     '건축과 담당자', '기초복지과 전화번호' 같은 부서 질의는 공고보다
-    조직·업무분장이 정답이므로 결정적 규칙으로 최상단에 고정한다."""
+    조직·업무분장이 정답이므로 결정적 규칙으로 최상단에 고정한다.
+    부분 명칭도 잇는다 — '환경과'(질의)는 '맑은환경과'(실제 부서)로."""
     nodes, *_rest = load_data()
     qflat = re.sub(r"\s+", "", query).lower()
+    dept_tokens = set(_DEPT_TOKEN_RE.findall(qflat))
+
+    def _matches(name: str) -> bool:
+        name = name.lower()
+        if len(name) >= 3 and name in qflat:
+            return True
+        return any(len(t) >= 3 and t in name for t in dept_tokens)
+
     org_hits, entity_hits = [], []
     for n in nodes:
         if n["category"] == "org":
-            name = n["title"].split()[0]           # "기초복지과 조직·업무분장"
-            if len(name) >= 3 and name.lower() in qflat:
+            if _matches(n["title"].split()[0]):    # "기초복지과 조직·업무분장"
                 org_hits.append(n["id"])
         elif n.get("etype") == "dept":
-            if len(n["title"]) >= 3 and n["title"].lower() in qflat:
+            if _matches(n["title"]):
                 entity_hits.append(n["id"])
-    return org_hits + entity_hits
+    # 부분 일치가 여러 부서에 걸리면(예: '복지과') 상위 3개까지만 고정한다
+    return org_hits[:3] + entity_hits[:3]
 
 
 def run_search(query: str,

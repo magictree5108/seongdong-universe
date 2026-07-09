@@ -54,7 +54,8 @@ JUDGE_SYSTEM = (
     "목록(제목·유형)이 주어진다.\n"
     "이 시스템의 데이터 보유 범위: 성동구 고시공고(약 1,300건), 성동구 자치법규 "
     "전체(644건), 감사원·자체감사기구 사전컨설팅/적극행정면책 사례(약 800건), "
-    "구 부서별 조직·업무분장(41개 부서).\n"
+    "구 부서별 조직·업무분장(41개 부서), 보도자료·새소식·감사결과(약 2,600건), "
+    "국가 법령 검색(법제처 실시간 — 법령명 단위, 조문 본문은 링크로 확인).\n"
     "판정:\n"
     "- score 2(유용): 결과 상위가 질의 의도에 실질적으로 도움이 된다\n"
     "- score 1(부분적): 관련은 있으나 핵심을 비켜가거나 절반만 도움\n"
@@ -101,6 +102,13 @@ def run_one(q: str) -> dict:
     nodes, *_rest = app.load_data()
     tops = [{"title": nodes[i]["title"][:80], "category": nodes[i]["category"],
              "kind": nodes[i]["kind"]} for i, _s in results[:5]]
+    # 실제 UI가 함께 보여주는 국가 법령(법제처 실시간) 블록도 심사 대상에 포함
+    try:
+        for law in app.national_laws(q, tuple(expanded)):
+            tops.append({"title": f'{law["title"]} ({law["kind"]}, 시행 {law["date"]})',
+                         "category": "국가법령(법제처 실시간)", "kind": "law"})
+    except Exception:  # noqa: BLE001
+        pass
     return {"query": q, "mode": mode, "expanded": expanded,
             "results": tops, "n": len(results),
             "elapsed": round(time.time() - t0, 1)}
@@ -112,7 +120,7 @@ def judge_one(rec: dict) -> dict:
     content = f"질의: {rec['query']}\n\n검색 결과:\n{listing}"
     try:
         resp = _client().messages.parse(
-            model=JUDGE_MODEL, max_tokens=300, system=JUDGE_SYSTEM,
+            model=JUDGE_MODEL, max_tokens=300, temperature=0, system=JUDGE_SYSTEM,
             messages=[{"role": "user", "content": content}],
             output_format=_Verdict)
         v = resp.parsed_output
