@@ -829,65 +829,73 @@ def main():
     def _zoom_reset():
         st.session_state.zoom = 1.0
 
-    # ── 상단: 검색 + 전폭 3D 연결망 ──────────────────────────────
-    query = st.text_input(
-        "검색", placeholder="QUERY ▸ 사업명·키워드 입력 후 Enter — 예: 재개발 · 민간위탁 · 심리상담",
-        label_visibility="collapsed")
-    ai_mode = "idle"
-    ranked = []
-    expanded: list[str] = []
-    if query.strip():
-        result, ai_mode, expanded = run_search(query.strip(), ai_model)
-        ranked = [(i, s) for i, s in result if visible_mask[i]]
-    ex_sp, zc1, zc2, zc3 = st.columns([8.3, 0.55, 0.55, 0.55])
-    with ex_sp:
+    # 시각 순서: 3D 연결망 → 검색창 → 결과 패널 → 상태바.
+    # 검색어 값은 차트 하이라이트에 먼저 필요하므로 컨테이너로 자리를
+    # 잡아두고 실행 순서와 분리한다.
+    chart_box = st.container()
+    search_box = st.container()
+    panel_box = st.container()
+    status_box = st.container()
+
+    with search_box:
+        query = st.text_input(
+            "검색", placeholder="QUERY ▸ 사업명·키워드 입력 후 Enter — 예: 재개발 · 민간위탁 · 심리상담",
+            label_visibility="collapsed")
+        ai_mode = "idle"
+        ranked = []
+        expanded: list[str] = []
+        if query.strip():
+            result, ai_mode, expanded = run_search(query.strip(), ai_model)
+            ranked = [(i, s) for i, s in result if visible_mask[i]]
         if expanded:
             st.markdown(
                 f'<div class="stat-line" style="color:#5c6890;">키워드 확장: '
                 f'{html.escape(" · ".join(expanded))}</div>', unsafe_allow_html=True)
-    with zc1:
-        st.button("－", key="zoom_out", on_click=_zoom_by, args=(1 / 1.35,))
-    with zc2:
-        st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
-    with zc3:
-        st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
 
     sel_id = st.session_state.sel
     if sel_id is not None and not visible_mask[sel_id]:
         sel_id = None   # 필터로 가려진 선택은 해제된 것으로 취급
 
-    fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
-                      zoom=st.session_state.zoom)
-    st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
+    with chart_box:
+        zc_sp, zc1, zc2, zc3 = st.columns([8.3, 0.55, 0.55, 0.55])
+        with zc1:
+            st.button("－", key="zoom_out", on_click=_zoom_by, args=(1 / 1.35,))
+        with zc2:
+            st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
+        with zc3:
+            st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
+        fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
+                          zoom=st.session_state.zoom)
+        st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
 
-    vis_docs = int(sum(1 for i, n in enumerate(nodes)
-                       if visible_mask[i] and n["kind"] == "doc"))
-    vis_ents = int(sum(1 for i, n in enumerate(nodes)
-                       if visible_mask[i] and n["kind"] == "entity"))
-    sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
-    q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
-    ai_label = {"ai": f"AI 선별({model_choice.split(' ')[0]})",
-                "fallback": "로컬 유사도(AI 실패)",
-                "local": "로컬 유사도(키 없음)",
-                "none": "일치 없음", "idle": "—"}[ai_mode]
-    st.markdown(
-        f'<div class="status-bar">SYS <b>▮ ONLINE</b> · 문서 {vis_docs:,}/{meta["total_docs"]:,}'
-        f' · 개체 {vis_ents}/{meta["total_entities"]} · 기간 {y_range[0]}–{y_range[1]}'
-        f' · ZOOM {st.session_state.zoom:.1f}×'
-        f' · QUERY "{q_text}" · 선별 {ai_label} · SELECT {sel_title}'
-        f' · CASE {len(st.session_state.case)}건</div>',
-        unsafe_allow_html=True)
+    with panel_box:
+        if sel_id is not None:
+            st.markdown("#### ▣ OBJECT 360")
+            render_object_360(nodes, sel_id)
+        else:
+            count = f" — {len(ranked)}건" if ranked else ""
+            st.markdown(f"#### ▣ 상황판{count}")
+            render_board(nodes, ranked, query_active=bool(query.strip()))
+        render_case_file(nodes)
 
-    # ── 하단: 전폭 패널 (상황판 / OBJECT 360 / 케이스 파일) ──────
-    st.markdown("<br>", unsafe_allow_html=True)
-    if sel_id is not None:
-        st.markdown("#### ▣ OBJECT 360")
-        render_object_360(nodes, sel_id)
-    else:
-        count = f" — {len(ranked)}건" if ranked else ""
-        st.markdown(f"#### ▣ 상황판{count}")
-        render_board(nodes, ranked, query_active=bool(query.strip()))
-    render_case_file(nodes)
+    with status_box:
+        vis_docs = int(sum(1 for i, n in enumerate(nodes)
+                           if visible_mask[i] and n["kind"] == "doc"))
+        vis_ents = int(sum(1 for i, n in enumerate(nodes)
+                           if visible_mask[i] and n["kind"] == "entity"))
+        sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
+        q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
+        ai_label = {"ai": f"AI 선별({model_choice.split(' ')[0]})",
+                    "fallback": "로컬 유사도(AI 실패)",
+                    "local": "로컬 유사도(키 없음)",
+                    "none": "일치 없음", "idle": "—"}[ai_mode]
+        st.markdown(
+            f'<div class="status-bar">SYS <b>▮ ONLINE</b> · 문서 {vis_docs:,}/{meta["total_docs"]:,}'
+            f' · 개체 {vis_ents}/{meta["total_entities"]} · 기간 {y_range[0]}–{y_range[1]}'
+            f' · ZOOM {st.session_state.zoom:.1f}×'
+            f' · QUERY "{q_text}" · 선별 {ai_label} · SELECT {sel_title}'
+            f' · CASE {len(st.session_state.case)}건</div>',
+            unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
