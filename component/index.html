@@ -45,19 +45,22 @@ html, body { width: 100%; height: 100%; overflow: hidden;
 #q:focus { border-color: #4fd8ff; box-shadow: 0 0 34px rgba(79,216,255,0.5); }
 #q::placeholder { color: #5c6890; }
 
-/* 모드 안내 — 밝은 성단 위에서도 읽히도록 다크 패널로 감싼다 */
+/* 모드 안내 — 밝은 성단 위에서도 확실히 읽히도록 불투명에 가까운 다크 패널 */
 #modeHint { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
 .mode { display: flex; align-items: center; gap: 9px; text-align: left;
-  background: rgba(6,9,18,0.88); border: 1px solid rgba(120,150,255,0.22);
-  border-radius: 6px; padding: 8px 13px; font-size: 0.76rem; color: #8a97bd;
+  background: rgba(3,5,12,0.97); backdrop-filter: blur(4px);
+  border: 1px solid rgba(140,165,255,0.4);
+  border-radius: 6px; padding: 8px 13px; font-size: 0.76rem; color: #aab5da;
   line-height: 1.45; transition: border-color 0.25s, color 0.25s, box-shadow 0.25s; }
-.mode b { color: #b9c4e0; font-weight: 700; }
+.mode b { color: #e2e8ff; font-weight: 700; }
 .mode .ico { font-size: 0.85rem; }
-#modeSearch.active { border-color: rgba(79,216,255,0.75); color: #cfe3ff;
-  box-shadow: 0 0 16px rgba(79,216,255,0.25); }
+#modeSearch.active { background: rgba(6,16,28,0.97);
+  border-color: rgba(79,216,255,0.9); color: #cfe3ff;
+  box-shadow: 0 0 20px rgba(79,216,255,0.35); }
 #modeSearch.active b { color: #4fd8ff; }
-#modeAsk.active { border-color: rgba(255,226,138,0.8); color: #ffe9c2;
-  box-shadow: 0 0 16px rgba(255,209,102,0.3); }
+#modeAsk.active { background: rgba(24,18,4,0.97);
+  border-color: rgba(255,226,138,0.95); color: #ffe9c2;
+  box-shadow: 0 0 20px rgba(255,209,102,0.4); }
 #modeAsk.active b { color: #ffe28a; }
 
 #searchHint { color: #94a1c6; font-size: 0.7rem; letter-spacing: 0.08em;
@@ -167,8 +170,8 @@ html, body { width: 100%; height: 100%; overflow: hidden;
         <span><b>키워드 검색</b> — 관련 문서·사업을 우주에서 찾아 비춰줍니다
         (예: 재개발 · 민간위탁)</span></div>
       <div class="mode" id="modeAsk"><span class="ico">◆</span>
-        <span><b>질문하기</b> — 예산·조례·부서를 연결한 그래프 근거로 AI가
-        답합니다, 약 20~30초 (예: 마을버스 예산 얼마야?)</span></div>
+        <span><b>질문하기</b> — 사업·예산·조례·부서를 서로 연결해 근거와 함께
+        AI가 답합니다, 약 20~30초 (예: 마을버스 예산 얼마야?)</span></div>
     </div>
     <div id="searchHint">Enter 실행 · 드래그 회전 · 휠 확대/축소</div>
     <div id="noMatch">NO MATCH — 관련 자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.</div>
@@ -210,7 +213,7 @@ const CAT_COLOR = { consulting: 0xff9d45, notice: 0x4fd8ff, ordinance: 0xb18bff,
                     org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8,
                     policy: 0xffe28a };
 const CAT_SHORT = { consulting: "선례", notice: "공고", ordinance: "조례",
-                    org: "부서", news: "소식", entity: "개체", policy: "사업" };
+                    org: "부서", news: "소식", entity: "태그", policy: "사업" };
 
 function spriteTexture(diamond) {
   const c = document.createElement("canvas"); c.width = c.height = 64;
@@ -299,7 +302,7 @@ function initScene() {
     if (!q) return;
     const isQ = QUESTION_RE.test(q);
     const loading = document.getElementById("loading");
-    loading.textContent = isQ ? "그래프 근거 답변 생성 중 ··· (약 20~30초)" : "AI 선별 중 ···";
+    loading.textContent = isQ ? "근거 자료 연결해 답변 생성 중 ··· (약 20~30초)" : "AI 선별 중 ···";
     loading.style.display = "block";
     document.getElementById("noMatch").style.display = "none";
     document.getElementById("searchWrap").classList.add("hidden");

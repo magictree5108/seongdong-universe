@@ -32,15 +32,17 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 CATEGORY_STYLE = {
     "consulting": {"label": "사전컨설팅·면책 선례", "color": "#ff9d45"},
     "notice":     {"label": "성동구 고시공고",       "color": "#4fd8ff"},
-    "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff"},
+    "ordinance":  {"label": "성동구 조례·규칙",      "color": "#b18bff"},
     "org":        {"label": "조직·업무분장",         "color": "#2dd4bf"},
     "news":       {"label": "보도·소식·감사결과",    "color": "#f472b6"},
     "policy":     {"label": "정책·사업 (예산)",      "color": "#ffe28a"},
 }
+# 문서에서 규칙 기반으로 뽑아낸 태그(담당 부서·관련 법령·동네) — 사용자에게는
+# "태그"로 통칭한다 ("개체/entity"는 내부 구현 용어라 노출하지 않음)
 ENTITY_STYLE = {
-    "dept":  {"label": "담당 부서",        "color": "#6ee7a8"},
-    "law":   {"label": "법령·자치법규 참조", "color": "#ff7b9c"},
-    "place": {"label": "성동구 동네",       "color": "#ffd166"},
+    "dept":  {"label": "담당 부서",   "color": "#6ee7a8"},
+    "law":   {"label": "관련 법령",   "color": "#ff7b9c"},
+    "place": {"label": "성동구 동네", "color": "#ffd166"},
 }
 
 TOP_K = 20
@@ -482,7 +484,7 @@ def _meta_html(query, mode, expanded, laws, meta, n_results) -> str:
                 for l in laws)
             parts.append(f'<div class="laws">국가 법령 (법제처 실시간)</div>{lines}')
     else:
-        parts.append(f'문서 {meta["total_docs"]:,} · 개체 {meta["total_entities"]}'
+        parts.append(f'문서 {meta["total_docs"]:,} · 태그 {meta["total_entities"]}'
                      f' · 사업 {meta.get("total_policies", 0):,}'
                      f' · 연결 {meta["total_edges"]:,} · 데이터 {meta["built_at"][:10]}')
         parts.append("공개 행정데이터 데모 — 적법성·정확성을 보증하지 않습니다.")
@@ -500,18 +502,26 @@ def _legend_html(active_cats, active_etypes) -> str:
     return "<br>".join(dots)
 
 
+# 온톨로지 객체 타입(내부 영문 클래스명) → 사용자에게 보일 한글 명칭
+_SOURCE_TYPE_KO = {
+    "Policy": "사업", "Ordinance": "조례", "PressRelease": "보도자료",
+    "Department": "부서", "BudgetItem": "예산",
+}
+
+
 def _render_answer_card(ganswer: dict, query: str) -> None:
     """GraphRAG 답변 — 상세 보드 최상단의 골드 카드. 근거 원문 링크 포함."""
     st.markdown(
         f'<div class="board-card" style="border-color:rgba(255,226,138,0.5);">'
-        f'<div class="bc-meta" style="color:#ffe28a;">◆ AI 답변 — 온톨로지 그래프 근거'
+        f'<div class="bc-meta" style="color:#ffe28a;">◆ AI 답변 — 연결된 자료 근거'
         f' <span style="color:#7d8bb0;">(질문: {html.escape(query[:60])})</span></div>'
         f'</div>', unsafe_allow_html=True)
     st.markdown(ganswer["answer"])
     if ganswer.get("sources"):
         items = []
         for s in ganswer["sources"]:
-            label = f'{html.escape(s["name"][:50])} ({s["type"]})'
+            type_ko = _SOURCE_TYPE_KO.get(s["type"], s["type"])
+            label = f'{html.escape(s["name"][:50])} ({type_ko})'
             if s.get("url"):
                 items.append(f'<a href="{html.escape(s["url"])}" target="_blank" '
                              f'rel="noopener noreferrer" style="color:#ffe28a;">'
@@ -552,9 +562,9 @@ def _render_detail_board(nodes, results, laws, expanded, mode, query,
             f'(법제처 국가법령정보센터 실시간)</div>{items}</div>',
             unsafe_allow_html=True)
     style_map = {**{k: v for k, v in CATEGORY_STYLE.items()},
-                 "entity": {"label": "개체", "color": "#6ee7a8"}}
+                 "entity": {"label": "태그", "color": "#6ee7a8"}}
     short_map = {"consulting": "선례", "notice": "공고", "ordinance": "조례",
-                 "org": "부서", "news": "소식", "entity": "개체", "policy": "사업"}
+                 "org": "부서", "news": "소식", "entity": "태그", "policy": "사업"}
     for rank, (i, score) in enumerate(results, start=1):
         n = nodes[i]
         cat = "entity" if n["kind"] == "entity" else n["category"]
@@ -620,7 +630,7 @@ def main():
                        if st.checkbox(f'{style["label"]} '
                                       f'({cat_counts.get(slug, 0):,})',
                                       value=True, key=f"cat_{slug}")}
-        st.markdown("### 온톨로지")
+        st.markdown("### 관련 정보 (자동 태그)")
         active_etypes = {et for et, style in ENTITY_STYLE.items()
                          if st.checkbox(f'{style["label"]} '
                                         f'({meta["entity_types"].get(et, 0)})',
@@ -633,8 +643,9 @@ def main():
         st.markdown("---")
         st.markdown(
             '<div style="color:#5c6890; font-size:0.78rem; line-height:1.6;">'
-            '개체는 규칙 기반 자동 추출로 오추출이 있을 수 있습니다. '
-            '정확한 내용은 각 카드의 원문 링크에서 확인하세요.</div>',
+            '태그(담당 부서·관련 법령·동네)는 규칙 기반 자동 추출로 오류가 '
+            '있을 수 있습니다. 정확한 내용은 각 카드의 원문 링크에서 '
+            '확인하세요.</div>',
             unsafe_allow_html=True)
 
     def _visible(n) -> bool:
@@ -696,7 +707,7 @@ def main():
         nodes=payload_nodes, edges=payload_edges, data_sig=sig, state=state,
         title="성동 UNIVERSE",
         subtitle=(f'성동구 공공데이터 3D 의미 우주 · 문서 {meta["total_docs"]:,}'
-                  f' · 개체 {meta["total_entities"]}'
+                  f' · 태그 {meta["total_entities"]}'
                   f' · 사업 {meta.get("total_policies", 0):,}'
                   f' · {model_choice.split(" —")[0]}'),
         meta_html=meta_html,
