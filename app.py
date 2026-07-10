@@ -1,59 +1,55 @@
-"""NEO 성동 — 성동구 공공데이터 3D 의미 연결망 (팔란티어 Gotham 오마주).
+"""성동 UNIVERSE — 성동구 공공데이터 3D 의미 우주.
 
-디딤(Didim) 프로젝트가 수집한 성동구 고시공고·자치법규·사전컨설팅 선례를
-우주의 성단처럼 시각화하고, 그 위에 온톨로지 레이어(부서·법령·동네 개체)를
-얹는다. 검색하면 관련 자료가 앞으로 끌려나오고(상황판), 노드를 선택하면
-속성과 연결을 보여주는 Object 360 패널에서 연결을 타고 피벗할 수 있으며,
-조사 중 발견한 자료는 케이스 파일에 핀으로 모아 리포트로 내보낸다.
+디딤(Didim) 프로젝트가 수집한 성동구 공공데이터(고시공고·자치법규·
+사전컨설팅 선례·조직/업무분장·보도/소식)를 상시 유동하는 3D 성단으로
+그리고, 성단 한가운데의 검색창으로 우주를 검색한다. 검색이 끝나면
+카메라가 해당 성단 속으로 딥 줌하고, 결과 카드가 성단 위에 반투명
+오버레이로 떠서 자기 노드와 선으로 연결된다 (호버 시 선명해짐).
 
-데이터는 data_pipeline/build.py 가 미리 계산해 data/ 에 커밋해둔 정적
-파일(json/npy)이므로, 이 앱은 디딤 백엔드 없이 완전히 독립적으로 동작한다.
+- 렌더링: Three.js 커스텀 컴포넌트(component/index.html) — Plotly로는
+  상시 애니메이션·3D 위 HTML 오버레이·커넥터 라인이 불가능하다
+- 검색: Claude 2단계 (질의 확장 → 어휘 게이트+카테고리 쿼터 → AI 선별),
+  기본 모델 sonnet 5 + 부서 라우팅 + 법제처 실시간 국가법령
+- 데이터: data_pipeline/build.py 가 미리 계산한 정적 파일 — 디딤 백엔드
+  없이 완전히 독립 동작
 """
 import html
 import json
 import os
 import re
-from collections import defaultdict
-from datetime import datetime
 from pathlib import Path
 
 import numpy as np
-import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent / "data_pipeline"))
 import embedder  # noqa: E402  (경로 삽입 후 임포트)
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
-SPREAD = 9.0  # data_pipeline/build.py 의 pca_3d(spread=) 와 맞춘 값
 
 CATEGORY_STYLE = {
-    "consulting": {"label": "사전컨설팅·면책 선례", "color": "#ff9d45", "short": "선례"},
-    "notice":     {"label": "성동구 고시공고",       "color": "#4fd8ff", "short": "공고"},
-    "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff", "short": "조례"},
-    "org":        {"label": "조직·업무분장",         "color": "#2dd4bf", "short": "부서"},
-    "news":       {"label": "보도·소식·감사결과",    "color": "#f472b6", "short": "소식"},
+    "consulting": {"label": "사전컨설팅·면책 선례", "color": "#ff9d45"},
+    "notice":     {"label": "성동구 고시공고",       "color": "#4fd8ff"},
+    "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff"},
+    "org":        {"label": "조직·업무분장",         "color": "#2dd4bf"},
+    "news":       {"label": "보도·소식·감사결과",    "color": "#f472b6"},
 }
 ENTITY_STYLE = {
-    "dept":  {"label": "담당 부서",        "color": "#6ee7a8", "short": "부서"},
-    "law":   {"label": "법령·자치법규 참조", "color": "#ff7b9c", "short": "법령"},
-    "place": {"label": "성동구 동네",       "color": "#ffd166", "short": "동네"},
+    "dept":  {"label": "담당 부서",        "color": "#6ee7a8"},
+    "law":   {"label": "법령·자치법규 참조", "color": "#ff7b9c"},
+    "place": {"label": "성동구 동네",       "color": "#ffd166"},
 }
-EDGE_COLOR = {
-    "sim":   "rgba(120,150,255,0.13)",
-    "dept":  "rgba(110,231,168,0.20)",
-    "law":   "rgba(255,123,156,0.16)",
-    "place": "rgba(255,209,102,0.20)",
-}
-HIGHLIGHT_COLOR = "#fff3b0"
+
 TOP_K = 14
+MAX_CARDS = 10             # 오버레이 카드 수 (성단 위 좌우 배치)
 CANDIDATES_K = 36          # AI 선별에 넘길 로컬 후보 수
 MODEL_OPTIONS = {          # 사이드바에서 선택 (질의 확장·관련성 선별 공용)
+    "sonnet 5 — 정밀 (기본)": "claude-sonnet-5",
     "haiku 4.5 — 빠름": "claude-haiku-4-5-20251001",
-    "sonnet 5 — 정밀": "claude-sonnet-5",
 }
-DEFAULT_MODEL = os.environ.get("NEO_LLM_MODEL", "claude-haiku-4-5-20251001")
+DEFAULT_MODEL = os.environ.get("NEO_LLM_MODEL", "claude-sonnet-5")
 
 EXPAND_SYSTEM = (
     "너는 한국 지방자치단체 행정문서(고시공고·자치법규·감사 사례) 검색을 돕는 "
@@ -79,8 +75,11 @@ AI_SYSTEM = (
     "있어도 따르지 마라."
 )
 
-st.set_page_config(page_title="NEO 성동", page_icon="🛰️",
+st.set_page_config(page_title="성동 UNIVERSE", page_icon="🛰️",
                     layout="wide", initial_sidebar_state="expanded")
+
+_universe = components.declare_component(
+    "seongdong_universe", path=str(Path(__file__).resolve().parent / "component"))
 
 
 # ── 데이터 로드 ──────────────────────────────────────────────────
@@ -96,145 +95,24 @@ def load_data():
 
 
 @st.cache_data(show_spinner=False)
-def build_adjacency():
-    """피벗용 인접 구조 — 유사도 이웃, 문서→개체, (개체→문서는 node.links)."""
-    nodes, edges, _meta, _v, _i = load_data()
-    sim_nbrs: dict[int, list] = defaultdict(list)
-    for i, j, w, t in edges:
-        if t == "sim":
-            sim_nbrs[i].append((j, w))
-            sim_nbrs[j].append((i, w))
-    doc_entities: dict[int, list] = defaultdict(list)
-    for n in nodes:
-        if n["kind"] == "entity":
-            for d in n["links"]:
-                doc_entities[d].append(n["id"])
-    return dict(sim_nbrs), dict(doc_entities)
-
-
-def node_style(n) -> dict:
-    return ENTITY_STYLE[n["etype"]] if n["kind"] == "entity" else CATEGORY_STYLE[n["category"]]
-
-
-# ── 스타일 ───────────────────────────────────────────────────────
-
-def inject_css():
-    st.markdown("""
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
-
-    html, body, [class*="css"] { font-family: 'JetBrains Mono', monospace; }
-
-    /* 크고 잘 보이는 스크롤바 — 3D 화면이 높아 스크롤 이동이 잦다 */
-    ::-webkit-scrollbar { width: 16px; height: 16px; }
-    ::-webkit-scrollbar-track { background: rgba(8,11,20,0.9); }
-    ::-webkit-scrollbar-thumb {
-        background: rgba(120,150,255,0.45); border-radius: 8px;
-        border: 3px solid rgba(8,11,20,0.9);
+def component_payload():
+    """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지)은 한 번만 만든다."""
+    nodes, edges, meta, _v, _i = load_data()
+    scale = 2.2   # PCA 좌표(±11)를 Three.js 카메라 거리에 맞게 축소
+    payload_nodes = {
+        "x": [round(n["x"] / scale, 3) for n in nodes],
+        "y": [round(n["y"] / scale, 3) for n in nodes],
+        "z": [round(n["z"] / scale, 3) for n in nodes],
+        "cat": [n["etype"] if n["kind"] == "entity" else n["category"]
+                for n in nodes],
+        "kind": [1 if n["kind"] == "entity" else 0 for n in nodes],
     }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(79,216,255,0.75); }
-    * { scrollbar-width: auto; scrollbar-color: rgba(120,150,255,0.55) rgba(8,11,20,0.9); }
-
-    .stApp {
-        background:
-            radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.55) 0, transparent 60%),
-            radial-gradient(1px 1px at 78% 8%, rgba(255,255,255,0.4) 0, transparent 60%),
-            radial-gradient(1.5px 1.5px at 42% 65%, rgba(180,200,255,0.5) 0, transparent 60%),
-            radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,0.35) 0, transparent 60%),
-            radial-gradient(1px 1px at 25% 85%, rgba(255,255,255,0.4) 0, transparent 60%),
-            radial-gradient(1.5px 1.5px at 60% 30%, rgba(180,200,255,0.4) 0, transparent 60%),
-            linear-gradient(180deg, #05060d 0%, #070a16 55%, #05060d 100%);
-        color: #d7e3ff;
-    }
-    section[data-testid="stSidebar"] {
-        background: rgba(6, 9, 18, 0.9);
-        border-right: 1px solid rgba(120,150,255,0.18);
-    }
-    header[data-testid="stHeader"] { background: transparent; }
-    div[data-testid="stToolbar"] { visibility: hidden; }
-
-    h1, h2, h3, h4 { color: #eaf1ff !important; letter-spacing: 0.04em; }
-
-    .classification {
-        text-align: center; font-size: 0.68rem; letter-spacing: 0.35em;
-        color: #6ee7a8; border: 1px solid rgba(110,231,168,0.35);
-        background: rgba(110,231,168,0.06);
-        padding: 3px 0; margin-bottom: 14px; border-radius: 3px;
-    }
-    .neo-title {
-        font-size: 2.1rem; font-weight: 700; letter-spacing: 0.18em;
-        color: #eaf1ff; text-shadow: 0 0 18px rgba(120,170,255,0.55);
-        margin-bottom: 0;
-    }
-    .neo-subtitle { color: #7d8bb0; font-size: 0.82rem; letter-spacing: 0.08em; margin-top: 2px; }
-
-    div[data-testid="stTextInput"] input {
-        background: rgba(10,14,26,0.85) !important;
-        border: 1px solid rgba(120,170,255,0.4) !important;
-        color: #eaf1ff !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        letter-spacing: 0.03em;
-        border-radius: 4px !important;
-        box-shadow: 0 0 14px rgba(80,130,255,0.12) inset;
-    }
-    div[data-testid="stTextInput"] input:focus {
-        border-color: #4fd8ff !important;
-        box-shadow: 0 0 16px rgba(79,216,255,0.45) !important;
-    }
-
-    div.stButton > button {
-        background: rgba(12,17,32,0.9); color: #9fb4e8;
-        border: 1px solid rgba(120,150,255,0.3); border-radius: 3px;
-        font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-        padding: 2px 10px; min-height: 26px; letter-spacing: 0.05em;
-    }
-    div.stButton > button:hover {
-        border-color: #4fd8ff; color: #4fd8ff; background: rgba(79,216,255,0.08);
-    }
-    div[data-testid="stDownloadButton"] > button {
-        background: rgba(110,231,168,0.08); color: #6ee7a8;
-        border: 1px solid rgba(110,231,168,0.4); border-radius: 3px;
-        font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-    }
-
-    .board-card, .obj-card {
-        border: 1px solid rgba(120,150,255,0.28);
-        background: linear-gradient(180deg, rgba(16,20,36,0.75), rgba(10,13,24,0.75));
-        border-radius: 6px; padding: 14px 18px; margin-bottom: 4px;
-        box-shadow: 0 0 10px rgba(60,90,200,0.08);
-    }
-    .board-card .rank { color: #4fd8ff; font-weight: 700; font-size: 0.85rem; }
-    .cat-pill {
-        display: inline-block; font-size: 0.7rem; padding: 1px 8px; border-radius: 10px;
-        margin-left: 7px; border: 1px solid currentColor;
-    }
-    .board-card .title, .obj-card .title { color: #eaf1ff; font-weight: 700; font-size: 1.04rem; margin: 6px 0 3px; }
-    .board-card .meta, .obj-card .meta { color: #8291b8; font-size: 0.76rem; margin-bottom: 7px; }
-    .board-card .snippet, .obj-card .snippet { color: #b9c4e0; font-size: 0.85rem; line-height: 1.6; }
-    .simbar-track { background: rgba(255,255,255,0.08); border-radius: 3px; height: 4px; margin-top: 9px; }
-    .simbar-fill { background: linear-gradient(90deg, #4fd8ff, #fff3b0); height: 4px; border-radius: 3px; }
-    .board-card a, .obj-card a { color: #4fd8ff; text-decoration: none; font-size: 0.76rem; }
-    .board-card a:hover, .obj-card a:hover { text-decoration: underline; }
-
-    .obj-header { color: #4fd8ff; font-size: 0.72rem; letter-spacing: 0.25em; margin: 10px 0 4px; }
-    .prop-table { width: 100%; font-size: 0.72rem; color: #b9c4e0; border-collapse: collapse; }
-    .prop-table td { border-top: 1px solid rgba(120,150,255,0.12); padding: 3px 4px; }
-    .prop-table td:first-child { color: #7d8bb0; width: 34%; }
-
-    .idle-box {
-        border: 1px dashed rgba(120,150,255,0.3); border-radius: 6px;
-        padding: 18px 14px; color: #7d8bb0; font-size: 0.82rem; line-height: 1.6;
-    }
-    .status-bar {
-        border-top: 1px solid rgba(120,150,255,0.25);
-        color: #7d8bb0; font-size: 0.7rem; letter-spacing: 0.06em;
-        padding: 6px 2px 0; margin-top: 10px; white-space: nowrap;
-        overflow-x: auto;
-    }
-    .status-bar b { color: #6ee7a8; font-weight: 500; }
-    .stat-line { color: #b9c4e0; font-size: 0.82rem; margin: 2px 0; }
-    </style>
-    """, unsafe_allow_html=True)
+    # 개체 색은 컴포넌트 CAT_COLOR에서 etype 이름 대신 'entity' 키를 쓰므로 치환
+    payload_nodes["cat"] = ["entity" if k == 1 else c
+                            for c, k in zip(payload_nodes["cat"], payload_nodes["kind"])]
+    payload_edges = [[e[0], e[1]] for e in edges]
+    sig = f'{meta["built_at"]}::{meta["total_nodes"]}'
+    return payload_nodes, payload_edges, sig
 
 
 # ── 검색: 로컬 후보(어휘 게이트 + 코사인) → Claude 관련성 선별 ──────
@@ -288,10 +166,7 @@ def _law_oc() -> str | None:
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def national_laws(query: str, expanded: tuple[str, ...]) -> list[dict]:
-    """법제처 실시간 국가 법령 검색 — 자치법규만으로 부족한 상위법 질의 보완.
-
-    질의·확장 키워드로 법령명을 검색해 상위 4건을 반환한다. 실패는 조용히
-    빈 결과 (검색 자체를 막으면 안 된다)."""
+    """법제처 실시간 국가 법령 검색 — 자치법규만으로 부족한 상위법 질의 보완."""
     oc = _law_oc()
     if not oc:
         return []
@@ -328,12 +203,9 @@ def national_laws(query: str, expanded: tuple[str, ...]) -> list[dict]:
     return results[:4]
 
 
-@st.cache_data(show_spinner="연관 키워드를 확장하는 중…", ttl=3600)
+@st.cache_data(show_spinner=False, ttl=3600)
 def ai_expand(query: str, model: str = DEFAULT_MODEL) -> list[str] | None:
-    """Claude가 질의를 연관 행정용어로 확장한다 ('마음건강'→심리상담·정신건강).
-
-    문자 n-gram 임베딩은 동의어를 모르므로, 어휘 검색의 회수(recall)를
-    확장 키워드로 확보한다. 실패·키 없음 시 None."""
+    """Claude가 질의를 연관 행정용어로 확장한다 ('마음건강'→심리상담·정신건강)."""
     key = _api_key()
     if not key:
         return None
@@ -344,9 +216,10 @@ def ai_expand(query: str, model: str = DEFAULT_MODEL) -> list[str] | None:
         keywords: list[str]
 
     try:
-        client = anthropic.Anthropic(api_key=key, timeout=15.0, max_retries=1)
+        # Claude 5 계열은 thinking 블록을 먼저 생성하므로 토큰 여유가 필요하다
+        client = anthropic.Anthropic(api_key=key, timeout=30.0, max_retries=1)
         resp = _parse_deterministic(
-            client, model=model, max_tokens=300, system=EXPAND_SYSTEM,
+            client, model=model, max_tokens=2000, system=EXPAND_SYSTEM,
             messages=[{"role": "user", "content": f"질의: {query}"}],
             output_format=_Kw)
         parsed = resp.parsed_output
@@ -363,11 +236,9 @@ def local_candidates(query: str,
                      expanded: tuple[str, ...]) -> tuple[list[tuple[int, float]], int]:
     """AI에 넘길 로컬 후보. (후보 목록, 어휘 일치 후보 수)를 반환.
 
-    어휘 게이트: 질의 토큰(+ 확장 키워드)이 title·본문에 실제 등장하는
-    노드만 후보로 인정하고, (일치 키워드 수, 코사인) 순으로 랭크한다.
-    문자 n-gram 코사인 단독으로는 조사·어미 공유와 해시 충돌 때문에 무관
-    문서가 상위에 오르므로 반드시 게이트를 우선한다. 게이트가 완전히
-    비었을 때만 코사인 상위를 넘긴다 (AI가 걸러낸다)."""
+    어휘 게이트(공백 무시)로 질의·확장 키워드가 실제 등장하는 노드만 모으고
+    (일치 수, 코사인)으로 랭크한다. 카테고리 쿼터로 대량 코퍼스(보도·공고)의
+    독식을 막는다. 게이트가 완전히 비면 코사인 상위를 넘긴다(AI가 거른다)."""
     nodes, _e, _m, vectors, idf = load_data()
     qvec = embedder.embed([query], idf)[0]
     sims = vectors @ qvec
@@ -377,14 +248,11 @@ def local_candidates(query: str,
         kw = kw.lower()
         if len(kw) >= 2 and kw not in _GATE_STOPWORDS:
             groups.append((kw, kw[:-1]) if len(kw) >= 3 else (kw,))
-    # 중복 그룹 제거 (원형 기준)
     seen: set[str] = set()
     groups = [g for g in groups if not (g[0] in seen or seen.add(g[0]))]
 
     scored: list[tuple[int, int, float]] = []   # (일치 수, 노드, 코사인)
     if groups:
-        # 공백 무시 매칭 — "개인형이동장치"(확장)가 "개인형 이동장치"(문서)와
-        # 띄어쓰기 차이로 어긋나지 않게 한다
         flat_groups = [tuple(v.replace(" ", "") for v in g) for g in groups]
         for i, n in enumerate(nodes):
             hay = n["gate_text"].replace(" ", "")
@@ -392,8 +260,6 @@ def local_candidates(query: str,
             if matched:
                 scored.append((matched, i, float(sims[i])))
     scored.sort(key=lambda t: (-t[0], -t[2]))
-    # 카테고리 쿼터 — 키워드가 풍부한 대량 코퍼스(보도·소식, 공고)가 후보
-    # 풀을 독식해 조례·선례를 밀어내지 않게 한다
     cat_cap = {"news": 10, "notice": 12}
     cat_counts: dict[str, int] = {}
     gated: list[tuple[int, float]] = []
@@ -413,14 +279,10 @@ def local_candidates(query: str,
     return gated, n_gated
 
 
-@st.cache_data(show_spinner="AI가 관련 자료를 선별하는 중…", ttl=3600)
+@st.cache_data(show_spinner=False, ttl=3600)
 def ai_select(query: str, cand_key: tuple[int, ...],
               model: str = DEFAULT_MODEL) -> list[int] | None:
-    """Claude가 후보 중 질의와 실제로 관련된 자료만 관련도순으로 고른다.
-
-    반환 id는 후보의 부분집합으로 강제하며, 실패 시 None(호출부가 로컬
-    순위로 폴백). 주제 관련성 선별일 뿐 내용에 대한 판단이 아니다.
-    """
+    """Claude가 후보 중 질의와 실제로 관련된 자료만 관련도순으로 고른다."""
     key = _api_key()
     if not key:
         return None
@@ -434,9 +296,10 @@ def ai_select(query: str, cand_key: tuple[int, ...],
     items = [{"id": str(i), "title": nodes[i]["title"],
               "snippet": nodes[i]["snippet"][:200]} for i in cand_key]
     try:
-        client = anthropic.Anthropic(api_key=key, timeout=25.0, max_retries=1)
+        # Claude 5 계열은 thinking 블록을 먼저 생성하므로 토큰 여유가 필요하다
+        client = anthropic.Anthropic(api_key=key, timeout=45.0, max_retries=1)
         resp = _parse_deterministic(
-            client, model=model, max_tokens=800, system=AI_SYSTEM,
+            client, model=model, max_tokens=4000, system=AI_SYSTEM,
             messages=[{"role": "user", "content":
                        f"질의: {query}\n\n<candidates>\n"
                        f"{json.dumps(items, ensure_ascii=False)}\n</candidates>"}],
@@ -445,14 +308,13 @@ def ai_select(query: str, cand_key: tuple[int, ...],
         if parsed is None:
             return None
         valid = {str(i) for i in cand_key}
-        seen = set()
-        out = []
+        seen2, out = set(), []
         for x in parsed.relevant_ids:
-            if x in valid and x not in seen:
-                seen.add(x)
+            if x in valid and x not in seen2:
+                seen2.add(x)
                 out.append(int(x))
         return out
-    except Exception:  # noqa: BLE001 — AI 실패가 검색을 막으면 안 된다
+    except Exception:  # noqa: BLE001
         return None
 
 
@@ -461,10 +323,8 @@ _DEPT_TOKEN_RE = re.compile(r"[가-힣0-9]{2,}?(?:과|국|단|센터|담당관)"
 
 
 def _dept_routing(query: str) -> list[int]:
-    """질의에 부서명이 들어 있으면 그 부서의 업무분장 문서·개체를 찾는다.
+    """질의에 부서명이 들어 있으면 그 부서의 업무분장 문서·개체를 최상단 고정.
 
-    '건축과 담당자', '기초복지과 전화번호' 같은 부서 질의는 공고보다
-    조직·업무분장이 정답이므로 결정적 규칙으로 최상단에 고정한다.
     부분 명칭도 잇는다 — '환경과'(질의)는 '맑은환경과'(실제 부서)로."""
     nodes, *_rest = load_data()
     qflat = re.sub(r"\s+", "", query).lower()
@@ -479,12 +339,11 @@ def _dept_routing(query: str) -> list[int]:
     org_hits, entity_hits = [], []
     for n in nodes:
         if n["category"] == "org":
-            if _matches(n["title"].split()[0]):    # "기초복지과 조직·업무분장"
+            if _matches(n["title"].split()[0]):
                 org_hits.append(n["id"])
         elif n.get("etype") == "dept":
             if _matches(n["title"]):
                 entity_hits.append(n["id"])
-    # 부분 일치가 여러 부서에 걸리면(예: '복지과') 상위 3개까지만 고정한다
     return org_hits[:3] + entity_hits[:3]
 
 
@@ -504,7 +363,6 @@ def run_search(query: str,
         out = _with_routing([])
         return out, ("ai" if out else "none"), expanded
     if not _api_key():
-        # AI 없이는 어휘 일치 후보만 보여준다 (의미 후보는 잡음 위험)
         out = _with_routing(cands[:n_gated])
         return out, ("local" if out else "none"), expanded
     sel = ai_select(query, tuple(i for i, _s in cands), model)
@@ -516,192 +374,7 @@ def run_search(query: str,
     return out, ("ai" if out else "none"), expanded
 
 
-# ── 3D 도형 ──────────────────────────────────────────────────────
-
-def _neighbor_ids(node_id: int, nodes) -> list[tuple[int, float]]:
-    """선택 노드의 연결(유사 문서 + 개체 링크)을 (id, 강도)로 반환."""
-    sim_nbrs, doc_entities = build_adjacency()
-    n = nodes[node_id]
-    out: dict[int, float] = {}
-    if n["kind"] == "entity":
-        for d in n["links"]:
-            out[d] = max(out.get(d, 0), 1.0)
-    else:
-        for j, w in sorted(sim_nbrs.get(node_id, []), key=lambda x: -x[1])[:10]:
-            out[j] = max(out.get(j, 0), w)
-        for e in doc_entities.get(node_id, []):
-            out[e] = max(out.get(e, 0), 1.0)
-    out.pop(node_id, None)
-    return sorted(out.items(), key=lambda x: -x[1])
-
-
-@st.cache_data(show_spinner=False)
-def scene_ranges() -> list[list[float]]:
-    """이상치 문서가 화면 범위를 늘려 본체 성단이 작아지지 않도록
-    좌표 1–99 백분위로 축 범위를 고정한다."""
-    nodes, *_rest = load_data()
-    pts = np.array([[n["x"], n["y"], n["z"]] for n in nodes if n["kind"] == "doc"])
-    lo, hi = np.percentile(pts, 1, axis=0), np.percentile(pts, 99, axis=0)
-    pad = (hi - lo) * 0.12
-    return [[float(l - p), float(h + p)] for l, h, p in zip(lo, hi, pad)]
-
-
-def build_figure(nodes, edges, visible_mask, search_ranked, sel_id, zoom: float = 1.0):
-    fig = go.Figure()
-    sel_mode = sel_id is not None and visible_mask[sel_id]
-    query_mode = bool(search_ranked) and not sel_mode
-    highlight = dict(search_ranked) if query_mode else {}
-    focus_ids = set(highlight)
-    if sel_mode:
-        nbrs = _neighbor_ids(sel_id, nodes)
-        focus_ids = {sel_id} | {i for i, _w in nbrs}
-
-    # 타입별 엣지 (양 끝이 보일 때만). 포커스 모드에선 배경 연결을 아예
-    # 그리지 않는다 — 반투명 선 수천 개가 겹치면 하얗게 포화되기 때문.
-    if not (sel_mode or query_mode):
-        by_type: dict[str, list] = defaultdict(lambda: ([], [], []))
-        for i, j, _w, t in edges:
-            if not (visible_mask[i] and visible_mask[j]):
-                continue
-            xs, ys, zs = by_type[t]
-            a, b = nodes[i], nodes[j]
-            xs += [a["x"], b["x"], None]
-            ys += [a["y"], b["y"], None]
-            zs += [a["z"], b["z"], None]
-        for t, (xs, ys, zs) in by_type.items():
-            fig.add_trace(go.Scatter3d(
-                x=xs, y=ys, z=zs, mode="lines",
-                line=dict(color=EDGE_COLOR[t], width=1),
-                hoverinfo="skip", showlegend=False))
-
-    # 기본 노드: 문서(원) — 카테고리별 / 개체(다이아몬드) — 타입별
-    groups = [(f'doc:{slug}', style, lambda n, s=slug: n["kind"] == "doc" and n["category"] == s, "circle")
-              for slug, style in CATEGORY_STYLE.items()]
-    groups += [(f'ent:{et}', style, lambda n, e=et: n["kind"] == "entity" and n["etype"] == e, "diamond")
-               for et, style in ENTITY_STYLE.items()]
-    dim = sel_mode or query_mode
-    for gid, style, pred, symbol in groups:
-        idx = [i for i, n in enumerate(nodes)
-               if pred(n) and visible_mask[i] and i not in focus_ids]
-        if not idx:
-            continue
-        is_entity = symbol == "diamond"
-        fig.add_trace(go.Scatter3d(
-            x=[nodes[i]["x"] for i in idx],
-            y=[nodes[i]["y"] for i in idx],
-            z=[nodes[i]["z"] for i in idx],
-            mode="markers",
-            name=style["label"],
-            marker=dict(
-                size=[(7 + min(nodes[i]["degree"], 160) * 0.045) if is_entity
-                      else (4 + min(nodes[i]["degree"], 20) * 0.35) for i in idx],
-                color=style["color"], symbol=symbol,
-                opacity=0.15 if dim else (0.95 if is_entity else 0.72),
-                line=dict(width=1, color=style["color"]) if is_entity else dict(width=0),
-            ),
-            text=[f'{nodes[i]["title"]}<br>{nodes[i]["source_label"]}' for i in idx],
-            hovertemplate="%{text}<extra></extra>",
-        ))
-
-    cam_eye = dict(x=0.78, y=0.78, z=0.82)   # 기본을 성단 가까이
-
-    # 검색 모드 — 결과를 카메라 앞으로 끌어오고 원점 빔을 쏜다 (상황판 연출)
-    if query_mode:
-        eye = np.array([1.0, 1.0, 1.0]); eye = eye / np.linalg.norm(eye)
-        front = eye * SPREAD * 0.9
-        hx, hy, hz, hsize, hline, htext, labels = [], [], [], [], [], [], []
-        bx, by, bz = [], [], []
-        ranked = sorted(highlight.items(), key=lambda kv: -kv[1])
-        for rank, (i, score) in enumerate(ranked):
-            n = nodes[i]
-            pull = max(0.15, 0.62 - rank * 0.035)
-            px = n["x"] * (1 - pull) + front[0] * pull
-            py = n["y"] * (1 - pull) + front[1] * pull
-            pz = n["z"] * (1 - pull) + front[2] * pull
-            hx.append(px); hy.append(py); hz.append(pz)
-            hsize.append(max(9, 16 - rank * 0.4))
-            hline.append(node_style(n)["color"])
-            htext.append(f'{n["title"]}<br>유사도 {score:.2f}')
-            labels.append(n["title"][:16] + ("…" if len(n["title"]) > 16 else "")
-                          if rank < 8 else "")
-            bx += [0, px, None]; by += [0, py, None]; bz += [0, pz, None]
-        fig.add_trace(go.Scatter3d(
-            x=bx, y=by, z=bz, mode="lines",
-            line=dict(color="rgba(255,243,176,0.5)", width=2),
-            hoverinfo="skip", showlegend=False))
-        fig.add_trace(go.Scatter3d(
-            x=hx, y=hy, z=hz, mode="markers+text",
-            marker=dict(size=hsize, color=HIGHLIGHT_COLOR,
-                       line=dict(width=2, color=hline), opacity=1.0),
-            text=labels, textposition="top center",
-            textfont=dict(color="#fff3b0", size=10),
-            hovertext=htext, hovertemplate="%{hovertext}<extra></extra>",
-            showlegend=False))
-        centroid = np.array([hx, hy, hz]).mean(axis=1)
-        cam_eye = dict(x=float(centroid[0]) * 0.1 + 0.85,
-                      y=float(centroid[1]) * 0.1 + 0.85,
-                      z=float(centroid[2]) * 0.1 + 0.85)
-
-    # 선택 모드 — 성좌(constellation): 제자리에서 선택 노드와 연결만 밝힌다
-    if sel_mode:
-        s = nodes[sel_id]
-        nbrs = [(i, w) for i, w in _neighbor_ids(sel_id, nodes) if visible_mask[i]]
-        bx, by, bz = [], [], []
-        for i, _w in nbrs:
-            n = nodes[i]
-            bx += [s["x"], n["x"], None]
-            by += [s["y"], n["y"], None]
-            bz += [s["z"], n["z"], None]
-        fig.add_trace(go.Scatter3d(
-            x=bx, y=by, z=bz, mode="lines",
-            line=dict(color="rgba(255,243,176,0.65)", width=3),
-            hoverinfo="skip", showlegend=False))
-        fig.add_trace(go.Scatter3d(
-            x=[nodes[i]["x"] for i, _w in nbrs],
-            y=[nodes[i]["y"] for i, _w in nbrs],
-            z=[nodes[i]["z"] for i, _w in nbrs],
-            mode="markers",
-            marker=dict(
-                size=[9 if nodes[i]["kind"] == "entity" else 7 for i, _w in nbrs],
-                color=[node_style(nodes[i])["color"] for i, _w in nbrs],
-                symbol=["diamond" if nodes[i]["kind"] == "entity" else "circle"
-                        for i, _w in nbrs],
-                opacity=1.0, line=dict(width=1, color="#eaf1ff")),
-            text=[nodes[i]["title"] for i, _w in nbrs],
-            hovertemplate="%{text}<extra></extra>", showlegend=False))
-        fig.add_trace(go.Scatter3d(
-            x=[s["x"]], y=[s["y"]], z=[s["z"]], mode="markers+text",
-            marker=dict(size=18, color=HIGHLIGHT_COLOR,
-                       symbol="diamond" if s["kind"] == "entity" else "circle",
-                       line=dict(width=3, color="#ffffff"), opacity=1.0),
-            text=[s["title"][:20]], textposition="top center",
-            textfont=dict(color="#ffffff", size=11),
-            hovertext=[s["title"]], hovertemplate="%{hovertext}<extra></extra>",
-            showlegend=False))
-        cam_eye = dict(x=s["x"] * 0.04 + 0.9, y=s["y"] * 0.04 + 0.9,
-                      z=s["z"] * 0.04 + 0.9)
-
-    cam_eye = {k: v / zoom for k, v in cam_eye.items()}   # ＋/－ 버튼 확대·축소
-    ranges = scene_ranges()
-    axis = dict(visible=False, showbackground=False, showgrid=False, zeroline=False)
-    fig.update_layout(
-        scene=dict(xaxis={**axis, "range": ranges[0]},
-                  yaxis={**axis, "range": ranges[1]},
-                  zaxis={**axis, "range": ranges[2]},
-                  aspectmode="data",
-                  bgcolor="rgba(0,0,0,0)", camera=dict(eye=cam_eye)),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=0, r=0, t=0, b=0),
-        legend=dict(font=dict(color="#d7e3ff", family="JetBrains Mono", size=10),
-                   bgcolor="rgba(6,9,18,0.55)", bordercolor="rgba(120,150,255,0.25)",
-                   borderwidth=1, x=0.01, y=0.99),
-        uirevision=f"focus::{sel_id}::{bool(search_ranked)}::{zoom:.2f}",
-        height=720,
-    )
-    return fig
-
-
-# ── 패널 구성요소 ────────────────────────────────────────────────
+# ── UI ───────────────────────────────────────────────────────────
 
 def _safe_url(url: str | None) -> str | None:
     """href 주입 방지 — http(s) 스킴만 허용한다 (javascript: 등 차단)."""
@@ -710,341 +383,141 @@ def _safe_url(url: str | None) -> str | None:
     return None
 
 
-def _select_node(i: int | None):
-    st.session_state.sel = i
-
-
-def _pin_node(i: int):
-    if i not in st.session_state.case:
-        st.session_state.case.append(i)
-
-
-def _unpin_node(i: int):
-    st.session_state.case = [c for c in st.session_state.case if c != i]
-
-
-def _card_html(n, rank: int | None = None, score: float | None = None) -> str:
-    """검색/케이스 카드 HTML. 크롤링 원문은 반드시 이스케이프한다."""
-    style = node_style(n)
-    title = html.escape(n["title"])
-    source_label = html.escape(n["source_label"])
-    date = html.escape(n["date"]) if n["date"] else "날짜 미상"
-    snippet = html.escape(n["snippet"])
-    safe_url = _safe_url(n["url"])
-    link = (f'<a href="{html.escape(safe_url)}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>'
-            if safe_url else '<span style="color:#4a5578;">원문 링크 없음</span>')
-    rank_html = f'<span class="rank">#{rank:02d}</span>' if rank else ""
-    simbar = (f'<div class="simbar-track"><div class="simbar-fill" '
-              f'style="width:{max(score, 0) * 100:.0f}%;"></div></div>'
-              if score is not None else "")
-    return f"""
-    <div class="board-card">
-      {rank_html}
-      <span class="cat-pill" style="color:{style['color']};">{style['short']}</span>
-      <div class="title">{title}</div>
-      <div class="meta">{source_label} · {date}</div>
-      <div class="snippet">{snippet}</div>
-      {simbar}
-      <div style="margin-top:6px;">{link}</div>
-    </div>"""
-
-
-def _card_buttons(i: int, key_prefix: str):
-    """카드 오른쪽 좁은 열에 세로로 쌓이는 동작 버튼."""
-    st.button("OBJECT 360°", key=f"{key_prefix}_sel_{i}",
-              on_click=_select_node, args=(i,))
-    pinned = i in st.session_state.case
-    st.button("PINNED ✓" if pinned else "+ CASE", key=f"{key_prefix}_pin_{i}",
-              on_click=_pin_node, args=(i,), disabled=pinned)
-
-
-def render_board(nodes, ranked, query_active: bool):
-    if not ranked:
-        if query_active:
-            st.markdown(
-                '<div class="idle-box">NO MATCH — 이 검색어를 포함하거나 주제가 관련된 '
-                '자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.<br><br>'
-                '예: 재개발 · 민간위탁 · 재난지원금 · 심리상담 · 성수동 · 어린이보호</div>',
-                unsafe_allow_html=True)
-        else:
-            st.markdown(
-                '<div class="idle-box">STANDBY — 검색창에 사업명이나 키워드를 입력하면 '
-                '관련 데이터가 앞으로 끌려나오며 여기에 표시됩니다. 카드의 OBJECT 360° 로 '
-                '연결을 타고 이동하고, + CASE 로 케이스 파일에 모으세요.<br><br>'
-                '예: 재개발 · 민간위탁 · 재난지원금 · 심리상담 · 성수동 · 어린이보호</div>',
-                unsafe_allow_html=True)
-        return
-    for rank, (i, score) in enumerate(ranked, start=1):
-        c_card, c_btn = st.columns([6.2, 1], gap="small")
-        with c_card:
-            st.markdown(_card_html(nodes[i], rank=rank, score=score),
-                       unsafe_allow_html=True)
-        with c_btn:
-            _card_buttons(i, "board")
-
-
-def _prop_rows(n) -> str:
-    sim_nbrs, doc_entities = build_adjacency()
-    if n["kind"] == "entity":
-        links = f'문서 {n["degree"]}건'
-    else:
-        links = (f'유사 문서 {len(sim_nbrs.get(n["id"], []))} · '
-                 f'개체 {len(doc_entities.get(n["id"], []))}')
-    rows = [
-        ("OBJECT ID", n["doc_id"]),
-        ("유형", f'{node_style(n)["label"]} ({ "개체" if n["kind"] == "entity" else "문서"})'),
-        ("날짜", n["date"] or "—"),
-        ("연결", links),
-    ]
-    return "".join(f"<tr><td>{html.escape(k)}</td><td>{html.escape(v)}</td></tr>"
-                   for k, v in rows)
-
-
-def render_object_360(nodes, sel_id: int):
-    n = nodes[sel_id]
-    st.button("← 상황판으로", key="close360", on_click=_select_node, args=(None,))
-    c_main, c_side = st.columns([1.6, 1], gap="large")
-
-    with c_main:
-        c_card, c_btn = st.columns([5.5, 1], gap="small")
-        with c_card:
-            st.markdown(_card_html(n), unsafe_allow_html=True)
-        with c_btn:
-            _card_buttons(sel_id, "obj")
-        st.markdown('<div class="obj-header">PROPERTIES</div>', unsafe_allow_html=True)
-        st.markdown(f'<table class="prop-table">{_prop_rows(n)}</table>',
-                   unsafe_allow_html=True)
-
-    with c_side:
-        sim_nbrs, doc_entities = build_adjacency()
-        if n["kind"] == "doc":
-            ents = doc_entities.get(sel_id, [])
-            if ents:
-                st.markdown('<div class="obj-header">LINKED OBJECTS — 개체</div>',
-                           unsafe_allow_html=True)
-                for e in ents:
-                    en = nodes[e]
-                    st.button(f'◇ {en["title"]}  [{node_style(en)["short"]} · {en["degree"]}건]',
-                              key=f"piv_ent_{e}", on_click=_select_node, args=(e,))
-            near = sorted(sim_nbrs.get(sel_id, []), key=lambda x: -x[1])[:8]
-            if near:
-                st.markdown('<div class="obj-header">LINKED OBJECTS — 유사 문서</div>',
-                           unsafe_allow_html=True)
-                for j, w in near:
-                    jn = nodes[j]
-                    title = jn["title"][:36] + ("…" if len(jn["title"]) > 36 else "")
-                    st.button(f'○ {title}  [{node_style(jn)["short"]} · {w:.2f}]',
-                              key=f"piv_doc_{j}", on_click=_select_node, args=(j,))
-            if not ents and not near:
-                st.markdown('<div class="stat-line">연결된 객체가 없습니다.</div>',
-                           unsafe_allow_html=True)
-        else:
-            linked = n["links"]
-            linked_nodes = sorted((nodes[d] for d in linked),
-                                  key=lambda x: (x["date"] or ""), reverse=True)
-            st.markdown(
-                f'<div class="obj-header">LINKED OBJECTS — 연결 문서 {len(linked)}건 (최신순)</div>',
-                unsafe_allow_html=True)
-            for jn in linked_nodes[:15]:
-                title = jn["title"][:36] + ("…" if len(jn["title"]) > 36 else "")
-                st.button(f'○ {title}  [{jn["date"] or "날짜 미상"}]',
-                          key=f"piv_link_{jn['id']}", on_click=_select_node,
-                          args=(jn["id"],))
-            if len(linked) > 15:
-                st.markdown(f'<div class="stat-line">… 외 {len(linked) - 15}건</div>',
-                           unsafe_allow_html=True)
-
-
-def _case_markdown(nodes, case: list[int]) -> str:
-    lines = ["# NEO 성동 — 케이스 파일",
-             f"- 내보낸 시각: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
-             f"- 수집 항목: {len(case)}건",
-             "",
-             "> 공개 행정데이터 기반 데모에서 수집한 자료 목록입니다. "
-             "내용의 정확성·적법성은 원문에서 확인하십시오.", ""]
-    for k, i in enumerate(case, start=1):
+def _build_cards(nodes, ranked) -> list[dict]:
+    """오버레이 카드 데이터 — 컴포넌트가 innerHTML로 넣으므로 반드시 이스케이프."""
+    cards = []
+    for i, _s in ranked[:MAX_CARDS]:
         n = nodes[i]
-        lines += [f"## {k}. {n['title']}",
-                  f"- 출처: {n['source_label']} · {n['date'] or '날짜 미상'}",
-                  f"- 원문: {n['url'] or '링크 없음'}",
-                  f"- 발췌: {n['snippet']}", ""]
-    return "\n".join(lines)
+        cards.append({
+            "node": i,
+            "cat": n["etype"] if n["kind"] == "entity" else n["category"],
+            "title": html.escape(n["title"][:90]),
+            "source": html.escape(n["source_label"][:40]),
+            "date": html.escape(n["date"] or ""),
+            "snippet": html.escape(n["snippet"][:180]),
+            "url": html.escape(_safe_url(n["url"]) or ""),
+        })
+    for c in cards:
+        if c["cat"] in ENTITY_STYLE:   # 컴포넌트 색상 키와 맞춤
+            c["cat"] = "entity"
+    return cards
 
 
-def render_case_file(nodes):
-    case = st.session_state.case
-    with st.expander(f"▣ 케이스 파일 ({len(case)}건)", expanded=bool(case)):
-        if not case:
-            st.markdown('<div class="stat-line">카드의 + CASE 버튼으로 자료를 모으세요.</div>',
-                       unsafe_allow_html=True)
-            return
-        for i in case:
-            n = nodes[i]
-            title = n["title"][:34] + ("…" if len(n["title"]) > 34 else "")
-            c1, c2 = st.columns([3, 1])
-            with c1:
-                st.markdown(
-                    f'<div class="stat-line" style="color:{node_style(n)["color"]};">'
-                    f'▪ {html.escape(title)}</div>', unsafe_allow_html=True)
-            with c2:
-                st.button("제거", key=f"unpin_{i}", on_click=_unpin_node, args=(i,))
-        st.download_button(
-            "케이스 파일 내보내기 (.md)", _case_markdown(nodes, case),
-            file_name=f"neo-seongdong-case-{datetime.now().strftime('%Y%m%d-%H%M')}.md",
-            mime="text/markdown")
+def _meta_html(query, mode, expanded, laws, meta, n_results) -> str:
+    parts = []
+    if query:
+        label = {"ai": "AI 선별", "fallback": "로컬(AI 실패)",
+                 "local": "로컬(키 없음)", "none": "일치 없음"}.get(mode, mode)
+        parts.append(f'QUERY <b style="color:#4fd8ff;">{html.escape(query[:36])}</b>'
+                     f' · {label} · {n_results}건')
+        if expanded:
+            parts.append("키워드 확장: " + html.escape(" · ".join(expanded)))
+        if laws:
+            lines = "".join(
+                f'<div>§ <a href="{html.escape(l["url"])}" target="_blank" '
+                f'rel="noopener noreferrer">{html.escape(l["title"])}</a>'
+                f' — {html.escape(l["kind"])} · 시행 {html.escape(l["date"])}</div>'
+                for l in laws)
+            parts.append(f'<div class="laws">국가 법령 (법제처 실시간)</div>{lines}')
+    else:
+        parts.append(f'문서 {meta["total_docs"]:,} · 개체 {meta["total_entities"]}'
+                     f' · 연결 {meta["total_edges"]:,} · 데이터 {meta["built_at"][:10]}')
+        parts.append("공개 행정데이터 데모 — 적법성·정확성을 보증하지 않습니다.")
+    return "<br>".join(parts)
 
 
-# ── 메인 ─────────────────────────────────────────────────────────
+def _legend_html(active_cats, active_etypes) -> str:
+    dots = []
+    for slug, s in CATEGORY_STYLE.items():
+        if slug in active_cats:
+            dots.append(f'<b style="color:{s["color"]};">●</b> {s["label"]}')
+    for et, s in ENTITY_STYLE.items():
+        if et in active_etypes:
+            dots.append(f'<b style="color:{s["color"]};">◆</b> {s["label"]}')
+    return "<br>".join(dots)
+
 
 def main():
-    inject_css()
-    nodes, edges, meta, vectors, idf = load_data()
-    st.session_state.setdefault("sel", None)
-    st.session_state.setdefault("case", [])
-    st.session_state.setdefault("zoom", 1.0)
+    st.markdown("""<style>
+      .block-container { padding: 0.6rem 1.0rem 0.4rem; max-width: 100%; }
+      header[data-testid="stHeader"] { background: transparent; height: 0; }
+      section[data-testid="stSidebar"] { background: rgba(6,9,18,0.95); }
+      .stApp { background: #05060d; }
+      iframe { border: none; border-radius: 8px; }
+    </style>""", unsafe_allow_html=True)
 
-    st.markdown(
-        '<div class="classification">OPEN DATA ── 성동구 공개 행정데이터 ── 데모 · 판단 없음</div>',
-        unsafe_allow_html=True)
-    st.markdown('<div class="neo-title">NEO 성동</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="neo-subtitle">성동구 공공데이터 3D 의미 연결망 + 온톨로지 · '
-        f'문서 {meta["total_docs"]:,} · 개체 {meta["total_entities"]} · '
-        f'연결 {meta["total_edges"]:,}</div><br>', unsafe_allow_html=True)
+    nodes, edges, meta, _vectors, _idf = load_data()
+    st.session_state.setdefault("uq", None)
+    st.session_state.setdefault("nonce", None)
 
-    # 사이드바 — 레이어 토글 + 기간 필터
     with st.sidebar:
         st.markdown("### 레이어")
         active_cats = {slug for slug, style in CATEGORY_STYLE.items()
-                       if st.checkbox(f'● {style["label"]} ({meta["categories"].get(slug, 0):,})',
+                       if st.checkbox(f'{style["label"]} '
+                                      f'({meta["categories"].get(slug, 0):,})',
                                       value=True, key=f"cat_{slug}")}
         st.markdown("### 온톨로지")
         active_etypes = {et for et, style in ENTITY_STYLE.items()
-                         if st.checkbox(f'◇ {style["label"]} ({meta["entity_types"].get(et, 0)})',
+                         if st.checkbox(f'{style["label"]} '
+                                        f'({meta["entity_types"].get(et, 0)})',
                                         value=True, key=f"ent_{et}")}
-        st.markdown("---")
-        st.markdown("### 기간")
-        years = [n["year"] for n in nodes if n["year"]]
-        y_min, y_max = min(years), max(years)
-        y_range = st.slider("연도 범위", y_min, y_max, (y_min, y_max),
-                            label_visibility="collapsed")
-        include_undated = st.checkbox("날짜 미상 포함", value=True)
         st.markdown("---")
         st.markdown("### 검색 AI")
         model_choice = st.radio("검색 AI 모델", list(MODEL_OPTIONS),
                                 index=0, label_visibility="collapsed")
         ai_model = MODEL_OPTIONS[model_choice]
         st.markdown("---")
-        st.markdown(f'<div class="stat-line">데이터 빌드: {meta["built_at"][:16]}</div>',
-                   unsafe_allow_html=True)
         st.markdown(
-            '<div class="stat-line" style="margin-top:8px; color:#5c6890;">'
-            '공개 행정데이터 기반 데모입니다. 개체는 규칙 기반 자동 추출로 '
-            '오추출이 있을 수 있습니다. 적법성·정확성을 보증하지 않습니다.</div>',
+            '<div style="color:#5c6890; font-size:0.78rem; line-height:1.6;">'
+            '개체는 규칙 기반 자동 추출로 오추출이 있을 수 있습니다. '
+            '정확한 내용은 각 카드의 원문 링크에서 확인하세요.</div>',
             unsafe_allow_html=True)
 
     def _visible(n) -> bool:
         if n["kind"] == "entity":
             return n["etype"] in active_etypes
-        if n["category"] not in active_cats:
-            return False
-        if n["year"] is None:
-            return include_undated
-        return y_range[0] <= n["year"] <= y_range[1]
+        return n["category"] in active_cats
 
-    visible_mask = np.array([_visible(n) for n in nodes])
+    payload_nodes, payload_edges, sig = component_payload()
+    payload_nodes = dict(payload_nodes)
+    payload_nodes["vis"] = [1 if _visible(n) else 0 for n in nodes]
 
-    def _zoom_by(factor: float):
-        st.session_state.zoom = min(4.0, max(0.4, st.session_state.zoom * factor))
-
-    def _zoom_reset():
-        st.session_state.zoom = 1.0
-
-    # 시각 순서: 3D 연결망 → 검색창 → 결과 패널 → 상태바.
-    # 검색어 값은 차트 하이라이트에 먼저 필요하므로 컨테이너로 자리를
-    # 잡아두고 실행 순서와 분리한다.
-    chart_box = st.container()
-    search_box = st.container()
-    panel_box = st.container()
-    status_box = st.container()
-
-    with search_box:
-        query = st.text_input(
-            "검색", placeholder="QUERY ▸ 사업명·키워드 입력 후 Enter — 예: 재개발 · 민간위탁 · 심리상담",
-            label_visibility="collapsed")
-        ai_mode = "idle"
-        ranked = []
-        expanded: list[str] = []
-        if query.strip():
-            result, ai_mode, expanded = run_search(query.strip(), ai_model)
-            ranked = [(i, s) for i, s in result if visible_mask[i]]
-        if expanded:
-            st.markdown(
-                f'<div class="stat-line" style="color:#5c6890;">키워드 확장: '
-                f'{html.escape(" · ".join(expanded))}</div>', unsafe_allow_html=True)
-
-    sel_id = st.session_state.sel
-    if sel_id is not None and not visible_mask[sel_id]:
-        sel_id = None   # 필터로 가려진 선택은 해제된 것으로 취급
-
-    with chart_box:
-        zc_sp, zc1, zc2, zc3 = st.columns([8.3, 0.55, 0.55, 0.55])
-        with zc1:
-            st.button("－", key="zoom_out", on_click=_zoom_by, args=(1 / 1.35,))
-        with zc2:
-            st.button("＋", key="zoom_in", on_click=_zoom_by, args=(1.35,))
-        with zc3:
-            st.button("⟲", key="zoom_reset", on_click=_zoom_reset)
-        # scrollZoom=False: 차트 위에서도 마우스 휠이 페이지 스크롤로 동작한다
-        # (확대·축소는 ＋/－ 버튼과 드래그 회전으로)
-        fig = build_figure(nodes, edges, visible_mask, ranked, sel_id,
-                          zoom=st.session_state.zoom)
-        st.plotly_chart(fig, width="stretch",
-                       config={"displaylogo": False, "scrollZoom": False})
-
-    with panel_box:
-        if sel_id is not None:
-            st.markdown("#### ▣ OBJECT 360")
-            render_object_360(nodes, sel_id)
+    # 검색 상태 → 컴포넌트 state
+    uq = st.session_state.uq
+    state = {"mode": "idle", "cards": [], "centroid": [0, 0, 0]}
+    meta_html = _meta_html(None, None, [], [], meta, 0)
+    if uq:
+        results, mode, expanded = run_search(uq, ai_model)
+        results = [(i, s) for i, s in results if _visible(nodes[i])]
+        laws = national_laws(uq, tuple(expanded))
+        cards = _build_cards(nodes, results)
+        if cards:
+            scale = 2.2
+            cx = float(np.mean([nodes[c["node"]]["x"] for c in cards])) / scale
+            cy = float(np.mean([nodes[c["node"]]["y"] for c in cards])) / scale
+            cz = float(np.mean([nodes[c["node"]]["z"] for c in cards])) / scale
+            state = {"mode": "results", "cards": cards,
+                     "centroid": [round(cx, 3), round(cy, 3), round(cz, 3)]}
         else:
-            count = f" — {len(ranked)}건" if ranked else ""
-            st.markdown(f"#### ▣ 상황판{count}")
-            if query.strip():
-                laws = national_laws(query.strip(), tuple(expanded))
-                if laws:
-                    items = "".join(
-                        f'<div class="stat-line">§ <a href="{html.escape(l["url"])}" '
-                        f'target="_blank" rel="noopener noreferrer" '
-                        f'style="color:#ffd166;">{html.escape(l["title"])}</a>'
-                        f' <span style="color:#7d8bb0;">— {html.escape(l["kind"])}'
-                        f' · {html.escape(l["dept"])} · 시행 {html.escape(l["date"])}'
-                        f'</span></div>' for l in laws)
-                    st.markdown(
-                        f'<div class="board-card" style="border-color:rgba(255,209,102,0.35);">'
-                        f'<div class="meta" style="color:#ffd166;">국가 법령 '
-                        f'(법제처 국가법령정보센터 실시간)</div>{items}</div>',
-                        unsafe_allow_html=True)
-            render_board(nodes, ranked, query_active=bool(query.strip()))
-        render_case_file(nodes)
+            state = {"mode": "none", "cards": [], "centroid": [0, 0, 0]}
+        meta_html = _meta_html(uq, mode, expanded, laws, meta, len(results))
 
-    with status_box:
-        vis_docs = int(sum(1 for i, n in enumerate(nodes)
-                           if visible_mask[i] and n["kind"] == "doc"))
-        vis_ents = int(sum(1 for i, n in enumerate(nodes)
-                           if visible_mask[i] and n["kind"] == "entity"))
-        sel_title = (html.escape(nodes[sel_id]["title"][:24]) if sel_id is not None else "—")
-        q_text = html.escape(query.strip()[:24]) if query.strip() else "—"
-        ai_label = {"ai": f"AI 선별({model_choice.split(' ')[0]})",
-                    "fallback": "로컬 유사도(AI 실패)",
-                    "local": "로컬 유사도(키 없음)",
-                    "none": "일치 없음", "idle": "—"}[ai_mode]
-        st.markdown(
-            f'<div class="status-bar">SYS <b>▮ ONLINE</b> · 문서 {vis_docs:,}/{meta["total_docs"]:,}'
-            f' · 개체 {vis_ents}/{meta["total_entities"]} · 기간 {y_range[0]}–{y_range[1]}'
-            f' · ZOOM {st.session_state.zoom:.1f}×'
-            f' · QUERY "{q_text}" · 선별 {ai_label} · SELECT {sel_title}'
-            f' · CASE {len(st.session_state.case)}건</div>',
-            unsafe_allow_html=True)
+    event = _universe(
+        nodes=payload_nodes, edges=payload_edges, data_sig=sig, state=state,
+        title="성동 UNIVERSE",
+        subtitle=(f'성동구 공공데이터 3D 의미 우주 · 문서 {meta["total_docs"]:,}'
+                  f' · 개체 {meta["total_entities"]} · {model_choice.split(" —")[0]}'),
+        meta_html=meta_html,
+        legend_html=_legend_html(active_cats, active_etypes),
+        key="universe", default=None)
+
+    # 컴포넌트 이벤트(검색·초기화) 처리 — nonce로 재전달 중복 제거
+    if isinstance(event, dict) and event.get("nonce") \
+            and event["nonce"] != st.session_state.nonce:
+        st.session_state.nonce = event["nonce"]
+        st.session_state.uq = (event.get("query") or "").strip() \
+            if event.get("type") == "search" else None
+        st.rerun()
 
 
 if __name__ == "__main__":

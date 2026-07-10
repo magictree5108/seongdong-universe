@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden;
+  font-family: 'JetBrains Mono', monospace; background: transparent; }
+#stage { position: relative; width: 100%; height: 100vh;
+  background:
+    radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,0.5) 0, transparent 60%),
+    radial-gradient(1px 1px at 78% 8%, rgba(255,255,255,0.35) 0, transparent 60%),
+    radial-gradient(1.5px 1.5px at 42% 65%, rgba(180,200,255,0.45) 0, transparent 60%),
+    radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,0.3) 0, transparent 60%),
+    radial-gradient(1px 1px at 25% 85%, rgba(255,255,255,0.35) 0, transparent 60%),
+    linear-gradient(180deg, #05060d 0%, #070a16 55%, #05060d 100%);
+}
+#gl { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+#wires { position: absolute; inset: 0; pointer-events: none; }
+
+.hdr { position: absolute; top: 18px; left: 24px; z-index: 30; pointer-events: none; }
+.hdr .title { font-size: 1.9rem; font-weight: 700; letter-spacing: 0.22em;
+  color: #eaf1ff; text-shadow: 0 0 22px rgba(120,170,255,0.6); }
+.hdr .sub { color: #7d8bb0; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 4px; }
+
+#resetBtn { position: absolute; top: 22px; right: 24px; z-index: 40;
+  background: rgba(12,17,32,0.85); color: #6ee7a8;
+  border: 1px solid rgba(110,231,168,0.55); border-radius: 5px;
+  font-family: inherit; font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.12em; padding: 9px 20px; cursor: pointer;
+  box-shadow: 0 0 16px rgba(110,231,168,0.15); }
+#resetBtn:hover { background: rgba(110,231,168,0.15); box-shadow: 0 0 22px rgba(110,231,168,0.4); }
+
+#searchWrap { position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%); z-index: 30; width: min(620px, 82%);
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s; text-align: center; }
+#searchWrap.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+#q { width: 100%; background: rgba(8,12,24,0.82);
+  border: 1px solid rgba(120,170,255,0.55); color: #eaf1ff;
+  font-family: inherit; font-size: 1.05rem; letter-spacing: 0.03em;
+  border-radius: 6px; padding: 15px 20px; outline: none;
+  box-shadow: 0 0 30px rgba(80,130,255,0.25), 0 0 90px rgba(80,130,255,0.12);
+  text-align: center; }
+#q:focus { border-color: #4fd8ff; box-shadow: 0 0 34px rgba(79,216,255,0.5); }
+#q::placeholder { color: #5c6890; }
+#searchHint { color: #7d8bb0; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 12px; }
+#noMatch { color: #ffb4a2; font-size: 0.8rem; margin-top: 12px; display: none; }
+
+#loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  z-index: 35; color: #4fd8ff; font-size: 0.9rem; letter-spacing: 0.3em;
+  display: none; animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+.card { position: absolute; width: 330px; z-index: 20;
+  border: 1px solid rgba(120,150,255,0.4); border-radius: 7px;
+  background: linear-gradient(180deg, rgba(16,20,36,0.92), rgba(10,13,24,0.92));
+  padding: 11px 14px; opacity: 0.8; transition: opacity 0.18s ease;
+  box-shadow: 0 0 14px rgba(60,90,200,0.18); cursor: default; }
+.card:hover { opacity: 1.0; z-index: 25;
+  border-color: rgba(79,216,255,0.8); box-shadow: 0 0 24px rgba(79,216,255,0.35); }
+.card .rank { color: #4fd8ff; font-weight: 700; font-size: 0.72rem; }
+.card .pill { display: inline-block; font-size: 0.62rem; padding: 1px 7px;
+  border-radius: 9px; margin-left: 6px; border: 1px solid currentColor; }
+.card .t { color: #eaf1ff; font-weight: 700; font-size: 0.82rem; margin: 4px 0 3px;
+  line-height: 1.35; }
+.card .m { color: #8291b8; font-size: 0.65rem; margin-bottom: 4px; }
+.card .s { color: #b9c4e0; font-size: 0.7rem; line-height: 1.5; max-height: 66px;
+  overflow: hidden; }
+.card a { color: #4fd8ff; font-size: 0.66rem; text-decoration: none; }
+.card a:hover { text-decoration: underline; }
+
+#meta { position: absolute; left: 24px; bottom: 18px; z-index: 20; max-width: 46%;
+  color: #7d8bb0; font-size: 0.68rem; line-height: 1.7; opacity: 0.85; }
+#meta .laws a { color: #ffd166; text-decoration: none; }
+#meta .laws a:hover { text-decoration: underline; }
+#legend { position: absolute; right: 24px; bottom: 18px; z-index: 20;
+  color: #7d8bb0; font-size: 0.66rem; line-height: 1.7; text-align: right; opacity: 0.8; }
+#legend b { font-weight: 400; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+  <svg id="wires"></svg>
+  <div class="hdr">
+    <div class="title" id="appTitle">성동 UNIVERSE</div>
+    <div class="sub" id="appSub"></div>
+  </div>
+  <button id="resetBtn" title="검색을 초기화하고 전체 우주로 돌아갑니다">⟲ 초기화</button>
+  <div id="searchWrap">
+    <input id="q" placeholder="성동구 공공데이터 우주 검색 — 예: 재개발 · 민간위탁 · 심리상담" autocomplete="off">
+    <div id="searchHint">Enter 로 검색 · 드래그 회전 · 휠 확대/축소</div>
+    <div id="noMatch">NO MATCH — 관련 자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.</div>
+  </div>
+  <div id="loading">AI 선별 중 ···</div>
+  <div id="meta"></div>
+  <div id="legend"></div>
+</div>
+<script src="./three.min.js"></script>
+<script>
+"use strict";
+/* ── Streamlit 컴포넌트 프로토콜 (라이브러리 없이 postMessage 직접 구현) ── */
+function stSend(type, data) {
+  window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type: type }, data), "*");
+}
+function stSetValue(v) { stSend("streamlit:setComponentValue", { value: v, dataType: "json" }); }
+
+let scene, camera, renderer, docPoints, entPoints, edgeLines, hiPoints;
+let N = 0, basePos = null, drawPos = null, phase = null, vis = null;
+let state = { mode: "idle", cards: [], centroid: [0,0,0] };
+let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
+    camTargetFocus = new THREE.Vector3(0,0,0);
+let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
+let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
+
+const CAT_COLOR = { consulting: 0xff9d45, notice: 0x4fd8ff, ordinance: 0xb18bff,
+                    org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8 };
+const CAT_SHORT = { consulting: "선례", notice: "공고", ordinance: "조례",
+                    org: "부서", news: "소식", entity: "개체" };
+
+function spriteTexture(diamond) {
+  const c = document.createElement("canvas"); c.width = c.height = 64;
+  const g = c.getContext("2d");
+  g.translate(32, 32);
+  if (diamond) g.rotate(Math.PI / 4);
+  const grad = g.createRadialGradient(0, 0, 2, 0, 0, 26);
+  grad.addColorStop(0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.35, "rgba(255,255,255,0.85)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grad;
+  if (diamond) g.fillRect(-18, -18, 36, 36); else { g.beginPath(); g.arc(0,0,26,0,7); g.fill(); }
+  return new THREE.CanvasTexture(c);
+}
+
+function initScene() {
+  const canvas = document.getElementById("gl");
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(55, 2, 0.1, 500);
+  window.addEventListener("resize", resize);
+  resize();
+
+  const st = document.getElementById("stage");
+  st.addEventListener("pointerdown", e => {
+    if (e.target.closest(".card") || e.target.closest("#searchWrap") ||
+        e.target.closest("#resetBtn")) return;
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+  });
+  window.addEventListener("pointerup", () => dragging = false);
+  window.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    userTheta -= (e.clientX - lastX) * 0.005;
+    userPhi = Math.max(0.15, Math.min(3.0, userPhi - (e.clientY - lastY) * 0.005));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  st.addEventListener("wheel", e => {
+    e.preventDefault();
+    camTargetDist = Math.max(3, Math.min(60, camTargetDist * (e.deltaY > 0 ? 1.1 : 0.9)));
+  }, { passive: false });
+
+  document.getElementById("q").addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    const q = e.target.value.trim();
+    if (!q) return;
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("noMatch").style.display = "none";
+    document.getElementById("searchWrap").classList.add("hidden");
+    stSetValue({ type: "search", query: q, nonce: Date.now() });
+  });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    document.getElementById("q").value = "";
+    stSetValue({ type: "reset", nonce: Date.now() });
+  });
+  requestAnimationFrame(tick);
+}
+
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  const svg = document.getElementById("wires");
+  svg.setAttribute("width", w); svg.setAttribute("height", h);
+}
+
+function buildGeometry(nodes, edges) {
+  N = nodes.x.length;
+  basePos = new Float32Array(N * 3); drawPos = new Float32Array(N * 3);
+  phase = new Float32Array(N); vis = nodes.vis;
+  const docIdx = [], entIdx = [];
+  for (let i = 0; i < N; i++) {
+    basePos[i*3] = nodes.x[i]; basePos[i*3+1] = nodes.y[i]; basePos[i*3+2] = nodes.z[i];
+    phase[i] = (i * 2654435761 % 6283) / 1000.0;
+    (nodes.kind[i] === 1 ? entIdx : docIdx).push(i);
+  }
+  [docPoints, entPoints, edgeLines, hiPoints].forEach(o => { if (o) scene.remove(o); });
+
+  function makePoints(idx, diamond, size, opacity) {
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(idx.length * 3), col = new Float32Array(idx.length * 3);
+    const c = new THREE.Color();
+    idx.forEach((ni, k) => {
+      c.setHex(CAT_COLOR[nodes.cat[ni]] || 0x8899ff);
+      col[k*3] = c.r; col[k*3+1] = c.g; col[k*3+2] = c.b;
+    });
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    const mat = new THREE.PointsMaterial({ size, map: spriteTexture(diamond),
+      vertexColors: true, transparent: true, opacity, depthWrite: false,
+      blending: THREE.AdditiveBlending, sizeAttenuation: true });
+    const pts = new THREE.Points(geo, mat);
+    pts.userData.idx = idx;
+    scene.add(pts);
+    return pts;
+  }
+  docPoints = makePoints(docIdx, false, 0.55, 0.6);
+  entPoints = makePoints(entIdx, true, 1.5, 0.85);
+
+  const epos = new Float32Array(edges.length * 6);
+  const egeo = new THREE.BufferGeometry();
+  egeo.setAttribute("position", new THREE.BufferAttribute(epos, 3));
+  edgeLines = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({
+    color: 0x7896ff, transparent: true, opacity: 0.07 }));
+  edgeLines.userData.edges = edges;
+  scene.add(edgeLines);
+
+  const hgeo = new THREE.BufferGeometry();
+  hgeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(60), 3));
+  hgeo.setDrawRange(0, 0);
+  hiPoints = new THREE.Points(hgeo, new THREE.PointsMaterial({ size: 2.6,
+    map: spriteTexture(false), color: 0xfff3b0, transparent: true, opacity: 1.0,
+    depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true }));
+  scene.add(hiPoints);
+}
+
+function applyStateVisuals() {
+  const focus = state.mode === "results";
+  if (docPoints) docPoints.material.opacity = focus ? 0.18 : 0.6;
+  if (entPoints) entPoints.material.opacity = focus ? 0.25 : 0.85;
+  if (edgeLines) edgeLines.material.opacity = focus ? 0.03 : 0.07;
+  document.getElementById("searchWrap").classList.toggle("hidden", focus);
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("noMatch").style.display =
+    state.mode === "none" ? "block" : "none";
+  if (state.mode === "none") {
+    document.getElementById("searchWrap").classList.remove("hidden");
+  }
+  if (focus) {
+    camTargetFocus.set(state.centroid[0], state.centroid[1], state.centroid[2]);
+    camTargetDist = 6.5;                    // 딥 줌 — 결과 성단 속으로
+  } else {
+    camTargetFocus.set(0, 0, 0);
+    camTargetDist = 26;
+  }
+  buildCards();
+}
+
+function buildCards() {
+  cardEls.forEach(el => el.remove()); cardEls = [];
+  const svg = document.getElementById("wires");
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  if (state.mode !== "results") return;
+  const cards = state.cards.slice(0, 8);
+  cards.forEach((cdata, k) => {
+    const el = document.createElement("div");
+    el.className = "card";
+    const color = "#" + (CAT_COLOR[cdata.cat] || 0x8899ff).toString(16).padStart(6, "0");
+    const link = cdata.url
+      ? `<a href="${cdata.url}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>`
+      : `<span style="color:#4a5578;font-size:0.66rem;">원문 링크 없음</span>`;
+    el.innerHTML =
+      `<span class="rank">#${String(k + 1).padStart(2, "0")}</span>` +
+      `<span class="pill" style="color:${color};">${CAT_SHORT[cdata.cat] || ""}</span>` +
+      `<div class="t">${cdata.title}</div>` +
+      `<div class="m">${cdata.source} · ${cdata.date || "날짜 미상"}</div>` +
+      `<div class="s">${cdata.snippet}</div>` +
+      `<div style="margin-top:5px;">${link}</div>`;
+    document.getElementById("stage").appendChild(el);
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("stroke", "rgba(255,243,176,0.55)");
+    line.setAttribute("stroke-width", "1.2");
+    svg.appendChild(line);
+    cardEls.push(el);
+    el._line = line; el._node = cdata.node; el._slot = k;
+  });
+}
+
+function layoutCards() {
+  const w = window.innerWidth, h = window.innerHeight;
+  const perSide = Math.ceil(cardEls.length / 2);
+  const v = new THREE.Vector3();
+  cardEls.forEach(el => {
+    const k = el._slot, left = k % 2 === 0, row = Math.floor(k / 2);
+    const rows = perSide;
+    // 하단 메타·범례와 겹치지 않도록 카드 영역을 화면 위 2/3에 배치
+    const usable = h - 330;
+    const y = 96 + usable * (rows <= 1 ? 0.3 : row / Math.max(1, rows - 1));
+    const x = left ? 24 : w - 354;
+    el.style.left = x + "px"; el.style.top = y + "px";
+    v.set(drawPos[el._node*3], drawPos[el._node*3+1], drawPos[el._node*3+2]).project(camera);
+    if (v.z > 1) { el._line.setAttribute("stroke", "transparent"); return; }
+    el._line.setAttribute("stroke", "rgba(255,243,176,0.55)");
+    const nx = (v.x * 0.5 + 0.5) * w, ny = (-v.y * 0.5 + 0.5) * h;
+    const rect = el.getBoundingClientRect();
+    el._line.setAttribute("x1", left ? rect.right : rect.left);
+    el._line.setAttribute("y1", rect.top + rect.height / 2);
+    el._line.setAttribute("x2", nx); el._line.setAttribute("y2", ny);
+  });
+}
+
+let tPrev = 0;
+function tick(t) {
+  requestAnimationFrame(tick);
+  if (!renderer || !N) return;
+  const dt = Math.min(0.05, (t - tPrev) / 1000 || 0.016); tPrev = t;
+  rotY += dt * 0.05;                          // 상시 느린 자전
+  const time = t / 1000;
+
+  for (let i = 0; i < N; i++) {               // 노드별 미세 부유
+    const hidden = vis && !vis[i];
+    if (hidden) { drawPos[i*3] = drawPos[i*3+1] = drawPos[i*3+2] = 1e6; continue; }
+    const p = phase[i];
+    drawPos[i*3]   = basePos[i*3]   + Math.sin(time * 0.5 + p) * 0.09;
+    drawPos[i*3+1] = basePos[i*3+1] + Math.sin(time * 0.35 + p * 1.7) * 0.09;
+    drawPos[i*3+2] = basePos[i*3+2] + Math.cos(time * 0.42 + p) * 0.09;
+  }
+  [docPoints, entPoints].forEach(pts => {
+    const idx = pts.userData.idx, arr = pts.geometry.attributes.position.array;
+    idx.forEach((ni, k) => {
+      arr[k*3] = drawPos[ni*3]; arr[k*3+1] = drawPos[ni*3+1]; arr[k*3+2] = drawPos[ni*3+2];
+    });
+    pts.geometry.attributes.position.needsUpdate = true;
+  });
+  const eArr = edgeLines.geometry.attributes.position.array,
+        eds = edgeLines.userData.edges;
+  for (let e = 0; e < eds.length; e++) {
+    const a = eds[e][0], b = eds[e][1];
+    eArr[e*6]   = drawPos[a*3]; eArr[e*6+1] = drawPos[a*3+1]; eArr[e*6+2] = drawPos[a*3+2];
+    eArr[e*6+3] = drawPos[b*3]; eArr[e*6+4] = drawPos[b*3+1]; eArr[e*6+5] = drawPos[b*3+2];
+  }
+  edgeLines.geometry.attributes.position.needsUpdate = true;
+
+  if (state.mode === "results") {             // 결과 노드 하이라이트
+    const hArr = hiPoints.geometry.attributes.position.array;
+    const cards = state.cards.slice(0, Math.min(20, state.cards.length));
+    cards.forEach((c, k) => {
+      hArr[k*3] = drawPos[c.node*3]; hArr[k*3+1] = drawPos[c.node*3+1];
+      hArr[k*3+2] = drawPos[c.node*3+2];
+    });
+    hiPoints.geometry.setDrawRange(0, cards.length);
+    hiPoints.geometry.attributes.position.needsUpdate = true;
+  } else hiPoints.geometry.setDrawRange(0, 0);
+
+  camDist += (camTargetDist - camDist) * Math.min(1, dt * 2.5);
+  camFocus.lerp(camTargetFocus, Math.min(1, dt * 2.5));
+  const th = userTheta + rotY, ph = userPhi;
+  camera.position.set(
+    camFocus.x + camDist * Math.sin(ph) * Math.cos(th),
+    camFocus.y + camDist * Math.cos(ph),
+    camFocus.z + camDist * Math.sin(ph) * Math.sin(th));
+  camera.lookAt(camFocus);
+  renderer.render(scene, camera);
+  layoutCards();
+}
+
+/* ── 렌더 이벤트 수신 ── */
+window.addEventListener("message", ev => {
+  const msg = ev.data;
+  if (!msg || msg.type !== "streamlit:render") return;
+  const args = msg.args;
+  if (!initialized) { initScene(); initialized = true; }
+  if (args.data_sig !== dataSig) {
+    dataSig = args.data_sig;
+    buildGeometry(args.nodes, args.edges);
+    nodesRef = args.nodes;
+  } else if (nodesRef && args.nodes.vis) {
+    vis = args.nodes.vis;
+  }
+  state = args.state;
+  document.getElementById("appTitle").textContent = args.title || "성동 UNIVERSE";
+  document.getElementById("appSub").textContent = args.subtitle || "";
+  document.getElementById("meta").innerHTML = args.meta_html || "";
+  document.getElementById("legend").innerHTML = args.legend_html || "";
+  applyStateVisuals();
+});
+stSend("streamlit:componentReady", { apiVersion: 1 });
+stSend("streamlit:setFrameHeight", { height: 860 });
+</script>
+</body>
+</html>
