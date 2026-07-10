@@ -86,8 +86,20 @@ _universe = components.declare_component(
 
 # ── 데이터 로드 ──────────────────────────────────────────────────
 
+def _data_sig() -> float:
+    """데이터 파일 서명 — 캐시 무효화 키.
+
+    cache_data는 함수 코드가 그대로면 캐시를 유지하므로, 코드만 바뀌고
+    데이터 파일이 갱신된 배포(핫 리로드)에서 옛 노드/메타가 계속 서빙되는
+    사고가 난다. 파일 mtime을 캐시 키 인자로 넣어 데이터 갱신 즉시 반영한다."""
+    try:
+        return (DATA_DIR / "meta.json").stat().st_mtime
+    except OSError:
+        return 0.0
+
+
 @st.cache_data(show_spinner=False)
-def load_data():
+def load_data(sig: float = 0.0):
     nodes = json.loads((DATA_DIR / "nodes.json").read_text(encoding="utf-8"))
     edges = json.loads((DATA_DIR / "edges.json").read_text(encoding="utf-8"))
     meta = json.loads((DATA_DIR / "meta.json").read_text(encoding="utf-8"))
@@ -104,11 +116,11 @@ def _safe_url(url: str | None) -> str | None:
 
 
 @st.cache_data(show_spinner=False)
-def component_payload():
+def component_payload(data_sig: float = 0.0):
     """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지·노드 정보)은
     한 번만 만든다. 텍스트는 컴포넌트가 innerHTML로 넣으므로 여기서
     전부 이스케이프한다 (크롤 원문 XSS 방지)."""
-    nodes, edges, meta, _v, _i = load_data()
+    nodes, edges, meta, _v, _i = load_data(data_sig)
     payload_nodes = {
         "x": [round(n["x"] / COORD_SCALE, 3) for n in nodes],
         "y": [round(n["y"] / COORD_SCALE, 3) for n in nodes],
@@ -255,7 +267,7 @@ def local_candidates(query: str,
     어휘 게이트(공백 무시)로 질의·확장 키워드가 실제 등장하는 노드만 모으고
     (일치 수, 코사인)으로 랭크한다. 카테고리 쿼터로 대량 코퍼스(보도·공고)의
     독식을 막는다. 게이트가 완전히 비면 코사인 상위를 넘긴다(AI가 거른다)."""
-    nodes, _e, _m, vectors, idf = load_data()
+    nodes, _e, _m, vectors, idf = load_data(_data_sig())
     qvec = embedder.embed([query], idf)[0]
     sims = vectors @ qvec
 
@@ -302,7 +314,7 @@ def ai_select(query: str, cand_key: tuple[int, ...],
     key = _api_key()
     if not key:
         return None
-    nodes, *_rest = load_data()
+    nodes, *_rest = load_data(_data_sig())
     import anthropic
     from pydantic import BaseModel
 
@@ -342,7 +354,7 @@ def _dept_routing(query: str) -> list[int]:
     """질의에 부서명이 들어 있으면 그 부서의 업무분장 문서·개체를 최상단 고정.
 
     부분 명칭도 잇는다 — '환경과'(질의)는 '맑은환경과'(실제 부서)로."""
-    nodes, *_rest = load_data()
+    nodes, *_rest = load_data(_data_sig())
     qflat = re.sub(r"\s+", "", query).lower()
     dept_tokens = set(_DEPT_TOKEN_RE.findall(qflat))
 
@@ -528,7 +540,7 @@ def main():
         margin-top: 28px; padding: 14px 0 6px; }
     </style>""", unsafe_allow_html=True)
 
-    nodes, edges, meta, _vectors, _idf = load_data()
+    nodes, edges, meta, _vectors, _idf = load_data(_data_sig())
     st.session_state.setdefault("uq", None)
     st.session_state.setdefault("nonce", None)
 
@@ -562,7 +574,7 @@ def main():
             return n["etype"] in active_etypes
         return n["category"] in active_cats
 
-    payload_nodes, payload_edges, sig = component_payload()
+    payload_nodes, payload_edges, sig = component_payload(_data_sig())
     payload_nodes = dict(payload_nodes)
     payload_nodes["vis"] = [1 if _visible(n) else 0 for n in nodes]
 
