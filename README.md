@@ -73,12 +73,15 @@ Ordinance, BudgetItem, PressRelease, Facility, District, ComplaintType)과
 계층은 의도적으로 구현하지 않습니다.
 
 ```bash
-python -m ontology.promote   # 디딤 색인 → data/ontology.db (조례·부서·보도 승격)
-python -m ontology.verify    # 벤치마크: 빈 그래프 왕복·링크 규칙·다중 홉 조회
+python -m ontology.promote        # 디딤 색인 → data/ontology.db (조례·부서·보도 승격)
+python -m ontology.ingest_budget  # 지방재정365 → Policy·BudgetItem·집행링크 (LOFIN_KEY 필요)
+python -m ontology.verify         # 벤치마크: 빈 그래프 왕복·링크 규칙·다중 홉 조회
 ```
 
-현재 승격된 객체: Ordinance 644 · Department 41 · PressRelease 2,330.
-Policy·BudgetItem은 예산 데이터 수집(2단계) 후 생성됩니다.
+현재 객체: Ordinance 644 · Department 41 · PressRelease 2,330 · Policy 1,813 ·
+BudgetItem 4,879 (2023~2026 회계연도) · 집행 링크 4,879.
+예산 출처: 지방재정365 세부사업별 세출현황 (출처표시 조건, 일간 갱신,
+자치단체코드 1114000 = 서울성동구).
 
 ## 검색 품질 평가
 
