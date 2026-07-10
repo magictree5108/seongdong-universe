@@ -386,8 +386,9 @@ function applyStateVisuals() {
   }
   if (focus) {
     camTargetFocus.set(state.centroid[0], state.centroid[1], state.centroid[2]);
-    // 결과 성단의 퍼짐 반경에 맞춰 줌 — 관련 연결망이 한눈에 들어오게
-    camTargetDist = Math.max(9, Math.min(18, (state.spread || 2) * 2.4 + 5));
+    // 거의 끝까지 축소 — 전체 우주 속에서 결과 연결망 전체가 보이게
+    // (하이라이트·커넥터 라인이 위치를 알려주므로 확대는 사용자 휠에 맡긴다)
+    camTargetDist = Math.max(26, Math.min(38, (state.spread || 2) * 2.2 + 12));
   } else {
     camTargetFocus.set(0, 0, 0);
     camTargetDist = 26;
