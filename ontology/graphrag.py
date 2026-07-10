@@ -34,13 +34,26 @@ MIN_CONFIDENCE = 0.85        # Claude 생성 링크의 고정밀 소비 기준
 MAX_SEEDS = 6
 MAX_CONTEXT_OBJECTS = 28
 
-_STOP = {"사업", "예산", "조례", "부서", "성동구", "서울특별시", "관련", "대한",
-         "올해", "내년", "작년", "얼마", "무엇", "어디", "근거", "현황", "알려줘"}
+_STOP = {"사업", "사업들", "사업은", "사업이", "예산", "예산이", "예산은", "조례",
+         "부서", "성동구", "서울특별시", "관련", "대한", "올해", "내년", "작년",
+         "얼마", "얼마나", "얼마야", "무엇", "어디", "근거", "현황", "알려줘",
+         "알려주", "가장", "제일", "최대", "상위", "많이", "많은", "쓰는", "맡은",
+         "뭐야", "뭔가", "분야", "총액", "합계", "전체"}
+
+# 집계형 질문 — 이름-일치 시드로는 답할 수 없어 SQL 집계를 컨텍스트에 주입한다
+_AGG_RE = re.compile(r"가장|제일|최대|최고|상위|톱|순위|총액|총 |합계|전체|규모|"
+                     r"많이|많은|비교|얼마나 (돼|되)|몇 개|평균")
 
 
 def _q_tokens(question: str) -> list[str]:
-    toks = [t for t in re.split(r"[^가-힣A-Za-z0-9]+", question)
-            if len(t) >= 2 and t not in _STOP]
+    toks = []
+    for t in re.split(r"[^가-힣A-Za-z0-9]+", question):
+        if len(t) < 2 or t in _STOP:
+            continue
+        toks.append(t)
+        # 조사 제거 근사형 — '주거정비과가' → '주거정비과' 도 매칭되게
+        if len(t) >= 4:
+            toks.append(t[:-1])
     # 복합어 분해 보강: "마을버스사업" 같은 붙임도 부분 일치로 잡히도록 원문도 보존
     return toks or [question.strip()]
 
@@ -48,8 +61,10 @@ def _q_tokens(question: str) -> list[str]:
 ANSWER_SYSTEM = """너는 성동구 공개 행정데이터 온톨로지(개인 학습용 프로토타입)의 질의응답기다.
 
 규칙:
-1. 아래 [서브그래프] 안의 사실만 사용하라. 그래프에 없는 내용을 추측하지 마라 —
+1. 아래 [서브그래프]·[집계] 안의 사실만 사용하라. 그래프에 없는 내용을 추측하지 마라 —
    모르면 "제공된 그래프에서 확인되지 않습니다"라고 답하라.
+   총액·순위·"가장 큰" 질문은 반드시 [집계] 블록으로 답하라 — 서브그래프의
+   부분 목록으로 전체를 추정하지 마라. [집계]가 없으면 전체 비교는 불가하다고 밝혀라.
 2. 답변의 각 사실 뒤에 근거 객체 id를 대괄호로 표기하라. 예: 담당부서는 교통행정과다 [department:3122].
 3. 금액은 원 단위 숫자와 억 원 환산을 병기하라. 집행률은 지출액/예산현액으로 계산해도 된다.
 4. 링크의 확신도(confidence)가 1.0 미만인 관계는 자동 추출된 것이므로,
@@ -73,19 +88,30 @@ def _api_key(explicit: str | None = None) -> str:
 
 
 def find_seeds(store: OntologyStore, question: str, limit: int = MAX_SEEDS) -> list[SDObject]:
-    """이름 어휘 일치로 시드 객체를 찾는다. 긴 토큰 일치에 가중치."""
+    """이름 어휘 일치로 시드 객체를 찾는다. 긴 토큰 일치에 가중치.
+
+    부서명이 질문에 통째로 들어 있으면 그 Department를 최우선 시드로 넣고,
+    집계형 질문에서는 보도자료 시드를 뒤로 미룬다 (분석 질문에 낱말만 겹치는
+    보도가 시드를 독식해 서브그래프가 무의미해지는 것을 막는다)."""
     toks = _q_tokens(question)
-    scored: list[tuple[float, SDObject]] = []
+    aggregate = bool(_AGG_RE.search(question))
+    scored: list[tuple[float, str]] = []
     rows = store.conn.execute("SELECT id, type, name FROM objects").fetchall()
+    forced: list[str] = []
     for r in rows:
         name = r["name"]
+        if r["type"] == "Department" and name in question:
+            forced.append(r["id"])
+            continue
         score = sum(len(t) for t in toks if t in name)
         if score > 0:
+            if aggregate and r["type"] == "PressRelease":
+                score *= 0.3
             # 같은 사업이 여러 표기로 있을 때 이름이 짧을수록(정확 일치에 가까울수록) 우대
             scored.append((score - len(name) * 0.001, r["id"]))
     scored.sort(key=lambda x: -x[0])
     seeds, seen_names = [], set()
-    for _, oid in scored:
+    for oid in forced + [oid for _, oid in scored]:
         obj = store.get(oid)
         if obj.name in seen_names:
             continue
@@ -94,6 +120,87 @@ def find_seeds(store: OntologyStore, question: str, limit: int = MAX_SEEDS) -> l
         if len(seeds) >= limit:
             break
     return seeds
+
+
+# ── 집계 컨텍스트 — 구조적 질문(총액·상위·부서/분야 목록)용 ──────
+
+
+def _agg(store: OntologyStore, question: str) -> str | None:
+    """집계형 질문에 결정적 SQL 집계를 컨텍스트로 준다.
+
+    이름-일치 시드 + 1홉 확장은 "가장 큰 사업" "분야 총액" 같은 질문에
+    구조적으로 답할 수 없다 — 전체를 보지 못하기 때문. 분야·부서·연도가
+    질문에 등장하거나 최상급·합계 표현이 있으면 DB 전체 집계를 주입한다."""
+    conn = store.conn
+    j = lambda k: f"json_extract(props, '$.{k}')"  # noqa: E731
+
+    fields = [r[0] for r in conn.execute(
+        f"SELECT DISTINCT {j('field')} FROM objects WHERE type='Policy'") if r[0]]
+    depts = [r[0] for r in conn.execute(
+        "SELECT name FROM objects WHERE type='Department'")]
+    hit_fields = [f for f in fields
+                  if f in question or any(t in f for t in _q_tokens(question) if len(t) >= 2)]
+    hit_depts = [d for d in depts if d in question]
+    m_year = re.search(r"20\d{2}", question)
+    years = [r[0] for r in conn.execute(
+        f"SELECT DISTINCT {j('year')} FROM objects WHERE type='BudgetItem' ORDER BY 1")]
+    year = int(m_year.group(0)) if m_year and int(m_year.group(0)) in years else max(years)
+
+    if not (_AGG_RE.search(question) or hit_fields or hit_depts or m_year):
+        return None
+
+    won = lambda v: f"{int(v):,}원" if v else "0원"  # noqa: E731
+    # "돈을 많이 쓰는/지출/집행" 질문은 지출액 기준으로 정렬해 준다
+    order = ("expenditure" if re.search(r"지출|집행|많이 쓰|돈을", question)
+             else "budget_current")
+    order_label = "지출액" if order == "expenditure" else "예산현액"
+    blocks = [f"[집계 — 지방재정365 세부사업, 회계연도 {year}, 정렬 기준 {order_label}"
+              f" (지출액은 조회일 기준)]"]
+
+    # 분야별 총액 — 항상 포함 (13행 내외로 작다)
+    rows = conn.execute(
+        f"SELECT {j('field')}, COUNT(*), SUM({j('budget_current')}), SUM({j('expenditure')})"
+        f" FROM objects WHERE type='BudgetItem' AND {j('year')} = ?"
+        f" GROUP BY 1 ORDER BY 3 DESC", (year,)).fetchall()
+    blocks.append("분야별 총액: " + " / ".join(
+        f"{r[0] or '기타'} {won(r[2])} (세부사업 {r[1]}개, 지출 {won(r[3])})" for r in rows))
+
+    # 상위 사업 — 해당 연도 예산현액 기준
+    top = conn.execute(
+        f"SELECT name, {j('field')}, {j('budget_current')}, {j('expenditure')}, id"
+        f" FROM objects WHERE type='BudgetItem' AND {j('year')} = ?"
+        f" ORDER BY {j(order)} DESC LIMIT 12", (year,)).fetchall()
+    blocks.append(f"{year}년 예산현액 상위 세부사업:\n" + "\n".join(
+        f" {k}. {r[0]} — {r[1] or '?'}, 예산현액 {won(r[2])}, 지출 {won(r[3])} [{r[4]}]"
+        for k, r in enumerate(top, 1)))
+
+    # 질문이 특정 분야·부서를 짚으면 그 범위의 목록·총액 추가
+    for f in hit_fields[:2]:
+        rows = conn.execute(
+            f"SELECT name, {j('budget_current')}, {j('expenditure')}, id FROM objects"
+            f" WHERE type='BudgetItem' AND {j('year')} = ? AND {j('field')} = ?"
+            f" ORDER BY {j(order)} DESC LIMIT 10", (year, f)).fetchall()
+        tot = conn.execute(
+            f"SELECT COUNT(*), SUM({j('budget_current')}) FROM objects"
+            f" WHERE type='BudgetItem' AND {j('year')} = ? AND {j('field')} = ?",
+            (year, f)).fetchone()
+        blocks.append(f"'{f}' 분야 {year}년: 세부사업 {tot[0]}개, 총 예산현액 {won(tot[1])}."
+                      f" 상위:\n" + "\n".join(
+                          f" - {r[0]} 예산현액 {won(r[1])}, 지출 {won(r[2])} [{r[3]}]"
+                          for r in rows))
+    for d in hit_depts[:2]:
+        rows = conn.execute(
+            f"SELECT name, {j('field')}, {j('budget_current')}, {j('expenditure')}, id"
+            f" FROM objects WHERE type='Policy' AND {j('department')} = ?"
+            f" ORDER BY {j(order)} DESC LIMIT 15", (d,)).fetchall()
+        tot = conn.execute(
+            f"SELECT COUNT(*), SUM({j('budget_current')}) FROM objects"
+            f" WHERE type='Policy' AND {j('department')} = ?", (d,)).fetchone()
+        blocks.append(f"'{d}' 소관 사업 {tot[0]}개 (최신연도 예산현액 합 {won(tot[1])})."
+                      f" 상위:\n" + "\n".join(
+                          f" - {r[0]} — {r[1] or '?'}, 예산현액 {won(r[2])},"
+                          f" 지출 {won(r[3])} [{r[4]}]" for r in rows))
+    return "\n\n".join(blocks)
 
 
 def expand_subgraph(store: OntologyStore, seeds: list[SDObject],
@@ -162,24 +269,35 @@ def answer_question(question: str, *, db_path: Path | str = DEFAULT_DB,
     """질문에 근거를 달아 답한다. 반환: {answer, sources, seeds, stats}."""
     with OntologyStore(db_path) as store:
         seeds = find_seeds(store, question)
-        if not seeds:
+        agg = _agg(store, question)
+        if not seeds and not agg:
             return {"answer": "질문과 연결되는 객체를 그래프에서 찾지 못했습니다.",
                     "sources": [], "seeds": [], "stats": {"objects": 0, "links": 0}}
         objects, links = expand_subgraph(store, seeds, min_confidence)
 
-    import anthropic
-    client = anthropic.Anthropic(api_key=_api_key(api_key))
-    msg = client.messages.create(
-        model=model, max_tokens=MAX_TOKENS, system=ANSWER_SYSTEM,
-        messages=[{"role": "user",
-                   "content": f"{build_context(objects, links)}\n\n[질문]\n{question}"}],
-    )
-    answer = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+        context = build_context(objects, links)
+        if agg:
+            context = f"{agg}\n\n{context}"
 
-    cited = [oid for oid in objects if oid in answer]
-    sources = [{"id": o.id, "type": type(o).__name__, "name": o.name,
-                "url": o.source_url}
-               for o in (objects[c] for c in cited)]
+        import anthropic
+        client = anthropic.Anthropic(api_key=_api_key(api_key))
+        msg = client.messages.create(
+            model=model, max_tokens=MAX_TOKENS, system=ANSWER_SYSTEM,
+            messages=[{"role": "user",
+                       "content": f"{context}\n\n[질문]\n{question}"}],
+        )
+        answer = "".join(
+            b.text for b in msg.content if getattr(b, "type", "") == "text").strip()
+
+        # 답변에 인용된 객체 → 근거 목록 (집계 블록에서 인용된 id도 포함)
+        cited = list(dict.fromkeys(re.findall(
+            r"\b(?:policy|budget|ordinance|press|department)[::][\w/:.-]+", answer)))
+        sources = []
+        for cid in cited:
+            o = objects.get(cid) or store.get(cid)
+            if o is not None:
+                sources.append({"id": o.id, "type": type(o).__name__,
+                                "name": o.name, "url": o.source_url})
     return {
         "answer": answer,
         "sources": sources,

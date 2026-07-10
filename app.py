@@ -375,6 +375,47 @@ def _dept_routing(query: str) -> list[int]:
     return org_hits[:3] + entity_hits[:3]
 
 
+# ── GraphRAG: 질문형 질의는 온톨로지 서브그래프로 근거 있는 답변 ────
+
+# 질문형 감지 — 의문사·요청형이 있을 때만 GraphRAG를 함께 돌린다 (비용·지연 관리)
+# 주의: component/index.html의 QUESTION_RE(입력창 질문 모드 표시)와 반드시 동기화
+_QUESTION_RE = re.compile(
+    r"[?？]|얼마|무엇|뭐야|뭔가|어디|어느|누가|누구|몇 |몇%|왜 |어떻게|알려|"
+    r"추이|변화|변했|현황은|뭐 하|하나요|인가요|인지|되나|됐나|맞아")
+
+
+def graph_answer(query: str) -> dict | None:
+    """온톨로지 GraphRAG 답변. 근거 객체 id·원문 URL이 달려 온다.
+
+    st.cache_data 대신 session_state에 수동 캐시한다 — 워커 스레드에서
+    돌릴 수 있어야 하고(문서 검색과 동시 실행), 레이어 토글 등 rerun마다
+    재호출되면 안 되기 때문."""
+    key = _api_key()
+    if not key or not (DATA_DIR / "ontology.db").exists():
+        return None
+    from ontology.graphrag import answer_question
+    try:
+        return answer_question(query, db_path=DATA_DIR / "ontology.db", api_key=key)
+    except Exception:  # noqa: BLE001 — 답변 실패는 검색만으로 진행
+        return None
+
+
+def _onto_node_map(nodes) -> dict[str, int]:
+    """온톨로지 객체 id → 우주 노드 인덱스 (원천이 같아 정확 매핑)."""
+    m: dict[str, int] = {}
+    for i, n in enumerate(nodes):
+        d = n["doc_id"]
+        if n["kind"] == "policy":
+            m[d] = i
+        elif d.startswith("sd/ordin/"):
+            m["ordinance:" + d.rsplit("/", 1)[-1]] = i
+        elif d.startswith("sd/board/"):
+            m["press:" + d.split("sd/board/", 1)[1]] = i
+        elif d.startswith("sd/org/"):
+            m["department:" + d.rsplit("/", 1)[-1]] = i
+    return m
+
+
 def run_search(query: str,
                model: str = DEFAULT_MODEL) -> tuple[list[tuple[int, float]], str, list[str]]:
     """(결과 [(노드, 로컬점수)], 모드 ai|fallback|local|none, 확장 키워드)."""
@@ -459,11 +500,38 @@ def _legend_html(active_cats, active_etypes) -> str:
     return "<br>".join(dots)
 
 
-def _render_detail_board(nodes, results, laws, expanded, mode, query):
+def _render_answer_card(ganswer: dict, query: str) -> None:
+    """GraphRAG 답변 — 상세 보드 최상단의 골드 카드. 근거 원문 링크 포함."""
+    st.markdown(
+        f'<div class="board-card" style="border-color:rgba(255,226,138,0.5);">'
+        f'<div class="bc-meta" style="color:#ffe28a;">◆ AI 답변 — 온톨로지 그래프 근거'
+        f' <span style="color:#7d8bb0;">(질문: {html.escape(query[:60])})</span></div>'
+        f'</div>', unsafe_allow_html=True)
+    st.markdown(ganswer["answer"])
+    if ganswer.get("sources"):
+        items = []
+        for s in ganswer["sources"]:
+            label = f'{html.escape(s["name"][:50])} ({s["type"]})'
+            if s.get("url"):
+                items.append(f'<a href="{html.escape(s["url"])}" target="_blank" '
+                             f'rel="noopener noreferrer" style="color:#ffe28a;">'
+                             f'{label} ↗</a>')
+            else:
+                items.append(label)
+        st.markdown(
+            f'<div class="bc-meta" style="margin-top:4px;">근거 원문: '
+            + " · ".join(items) + "</div>", unsafe_allow_html=True)
+    st.markdown('<hr style="border-color:rgba(120,150,255,0.2);">',
+                unsafe_allow_html=True)
+
+
+def _render_detail_board(nodes, results, laws, expanded, mode, query,
+                         with_anchor: bool = True):
     """우주 아래 전폭 스크롤 상황판 — 상세 정보(법령 포함)를 길게 보여준다."""
     label = {"ai": "AI 선별", "fallback": "로컬(AI 실패)",
              "local": "로컬(키 없음)", "none": "일치 없음"}.get(mode, mode)
-    st.markdown(f'<div class="board-anchor" id="board"></div>'
+    anchor = '<div class="board-anchor" id="board"></div>' if with_anchor else ""
+    st.markdown(f'{anchor}'
                 f'<h4 style="color:#eaf1ff; letter-spacing:0.06em;">'
                 f'▣ 상세 결과 — {len(results)}건 '
                 f'<span style="color:#7d8bb0; font-size:0.75rem;">'
@@ -582,9 +650,32 @@ def main():
     uq = st.session_state.uq
     state = {"mode": "idle", "cards": [], "centroid": [0, 0, 0], "spread": 0}
     meta_html = _meta_html(None, None, [], [], meta, 0)
-    results, laws, expanded, mode = [], [], [], "idle"
+    results, laws, expanded, mode, ganswer = [], [], [], "idle", None
     if uq:
+        # 질문형이면 GraphRAG를 워커 스레드에서 문서 검색과 동시에 돌린다.
+        # 결과는 질의별로 session_state에 캐시 — rerun(레이어 토글 등)마다
+        # 25초짜리 답변 생성을 반복하지 않기 위해.
+        ga_future = None
+        ga_cache = st.session_state.setdefault("ga_cache", {})
+        if _QUESTION_RE.search(uq):
+            if uq in ga_cache:
+                ganswer = ga_cache[uq]
+            else:
+                from concurrent.futures import ThreadPoolExecutor
+                _pool = ThreadPoolExecutor(max_workers=1)
+                ga_future = _pool.submit(graph_answer, uq)
         results, mode, expanded = run_search(uq, ai_model)
+        if ga_future is not None:
+            ganswer = ga_future.result()
+            ga_cache.clear()            # 직전 질의 것만 유지 (메모리 관리)
+            ga_cache[uq] = ganswer
+        if ganswer and ganswer.get("sources"):
+            # 답변의 근거 객체를 우주에서 하이라이트 — 결과 최상단에 고정
+            omap = _onto_node_map(nodes)
+            have = {i for i, _s in results}
+            srcs = [omap[s["id"]] for s in ganswer["sources"] if s["id"] in omap]
+            results = [(i, 1.0) for i in dict.fromkeys(srcs) if i not in have] + results
+            results = results[:TOP_K]
         results = [(i, s) for i, s in results if _visible(nodes[i])]
         laws = national_laws(uq, tuple(expanded))
         cards = _build_cards(nodes, results)
@@ -612,9 +703,14 @@ def main():
         legend_html=_legend_html(active_cats, active_etypes),
         key="universe", default=None)
 
-    # 우주 아래 — 전폭 스크롤 상세 결과 (법령 포함)
+    # 우주 아래 — 전폭 스크롤: AI 답변(질문형) + 상세 결과 (법령 포함)
+    if uq and ganswer:
+        st.markdown('<div class="board-anchor" id="board"></div>',
+                    unsafe_allow_html=True)
+        _render_answer_card(ganswer, uq)
     if uq and results:
-        _render_detail_board(nodes, results, laws, expanded, mode, uq)
+        _render_detail_board(nodes, results, laws, expanded, mode, uq,
+                             with_anchor=ganswer is None)
 
     st.markdown(
         '<div class="site-footer">문의 및 피드백: 010-8829-5108(정호원)</div>',

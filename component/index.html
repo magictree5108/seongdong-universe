@@ -98,6 +98,17 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   color: #7d8bb0; background: none; border: none; font-family: inherit;
   font-size: 0.9rem; }
 #detail .close:hover { color: #eaf1ff; }
+#detail .nbrs { margin-top: 10px; border-top: 1px solid rgba(120,150,255,0.25);
+  padding-top: 8px; max-height: 190px; overflow-y: auto; }
+#detail .nbrs .nh { color: #7d8bb0; font-size: 0.64rem; letter-spacing: 0.08em;
+  margin-bottom: 5px; }
+#detail .nbr { display: block; width: 100%; text-align: left; cursor: pointer;
+  background: rgba(20,26,46,0.6); border: 1px solid rgba(120,150,255,0.25);
+  border-radius: 5px; color: #b9c4e0; font-family: inherit; font-size: 0.7rem;
+  padding: 5px 9px; margin-bottom: 4px; line-height: 1.4; }
+#detail .nbr:hover { border-color: rgba(255,209,102,0.8); color: #eaf1ff;
+  background: rgba(255,209,102,0.08); }
+#detail .nbr .pill { font-size: 0.58rem; margin-right: 6px; margin-left: 0; }
 
 #scrollHint { position: absolute; left: 50%; top: 80%;
   transform: translateX(-50%); z-index: 40; color: #05060d;
@@ -130,8 +141,8 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   </div>
   <button id="resetBtn" title="검색을 초기화하고 전체 우주로 돌아갑니다">⟲ 초기화</button>
   <div id="searchWrap">
-    <input id="q" placeholder="성동구 공공데이터 우주 검색 — 예: 재개발 · 민간위탁 · 심리상담" autocomplete="off">
-    <div id="searchHint">Enter 로 검색 · 드래그 회전 · 휠 확대/축소</div>
+    <input id="q" placeholder="검색하거나 질문하세요 — 예: 재개발 · 마을버스 예산 얼마야?" autocomplete="off">
+    <div id="searchHint">Enter 로 검색 — 질문하면 AI가 근거를 달아 답합니다 · 드래그 회전 · 휠 확대/축소</div>
     <div id="noMatch">NO MATCH — 관련 자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.</div>
   </div>
   <div id="loading">AI 선별 중 ···</div>
@@ -161,6 +172,7 @@ let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
     camTargetFocus = new THREE.Vector3(0,0,0);
 let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
 let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
+let ontoAdj = {};
 let hoverId = -1, downX = 0, downY = 0, moved = false;
 const raycaster = new THREE.Raycaster();
 raycaster.params.Points = { threshold: 0.22 };
@@ -221,6 +233,11 @@ function initScene() {
   document.querySelector("#detail .close").addEventListener("click", () => {
     document.getElementById("detail").style.display = "none";
   });
+  // 상세 패널 피벗 칩 — 이벤트 위임 (innerHTML 재생성에도 유지)
+  document.getElementById("detailBody").addEventListener("click", e => {
+    const chip = e.target.closest(".nbr");
+    if (chip) pivotTo(parseInt(chip.dataset.node, 10));
+  });
   document.getElementById("scrollHint").addEventListener("click", () => {
     // 같은 출처(iframe)라 부모 문서의 상세 보드 앵커로 직접 스크롤할 수 있다
     try {
@@ -238,11 +255,23 @@ function initScene() {
     camTargetDist = Math.max(3, Math.min(60, camTargetDist * (e.deltaY > 0 ? 1.1 : 0.9)));
   }, { passive: false });
 
-  document.getElementById("q").addEventListener("keydown", e => {
+  // 질문형 감지 — app.py의 _QUESTION_RE와 반드시 동기화할 것
+  const QUESTION_RE = /[?？]|얼마|무엇|뭐야|뭔가|어디|어느|누가|누구|몇 |몇%|왜 |어떻게|알려|추이|변화|변했|현황은|뭐 하|하나요|인가요|인지|되나|됐나|맞아/;
+  const HINT_DEFAULT = "Enter 로 검색 — 질문하면 AI가 근거를 달아 답합니다 · 드래그 회전 · 휠 확대/축소";
+  const HINT_QUESTION = '<span style="color:#ffe28a;">◆ 질문으로 인식 — 검색과 함께 온톨로지 근거 답변을 생성합니다 (약 20~30초)</span>';
+  const qInput = document.getElementById("q");
+  qInput.addEventListener("input", () => {
+    document.getElementById("searchHint").innerHTML =
+      QUESTION_RE.test(qInput.value) ? HINT_QUESTION : HINT_DEFAULT;
+  });
+  qInput.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
     const q = e.target.value.trim();
     if (!q) return;
-    document.getElementById("loading").style.display = "block";
+    const isQ = QUESTION_RE.test(q);
+    const loading = document.getElementById("loading");
+    loading.textContent = isQ ? "그래프 근거 답변 생성 중 ··· (약 20~30초)" : "AI 선별 중 ···";
+    loading.style.display = "block";
     document.getElementById("noMatch").style.display = "none";
     document.getElementById("searchWrap").classList.add("hidden");
     stSetValue({ type: "search", query: q, nonce: Date.now() });
@@ -277,9 +306,31 @@ function nodeInfoHtml(i, forDetail) {
   const link = nr.url[i]
     ? `<a class="go" href="${nr.url[i]}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>`
     : `<div class="m" style="margin-top:8px;">원문 링크 없음</div>`;
+  // 온톨로지 이웃 피벗 칩 — 클릭하면 그 노드로 카메라가 날아간다
+  const nbrs = (ontoAdj[i] || []).filter(j => !vis || vis[j]);
+  let nbrHtml = "";
+  if (nbrs.length) {
+    const chips = nbrs.slice(0, 8).map(j => {
+      const jc = nodesRef.cat[j],
+            jcol = "#" + (CAT_COLOR[jc] || 0x8899ff).toString(16).padStart(6, "0");
+      return `<button class="nbr" data-node="${j}">` +
+             `<span class="pill" style="color:${jcol};">${CAT_SHORT[jc] || ""}</span>` +
+             `${nodesRef.title[j]}</button>`;
+    }).join("");
+    const more = nbrs.length > 8
+      ? `<div class="nh" style="margin-top:2px;">…외 ${nbrs.length - 8}건</div>` : "";
+    nbrHtml = `<div class="nbrs"><div class="nh">◆ 연결 (${nbrs.length}) — 클릭해서 이동</div>` +
+              chips + more + `</div>`;
+  }
   return `${pill}<div class="t">${nr.title[i]}</div>` +
          `<div class="m">${nr.src[i]} · ${nr.date[i] || "날짜 미상"}</div>` +
-         `<div class="s">${nr.snip[i]}</div>${link}`;
+         `<div class="s">${nr.snip[i]}</div>${link}${nbrHtml}`;
+}
+
+function pivotTo(i) {
+  camTargetFocus.set(basePos[i*3], basePos[i*3+1], basePos[i*3+2]);
+  camTargetDist = Math.min(camTargetDist, 9);
+  showDetail(i);
 }
 
 function showDetail(i) {
@@ -388,6 +439,14 @@ function buildGeometry(nodes, edges) {
   // 엣지 3번째 원소: 1 = 온톨로지 링크(담당·근거·언급) → 골드로 구분
   edgeLines = makeLines(edges.filter(e => !e[2]), 0x7896ff, 0.07);
   ontoLines = makeLines(edges.filter(e => e[2]), 0xffd166, 0.13);
+
+  // 온톨로지 인접 리스트 — 상세 패널의 피벗 칩(연결 타고 이동)용
+  ontoAdj = {};
+  edges.forEach(e => {
+    if (!e[2]) return;
+    (ontoAdj[e[0]] = ontoAdj[e[0]] || []).push(e[1]);
+    (ontoAdj[e[1]] = ontoAdj[e[1]] || []).push(e[0]);
+  });
 
   const hgeo = new THREE.BufferGeometry();
   hgeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(60), 3));
