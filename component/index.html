@@ -44,8 +44,28 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   text-align: center; }
 #q:focus { border-color: #4fd8ff; box-shadow: 0 0 34px rgba(79,216,255,0.5); }
 #q::placeholder { color: #5c6890; }
-#searchHint { color: #7d8bb0; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 12px; }
-#noMatch { color: #ffb4a2; font-size: 0.8rem; margin-top: 12px; display: none; }
+
+/* 모드 안내 — 밝은 성단 위에서도 읽히도록 다크 패널로 감싼다 */
+#modeHint { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.mode { display: flex; align-items: center; gap: 9px; text-align: left;
+  background: rgba(6,9,18,0.88); border: 1px solid rgba(120,150,255,0.22);
+  border-radius: 6px; padding: 8px 13px; font-size: 0.76rem; color: #8a97bd;
+  line-height: 1.45; transition: border-color 0.25s, color 0.25s, box-shadow 0.25s; }
+.mode b { color: #b9c4e0; font-weight: 700; }
+.mode .ico { font-size: 0.85rem; }
+#modeSearch.active { border-color: rgba(79,216,255,0.75); color: #cfe3ff;
+  box-shadow: 0 0 16px rgba(79,216,255,0.25); }
+#modeSearch.active b { color: #4fd8ff; }
+#modeAsk.active { border-color: rgba(255,226,138,0.8); color: #ffe9c2;
+  box-shadow: 0 0 16px rgba(255,209,102,0.3); }
+#modeAsk.active b { color: #ffe28a; }
+
+#searchHint { color: #94a1c6; font-size: 0.7rem; letter-spacing: 0.08em;
+  margin-top: 10px; text-shadow: 0 0 6px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.9);
+  background: rgba(6,9,18,0.6); display: inline-block; border-radius: 10px;
+  padding: 3px 12px; }
+#noMatch { color: #ffb4a2; font-size: 0.8rem; margin-top: 12px; display: none;
+  background: rgba(6,9,18,0.8); border-radius: 6px; padding: 6px 12px; }
 
 #loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
   z-index: 35; color: #4fd8ff; font-size: 0.9rem; letter-spacing: 0.3em;
@@ -142,7 +162,15 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   <button id="resetBtn" title="검색을 초기화하고 전체 우주로 돌아갑니다">⟲ 초기화</button>
   <div id="searchWrap">
     <input id="q" placeholder="검색하거나 질문하세요 — 예: 재개발 · 마을버스 예산 얼마야?" autocomplete="off">
-    <div id="searchHint">Enter 로 검색 — 질문하면 AI가 근거를 달아 답합니다 · 드래그 회전 · 휠 확대/축소</div>
+    <div id="modeHint">
+      <div class="mode" id="modeSearch"><span class="ico">🔍</span>
+        <span><b>키워드 검색</b> — 관련 문서·사업을 우주에서 찾아 비춰줍니다
+        (예: 재개발 · 민간위탁)</span></div>
+      <div class="mode" id="modeAsk"><span class="ico">◆</span>
+        <span><b>질문하기</b> — 예산·조례·부서를 연결한 그래프 근거로 AI가
+        답합니다, 약 20~30초 (예: 마을버스 예산 얼마야?)</span></div>
+    </div>
+    <div id="searchHint">Enter 실행 · 드래그 회전 · 휠 확대/축소</div>
     <div id="noMatch">NO MATCH — 관련 자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.</div>
   </div>
   <div id="loading">AI 선별 중 ···</div>
@@ -257,12 +285,13 @@ function initScene() {
 
   // 질문형 감지 — app.py의 _QUESTION_RE와 반드시 동기화할 것
   const QUESTION_RE = /[?？]|얼마|무엇|뭐야|뭔가|어디|어느|누가|누구|몇 |몇%|왜 |어떻게|알려|추이|변화|변했|현황은|뭐 하|하나요|인가요|인지|되나|됐나|맞아/;
-  const HINT_DEFAULT = "Enter 로 검색 — 질문하면 AI가 근거를 달아 답합니다 · 드래그 회전 · 휠 확대/축소";
-  const HINT_QUESTION = '<span style="color:#ffe28a;">◆ 질문으로 인식 — 검색과 함께 온톨로지 근거 답변을 생성합니다 (약 20~30초)</span>';
   const qInput = document.getElementById("q");
   qInput.addEventListener("input", () => {
-    document.getElementById("searchHint").innerHTML =
-      QUESTION_RE.test(qInput.value) ? HINT_QUESTION : HINT_DEFAULT;
+    const v = qInput.value.trim();
+    const isQ = QUESTION_RE.test(v);
+    // 입력 중 감지된 모드에 불이 들어온다 (빈 입력이면 둘 다 중립)
+    document.getElementById("modeSearch").classList.toggle("active", !!v && !isQ);
+    document.getElementById("modeAsk").classList.toggle("active", !!v && isQ);
   });
   qInput.addEventListener("keydown", e => {
     if (e.key !== "Enter") return;
