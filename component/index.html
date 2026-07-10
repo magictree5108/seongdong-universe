@@ -99,10 +99,15 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   font-size: 0.9rem; }
 #detail .close:hover { color: #eaf1ff; }
 
-#scrollHint { position: absolute; left: 50%; bottom: 10px;
-  transform: translateX(-50%); z-index: 40; color: #4fd8ff;
-  font-size: 0.74rem; letter-spacing: 0.12em; display: none;
-  animation: bob 1.6s ease-in-out infinite; text-shadow: 0 0 12px rgba(79,216,255,0.6); }
+#scrollHint { position: absolute; left: 50%; bottom: 14px;
+  transform: translateX(-50%); z-index: 40; color: #05060d;
+  font-size: 1.0rem; font-weight: 700; letter-spacing: 0.1em; display: none;
+  background: linear-gradient(90deg, #4fd8ff, #6ee7a8);
+  border-radius: 24px; padding: 11px 26px; cursor: pointer; border: none;
+  font-family: inherit;
+  animation: bob 1.6s ease-in-out infinite;
+  box-shadow: 0 0 26px rgba(79,216,255,0.55), 0 0 60px rgba(79,216,255,0.25); }
+#scrollHint:hover { box-shadow: 0 0 36px rgba(79,216,255,0.85); }
 @keyframes bob { 0%,100% { transform: translate(-50%, 0); }
   50% { transform: translate(-50%, 7px); } }
 
@@ -136,7 +141,7 @@ html, body { width: 100%; height: 100%; overflow: hidden;
     <button class="close" title="닫기">✕ 닫기</button>
     <div id="detailBody"></div>
   </div>
-  <div id="scrollHint">▼ 상세 결과·법령은 아래로 스크롤 ▼</div>
+  <button id="scrollHint">▼ 상세 결과·법령 보러 내려가기 ▼</button>
   <div id="meta"></div>
   <div id="legend"></div>
 </div>
@@ -214,6 +219,18 @@ function initScene() {
   });
   document.querySelector("#detail .close").addEventListener("click", () => {
     document.getElementById("detail").style.display = "none";
+  });
+  document.getElementById("scrollHint").addEventListener("click", () => {
+    // 같은 출처(iframe)라 부모 문서의 상세 보드 앵커로 직접 스크롤할 수 있다
+    try {
+      const anchor = window.parent.document.getElementById("board");
+      if (!anchor) return;
+      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => {   // smooth가 막히는 환경(탭 스로틀 등) 대비 즉시 이동 폴백
+        if (anchor.getBoundingClientRect().top > 200)
+          anchor.scrollIntoView({ behavior: "auto", block: "start" });
+      }, 800);
+    } catch (e) { /* 교차 출처 배포 환경이면 무시 */ }
   });
   st.addEventListener("wheel", e => {
     e.preventDefault();
