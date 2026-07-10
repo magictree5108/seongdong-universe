@@ -63,6 +63,23 @@ python data_pipeline/build.py --didim-index-dir ~/didim/data/index
 - 3D 좌표: 순수 numpy PCA(SVD) · 의미 연결망: 코사인 k-NN
 - 개체 추출: 정규식·사전 기반 — LLM 없이 결정적으로 동작
 
+## 온톨로지 계층 (팔란티어 의미 계층의 경량 재현)
+
+문서 중심 그래프와 별도로, 부서·사업·조례·예산 등을 1급 객체로 다루는
+읽기 전용 의미 계층을 구축 중입니다 — 8개 객체 타입(Policy, Department,
+Ordinance, BudgetItem, PressRelease, Facility, District, ComplaintType)과
+8개 링크 타입(담당·집행·근거·언급·관할·위치·소관)을 Pydantic 스키마로
+버전 관리하고 SQLite + NetworkX에 저장합니다. 팔란티어의 Action(쓰기/실행)
+계층은 의도적으로 구현하지 않습니다.
+
+```bash
+python -m ontology.promote   # 디딤 색인 → data/ontology.db (조례·부서·보도 승격)
+python -m ontology.verify    # 벤치마크: 빈 그래프 왕복·링크 규칙·다중 홉 조회
+```
+
+현재 승격된 객체: Ordinance 644 · Department 41 · PressRelease 2,330.
+Policy·BudgetItem은 예산 데이터 수집(2단계) 후 생성됩니다.
+
 ## 검색 품질 평가
 
 무작위 공무원 질의 100개로 파이프라인을 채점하는 하니스가 있습니다:
@@ -86,6 +103,11 @@ neo-seongdong/
 ├── data_pipeline/
 │   ├── embedder.py          # 해싱 n-gram TF-IDF 임베더 (빌드·검색 공용)
 │   └── build.py             # 디딤 색인 → 노드/엣지/온톨로지/임베딩 빌드
+├── ontology/
+│   ├── schema.py            # 8개 객체·8개 링크 타입 (Pydantic, 코드로 버전 관리)
+│   ├── store.py             # SQLite 저장소 + NetworkX 그래프 질의
+│   ├── promote.py           # 디딤 색인 → 온톨로지 객체 승격
+│   └── verify.py            # 1단계 벤치마크 (왕복·링크 규칙·다중 홉)
 ├── data/                    # 빌드 산출물 (저장소에 커밋됨, 약 33MB)
 ├── eval/                    # 100문항 검색 품질 평가 하니스 + 리포트
 └── .streamlit/config.toml   # 다크 테마
