@@ -70,6 +70,42 @@ html, body { width: 100%; height: 100%; overflow: hidden;
 .card a { color: #4fd8ff; font-size: 0.66rem; text-decoration: none; }
 .card a:hover { text-decoration: underline; }
 
+#tip { position: absolute; z-index: 45; width: 260px; pointer-events: none;
+  border: 1px solid rgba(79,216,255,0.55); border-radius: 6px;
+  background: rgba(10,14,26,0.94); padding: 9px 12px; display: none;
+  box-shadow: 0 0 18px rgba(79,216,255,0.25); }
+#tip .t { color: #eaf1ff; font-weight: 700; font-size: 0.76rem; line-height: 1.35; }
+#tip .m { color: #8291b8; font-size: 0.64rem; margin-top: 3px; }
+#tip .h { color: #4fd8ff; font-size: 0.62rem; margin-top: 5px; }
+#tipsvg { position: absolute; inset: 0; pointer-events: none; z-index: 44; }
+
+#detail { position: absolute; top: 70px; right: 24px; z-index: 50; width: 380px;
+  border: 1px solid rgba(79,216,255,0.6); border-radius: 8px;
+  background: linear-gradient(180deg, rgba(14,18,34,0.97), rgba(8,11,22,0.97));
+  padding: 16px 18px; display: none;
+  box-shadow: 0 0 30px rgba(79,216,255,0.3); }
+#detail .pill { display: inline-block; font-size: 0.66rem; padding: 1px 8px;
+  border-radius: 10px; border: 1px solid currentColor; }
+#detail .t { color: #eaf1ff; font-weight: 700; font-size: 0.95rem;
+  margin: 7px 0 4px; line-height: 1.4; }
+#detail .m { color: #8291b8; font-size: 0.7rem; margin-bottom: 8px; }
+#detail .s { color: #b9c4e0; font-size: 0.78rem; line-height: 1.6; }
+#detail a.go { display: inline-block; margin-top: 10px; color: #4fd8ff;
+  font-size: 0.76rem; text-decoration: none; border: 1px solid rgba(79,216,255,0.5);
+  border-radius: 4px; padding: 5px 12px; }
+#detail a.go:hover { background: rgba(79,216,255,0.12); }
+#detail .close { position: absolute; top: 8px; right: 10px; cursor: pointer;
+  color: #7d8bb0; background: none; border: none; font-family: inherit;
+  font-size: 0.9rem; }
+#detail .close:hover { color: #eaf1ff; }
+
+#scrollHint { position: absolute; left: 50%; bottom: 10px;
+  transform: translateX(-50%); z-index: 40; color: #4fd8ff;
+  font-size: 0.74rem; letter-spacing: 0.12em; display: none;
+  animation: bob 1.6s ease-in-out infinite; text-shadow: 0 0 12px rgba(79,216,255,0.6); }
+@keyframes bob { 0%,100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 7px); } }
+
 #meta { position: absolute; left: 24px; bottom: 18px; z-index: 20; max-width: 46%;
   color: #7d8bb0; font-size: 0.68rem; line-height: 1.7; opacity: 0.85; }
 #meta .laws a { color: #ffd166; text-decoration: none; }
@@ -94,6 +130,13 @@ html, body { width: 100%; height: 100%; overflow: hidden;
     <div id="noMatch">NO MATCH — 관련 자료가 확인되지 않았습니다. 다른 키워드로 시도해보세요.</div>
   </div>
   <div id="loading">AI 선별 중 ···</div>
+  <svg id="tipsvg"></svg>
+  <div id="tip"></div>
+  <div id="detail">
+    <button class="close" title="닫기">✕ 닫기</button>
+    <div id="detailBody"></div>
+  </div>
+  <div id="scrollHint">▼ 상세 결과·법령은 아래로 스크롤 ▼</div>
   <div id="meta"></div>
   <div id="legend"></div>
 </div>
@@ -108,11 +151,15 @@ function stSetValue(v) { stSend("streamlit:setComponentValue", { value: v, dataT
 
 let scene, camera, renderer, docPoints, entPoints, edgeLines, hiPoints;
 let N = 0, basePos = null, drawPos = null, phase = null, vis = null;
-let state = { mode: "idle", cards: [], centroid: [0,0,0] };
+let state = { mode: "idle", cards: [], centroid: [0,0,0], spread: 0 };
 let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
     camTargetFocus = new THREE.Vector3(0,0,0);
 let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
 let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
+let hoverId = -1, downX = 0, downY = 0, moved = false;
+const raycaster = new THREE.Raycaster();
+raycaster.params.Points = { threshold: 0.22 };
+const pointerNdc = new THREE.Vector2(-2, -2);
 
 const CAT_COLOR = { consulting: 0xff9d45, notice: 0x4fd8ff, ordinance: 0xb18bff,
                     org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8 };
@@ -143,17 +190,30 @@ function initScene() {
   resize();
 
   const st = document.getElementById("stage");
+  const UI_SEL = ".card,#searchWrap,#resetBtn,#detail,#tip,#meta,#legend,#scrollHint";
   st.addEventListener("pointerdown", e => {
-    if (e.target.closest(".card") || e.target.closest("#searchWrap") ||
-        e.target.closest("#resetBtn")) return;
-    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    if (e.target.closest(UI_SEL)) return;
+    dragging = true; moved = false;
+    lastX = downX = e.clientX; lastY = downY = e.clientY;
   });
-  window.addEventListener("pointerup", () => dragging = false);
+  window.addEventListener("pointerup", e => {
+    const wasDragging = dragging; dragging = false;
+    if (!wasDragging || moved || e.target.closest(UI_SEL)) return;
+    if (hoverId >= 0) showDetail(hoverId);      // 클릭 → 상세 패널
+  });
   window.addEventListener("pointermove", e => {
+    const r = renderer.domElement.getBoundingClientRect();
+    pointerNdc.set(((e.clientX - r.left) / r.width) * 2 - 1,
+                   -((e.clientY - r.top) / r.height) * 2 + 1);
+    if (e.target.closest(UI_SEL)) pointerNdc.set(-2, -2);   // UI 위에선 호버 끔
     if (!dragging) return;
+    if (Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY) > 5) moved = true;
     userTheta -= (e.clientX - lastX) * 0.005;
     userPhi = Math.max(0.15, Math.min(3.0, userPhi - (e.clientY - lastY) * 0.005));
     lastX = e.clientX; lastY = e.clientY;
+  });
+  document.querySelector("#detail .close").addEventListener("click", () => {
+    document.getElementById("detail").style.display = "none";
   });
   st.addEventListener("wheel", e => {
     e.preventDefault();
@@ -180,8 +240,83 @@ function resize() {
   const w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h; camera.updateProjectionMatrix();
-  const svg = document.getElementById("wires");
-  svg.setAttribute("width", w); svg.setAttribute("height", h);
+  ["wires", "tipsvg"].forEach(id => {
+    const svg = document.getElementById(id);
+    svg.setAttribute("width", w); svg.setAttribute("height", h);
+  });
+}
+
+/* ── 호버 툴팁 + 클릭 상세 ── */
+function nodeInfoHtml(i, forDetail) {
+  const nr = nodesRef;
+  const cat = nr.cat[i], color = "#" + (CAT_COLOR[cat] || 0x8899ff)
+      .toString(16).padStart(6, "0");
+  const pill = `<span class="pill" style="color:${color};">${CAT_SHORT[cat] || ""}</span>`;
+  if (!forDetail)
+    return `${pill}<div class="t">${nr.title[i]}</div>` +
+           `<div class="m">${nr.src[i]} · ${nr.date[i] || "날짜 미상"}</div>` +
+           `<div class="h">클릭하면 상세정보</div>`;
+  const link = nr.url[i]
+    ? `<a class="go" href="${nr.url[i]}" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>`
+    : `<div class="m" style="margin-top:8px;">원문 링크 없음</div>`;
+  return `${pill}<div class="t">${nr.title[i]}</div>` +
+         `<div class="m">${nr.src[i]} · ${nr.date[i] || "날짜 미상"}</div>` +
+         `<div class="s">${nr.snip[i]}</div>${link}`;
+}
+
+function showDetail(i) {
+  document.getElementById("detailBody").innerHTML = nodeInfoHtml(i, true);
+  document.getElementById("detail").style.display = "block";
+}
+
+function updateHover() {
+  if (!nodesRef || pointerNdc.x < -1.5 || dragging) { hideTip(); return; }
+  raycaster.setFromCamera(pointerNdc, camera);
+  const hits = raycaster.intersectObjects([docPoints, entPoints].filter(Boolean));
+  let id = -1;
+  if (hits.length) {
+    const h = hits[0];
+    id = h.object.userData.idx[h.index];
+    if (vis && !vis[id]) id = -1;
+  }
+  hoverId = id;
+  const tip = document.getElementById("tip"),
+        line = ensureTipLine();
+  if (id < 0) { hideTip(); return; }
+  tip.innerHTML = nodeInfoHtml(id, false);
+  tip.style.display = "block";
+  const w = window.innerWidth, h2 = window.innerHeight;
+  const v = new THREE.Vector3(drawPos[id*3], drawPos[id*3+1], drawPos[id*3+2])
+      .project(camera);
+  const nx = (v.x * 0.5 + 0.5) * w, ny = (-v.y * 0.5 + 0.5) * h2;
+  // 툴팁은 노드 오른쪽에, 화면 밖이면 왼쪽에
+  let tx = nx + 26, ty = Math.max(10, Math.min(h2 - 130, ny - 30));
+  if (tx + 270 > w) tx = nx - 290;
+  tip.style.left = tx + "px"; tip.style.top = ty + "px";
+  line.setAttribute("stroke", "rgba(79,216,255,0.7)");
+  line.setAttribute("x1", tx + (tx > nx ? 0 : 260));
+  line.setAttribute("y1", ty + 30);
+  line.setAttribute("x2", nx); line.setAttribute("y2", ny);
+  document.body.style.cursor = "pointer";
+}
+
+function ensureTipLine() {
+  const svg = document.getElementById("tipsvg");
+  let line = svg.querySelector("line");
+  if (!line) {
+    line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("stroke-width", "1.2");
+    svg.appendChild(line);
+  }
+  return line;
+}
+
+function hideTip() {
+  hoverId = -1;
+  document.getElementById("tip").style.display = "none";
+  const line = document.getElementById("tipsvg").querySelector("line");
+  if (line) line.setAttribute("stroke", "transparent");
+  document.body.style.cursor = "default";
 }
 
 function buildGeometry(nodes, edges) {
@@ -206,6 +341,9 @@ function buildGeometry(nodes, edges) {
     });
     geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    // 위치가 매 프레임 바뀌므로 boundingSphere를 넉넉히 고정
+    // (기본 자동 계산은 초기값(원점)으로 캐시되어 레이캐스트가 빗나간다)
+    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 40);
     const mat = new THREE.PointsMaterial({ size, map: spriteTexture(diamond),
       vertexColors: true, transparent: true, opacity, depthWrite: false,
       blending: THREE.AdditiveBlending, sizeAttenuation: true });
@@ -248,11 +386,14 @@ function applyStateVisuals() {
   }
   if (focus) {
     camTargetFocus.set(state.centroid[0], state.centroid[1], state.centroid[2]);
-    camTargetDist = 6.5;                    // 딥 줌 — 결과 성단 속으로
+    // 결과 성단의 퍼짐 반경에 맞춰 줌 — 관련 연결망이 한눈에 들어오게
+    camTargetDist = Math.max(9, Math.min(18, (state.spread || 2) * 2.4 + 5));
   } else {
     camTargetFocus.set(0, 0, 0);
     camTargetDist = 26;
   }
+  document.getElementById("scrollHint").style.display = focus ? "block" : "none";
+  document.getElementById("detail").style.display = "none";
   buildCards();
 }
 
@@ -362,6 +503,7 @@ function tick(t) {
   camera.lookAt(camFocus);
   renderer.render(scene, camera);
   layoutCards();
+  updateHover();
 }
 
 /* ── 렌더 이벤트 수신 ── */
@@ -370,11 +512,11 @@ window.addEventListener("message", ev => {
   if (!msg || msg.type !== "streamlit:render") return;
   const args = msg.args;
   if (!initialized) { initScene(); initialized = true; }
+  nodesRef = args.nodes;
   if (args.data_sig !== dataSig) {
     dataSig = args.data_sig;
     buildGeometry(args.nodes, args.edges);
-    nodesRef = args.nodes;
-  } else if (nodesRef && args.nodes.vis) {
+  } else if (args.nodes.vis) {
     vis = args.nodes.vis;
   }
   state = args.state;

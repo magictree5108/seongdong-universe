@@ -42,8 +42,9 @@ ENTITY_STYLE = {
     "place": {"label": "성동구 동네",       "color": "#ffd166"},
 }
 
-TOP_K = 14
-MAX_CARDS = 10             # 오버레이 카드 수 (성단 위 좌우 배치)
+TOP_K = 20
+MAX_CARDS = 8              # 오버레이 카드 수 (성단 위 좌우 배치)
+COORD_SCALE = 2.2          # PCA 좌표(±11) → Three.js 카메라 거리 축소 비율
 CANDIDATES_K = 36          # AI 선별에 넘길 로컬 후보 수
 MODEL_OPTIONS = {          # 사이드바에서 선택 (질의 확장·관련성 선별 공용)
     "sonnet 5 — 정밀 (기본)": "claude-sonnet-5",
@@ -94,22 +95,34 @@ def load_data():
     return nodes, edges, meta, vectors, idf
 
 
+def _safe_url(url: str | None) -> str | None:
+    """href 주입 방지 — http(s) 스킴만 허용한다 (javascript: 등 차단)."""
+    if url and url.startswith(("http://", "https://")):
+        return url
+    return None
+
+
 @st.cache_data(show_spinner=False)
 def component_payload():
-    """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지)은 한 번만 만든다."""
+    """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지·노드 정보)은
+    한 번만 만든다. 텍스트는 컴포넌트가 innerHTML로 넣으므로 여기서
+    전부 이스케이프한다 (크롤 원문 XSS 방지)."""
     nodes, edges, meta, _v, _i = load_data()
-    scale = 2.2   # PCA 좌표(±11)를 Three.js 카메라 거리에 맞게 축소
     payload_nodes = {
-        "x": [round(n["x"] / scale, 3) for n in nodes],
-        "y": [round(n["y"] / scale, 3) for n in nodes],
-        "z": [round(n["z"] / scale, 3) for n in nodes],
-        "cat": [n["etype"] if n["kind"] == "entity" else n["category"]
-                for n in nodes],
+        "x": [round(n["x"] / COORD_SCALE, 3) for n in nodes],
+        "y": [round(n["y"] / COORD_SCALE, 3) for n in nodes],
+        "z": [round(n["z"] / COORD_SCALE, 3) for n in nodes],
         "kind": [1 if n["kind"] == "entity" else 0 for n in nodes],
+        # 호버 툴팁·클릭 상세용 노드 정보
+        "title": [html.escape(n["title"][:90]) for n in nodes],
+        "src": [html.escape(n["source_label"][:44]) for n in nodes],
+        "date": [html.escape(n["date"] or "") for n in nodes],
+        "url": [html.escape(_safe_url(n["url"]) or "") for n in nodes],
+        "snip": [html.escape(n["snippet"][:220]) for n in nodes],
     }
     # 개체 색은 컴포넌트 CAT_COLOR에서 etype 이름 대신 'entity' 키를 쓰므로 치환
-    payload_nodes["cat"] = ["entity" if k == 1 else c
-                            for c, k in zip(payload_nodes["cat"], payload_nodes["kind"])]
+    payload_nodes["cat"] = ["entity" if n["kind"] == "entity" else n["category"]
+                            for n in nodes]
     payload_edges = [[e[0], e[1]] for e in edges]
     sig = f'{meta["built_at"]}::{meta["total_nodes"]}'
     return payload_nodes, payload_edges, sig
@@ -376,13 +389,6 @@ def run_search(query: str,
 
 # ── UI ───────────────────────────────────────────────────────────
 
-def _safe_url(url: str | None) -> str | None:
-    """href 주입 방지 — http(s) 스킴만 허용한다 (javascript: 등 차단)."""
-    if url and url.startswith(("http://", "https://")):
-        return url
-    return None
-
-
 def _build_cards(nodes, ranked) -> list[dict]:
     """오버레이 카드 데이터 — 컴포넌트가 innerHTML로 넣으므로 반드시 이스케이프."""
     cards = []
@@ -437,13 +443,85 @@ def _legend_html(active_cats, active_etypes) -> str:
     return "<br>".join(dots)
 
 
+def _render_detail_board(nodes, results, laws, expanded, mode, query):
+    """우주 아래 전폭 스크롤 상황판 — 상세 정보(법령 포함)를 길게 보여준다."""
+    label = {"ai": "AI 선별", "fallback": "로컬(AI 실패)",
+             "local": "로컬(키 없음)", "none": "일치 없음"}.get(mode, mode)
+    st.markdown(f'<div class="board-anchor" id="board"></div>'
+                f'<h4 style="color:#eaf1ff; letter-spacing:0.06em;">'
+                f'▣ 상세 결과 — {len(results)}건 '
+                f'<span style="color:#7d8bb0; font-size:0.75rem;">'
+                f'QUERY "{html.escape(query[:40])}" · {label}'
+                f'{" · 확장: " + html.escape(" · ".join(expanded)) if expanded else ""}'
+                f'</span></h4>', unsafe_allow_html=True)
+    if laws:
+        items = "".join(
+            f'<div class="stat-line">§ <a href="{html.escape(l["url"])}" '
+            f'target="_blank" rel="noopener noreferrer" style="color:#ffd166;">'
+            f'{html.escape(l["title"])}</a>'
+            f' <span style="color:#7d8bb0;">— {html.escape(l["kind"])}'
+            f' · {html.escape(l["dept"])} · 시행 {html.escape(l["date"])}</span></div>'
+            for l in laws)
+        st.markdown(
+            f'<div class="board-card" style="border-color:rgba(255,209,102,0.35);">'
+            f'<div class="bc-meta" style="color:#ffd166;">국가 법령 '
+            f'(법제처 국가법령정보센터 실시간)</div>{items}</div>',
+            unsafe_allow_html=True)
+    style_map = {**{k: v for k, v in CATEGORY_STYLE.items()},
+                 "entity": {"label": "개체", "color": "#6ee7a8"}}
+    short_map = {"consulting": "선례", "notice": "공고", "ordinance": "조례",
+                 "org": "부서", "news": "소식", "entity": "개체"}
+    for rank, (i, score) in enumerate(results, start=1):
+        n = nodes[i]
+        cat = "entity" if n["kind"] == "entity" else n["category"]
+        color = style_map[cat]["color"]
+        url = _safe_url(n["url"])
+        link = (f'<a href="{html.escape(url)}" target="_blank" '
+                f'rel="noopener noreferrer">원문 보기 ↗</a>'
+                if url else '<span style="color:#4a5578;">원문 링크 없음</span>')
+        st.markdown(f"""
+        <div class="board-card">
+          <span class="bc-rank">#{rank:02d}</span>
+          <span class="bc-pill" style="color:{color};">{short_map[cat]}</span>
+          <div class="bc-title">{html.escape(n["title"])}</div>
+          <div class="bc-meta">{html.escape(n["source_label"])} · {html.escape(n["date"] or "날짜 미상")}</div>
+          <div class="bc-snip">{html.escape(n["snippet"])}</div>
+          <div class="bc-bar"><div style="width:{max(score,0)*100:.0f}%;"></div></div>
+          <div style="margin-top:6px;">{link}</div>
+        </div>""", unsafe_allow_html=True)
+
+
 def main():
     st.markdown("""<style>
       .block-container { padding: 0.6rem 1.0rem 0.4rem; max-width: 100%; }
       header[data-testid="stHeader"] { background: transparent; height: 0; }
       section[data-testid="stSidebar"] { background: rgba(6,9,18,0.95); }
-      .stApp { background: #05060d; }
+      .stApp { background: #05060d; color: #d7e3ff;
+               font-family: 'JetBrains Mono', monospace; }
       iframe { border: none; border-radius: 8px; }
+      ::-webkit-scrollbar { width: 16px; }
+      ::-webkit-scrollbar-track { background: rgba(8,11,20,0.9); }
+      ::-webkit-scrollbar-thumb { background: rgba(120,150,255,0.45);
+        border-radius: 8px; border: 3px solid rgba(8,11,20,0.9); }
+      .board-card { border: 1px solid rgba(120,150,255,0.3); border-radius: 7px;
+        background: linear-gradient(180deg, rgba(16,20,36,0.8), rgba(10,13,24,0.8));
+        padding: 14px 18px; margin-bottom: 10px; }
+      .bc-rank { color: #4fd8ff; font-weight: 700; font-size: 0.85rem; }
+      .bc-pill { display: inline-block; font-size: 0.7rem; padding: 1px 8px;
+        border-radius: 10px; margin-left: 7px; border: 1px solid currentColor; }
+      .bc-title { color: #eaf1ff; font-weight: 700; font-size: 1.02rem; margin: 6px 0 3px; }
+      .bc-meta { color: #8291b8; font-size: 0.76rem; margin-bottom: 7px; }
+      .bc-snip { color: #b9c4e0; font-size: 0.85rem; line-height: 1.6; }
+      .bc-bar { background: rgba(255,255,255,0.08); border-radius: 3px;
+        height: 4px; margin-top: 9px; }
+      .bc-bar div { background: linear-gradient(90deg, #4fd8ff, #fff3b0);
+        height: 4px; border-radius: 3px; }
+      .board-card a { color: #4fd8ff; font-size: 0.76rem; text-decoration: none; }
+      .board-card a:hover { text-decoration: underline; }
+      .stat-line { color: #b9c4e0; font-size: 0.82rem; margin: 2px 0; }
+      .site-footer { color: #7d8bb0; text-align: center; font-size: 0.8rem;
+        letter-spacing: 0.05em; border-top: 1px solid rgba(120,150,255,0.2);
+        margin-top: 28px; padding: 14px 0 6px; }
     </style>""", unsafe_allow_html=True)
 
     nodes, edges, meta, _vectors, _idf = load_data()
@@ -484,22 +562,25 @@ def main():
 
     # 검색 상태 → 컴포넌트 state
     uq = st.session_state.uq
-    state = {"mode": "idle", "cards": [], "centroid": [0, 0, 0]}
+    state = {"mode": "idle", "cards": [], "centroid": [0, 0, 0], "spread": 0}
     meta_html = _meta_html(None, None, [], [], meta, 0)
+    results, laws, expanded, mode = [], [], [], "idle"
     if uq:
         results, mode, expanded = run_search(uq, ai_model)
         results = [(i, s) for i, s in results if _visible(nodes[i])]
         laws = national_laws(uq, tuple(expanded))
         cards = _build_cards(nodes, results)
         if cards:
-            scale = 2.2
-            cx = float(np.mean([nodes[c["node"]]["x"] for c in cards])) / scale
-            cy = float(np.mean([nodes[c["node"]]["y"] for c in cards])) / scale
-            cz = float(np.mean([nodes[c["node"]]["z"] for c in cards])) / scale
+            pts = np.array([[nodes[c["node"]]["x"], nodes[c["node"]]["y"],
+                             nodes[c["node"]]["z"]] for c in cards]) / COORD_SCALE
+            centroid = pts.mean(axis=0)
+            # 결과 성단의 퍼짐 반경 — 컴포넌트가 줌 거리를 여기에 맞춘다
+            spread = float(np.linalg.norm(pts - centroid, axis=1).max())
             state = {"mode": "results", "cards": cards,
-                     "centroid": [round(cx, 3), round(cy, 3), round(cz, 3)]}
+                     "centroid": [round(float(v), 3) for v in centroid],
+                     "spread": round(spread, 3)}
         else:
-            state = {"mode": "none", "cards": [], "centroid": [0, 0, 0]}
+            state = {"mode": "none", "cards": [], "centroid": [0, 0, 0], "spread": 0}
         meta_html = _meta_html(uq, mode, expanded, laws, meta, len(results))
 
     event = _universe(
@@ -510,6 +591,14 @@ def main():
         meta_html=meta_html,
         legend_html=_legend_html(active_cats, active_etypes),
         key="universe", default=None)
+
+    # 우주 아래 — 전폭 스크롤 상세 결과 (법령 포함)
+    if uq and results:
+        _render_detail_board(nodes, results, laws, expanded, mode, uq)
+
+    st.markdown(
+        '<div class="site-footer">문의 및 피드백: 010-8829-5108(정호원)</div>',
+        unsafe_allow_html=True)
 
     # 컴포넌트 이벤트(검색·초기화) 처리 — nonce로 재전달 중복 제거
     if isinstance(event, dict) and event.get("nonce") \
