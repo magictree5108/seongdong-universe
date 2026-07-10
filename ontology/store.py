@@ -212,7 +212,11 @@ class OntologyStore:
         obj_id: str,
         link_type: Optional[LinkType] = None,
         direction: str = "both",  # out | in | both
+        min_confidence: float = 0.0,
     ) -> list[Link]:
+        """min_confidence: Claude 생성 링크의 오탐을 소비 시점에 거른다.
+        고정밀 경로(질의응답 답변 근거 등)는 0.85 권장 — 표본 검증에서
+        오탐 대부분이 0.7(하한 통과치)에 몰려 있었다."""
         clauses, params = [], []
         if direction in ("out", "both"):
             clauses.append("src = ?")
@@ -226,20 +230,22 @@ class OntologyStore:
             params.append(link_type.value)
         with self._lock:
             rows = self.conn.execute(sql, params).fetchall()
-        return [
+        links = [
             Link(type=LinkType(r["type"]), src=r["src"], dst=r["dst"],
                  **json.loads(r["props"]))
             for r in rows
         ]
+        return [l for l in links if l.confidence >= min_confidence]
 
     def neighbors(
         self,
         obj_id: str,
         link_type: Optional[LinkType] = None,
         direction: str = "both",
+        min_confidence: float = 0.0,
     ) -> list[SDObject]:
         out = []
-        for link in self.links_of(obj_id, link_type, direction):
+        for link in self.links_of(obj_id, link_type, direction, min_confidence):
             other = link.dst if link.src == obj_id else link.src
             obj = self.get(other)
             if obj is not None:

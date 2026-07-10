@@ -75,13 +75,19 @@ Ordinance, BudgetItem, PressRelease, Facility, District, ComplaintType)과
 ```bash
 python -m ontology.promote        # 디딤 색인 → data/ontology.db (조례·부서·보도 승격)
 python -m ontology.ingest_budget  # 지방재정365 → Policy·BudgetItem·집행링크 (LOFIN_KEY 필요)
+python -m ontology.build_links --stage dept|ordinance|press|report  # 링크 생성 (Claude)
 python -m ontology.verify         # 벤치마크: 빈 그래프 왕복·링크 규칙·다중 홉 조회
 ```
 
-현재 객체: Ordinance 644 · Department 41 · PressRelease 2,330 · Policy 1,813 ·
-BudgetItem 4,879 (2023~2026 회계연도) · 집행 링크 4,879.
-예산 출처: 지방재정365 세부사업별 세출현황 (출처표시 조건, 일간 갱신,
-자치단체코드 1114000 = 서울성동구).
+현재 객체 9,707개: Policy 1,813 · BudgetItem 4,879 (2023~2026) · PressRelease 2,330 ·
+Ordinance 644 · Department 41. 링크 7,958개: 집행 4,879 · 담당 1,804 · 언급 1,007 · 근거 268.
+부서 정합은 부서코드별 사업명을 증거로 Claude가 판정한 사전(`data/dept_map.json`)을 쓰고,
+조례·보도 링크는 어휘 후보 생성 후 Claude가 확정하며 근거·확신도를 링크에 기록한다
+(수기 검증 표본: `data/link_review.md`). 예산 출처: 지방재정365 세부사업별 세출현황
+(출처표시 조건, 일간 갱신, 자치단체코드 1114000 = 서울성동구).
+
+대표 질의(두 홉): "마을버스 운영관리" → 담당 교통행정과 · 근거 마을버스 재정지원 조례
+· 4개년 예산·집행률.
 
 ## 검색 품질 평가
 
