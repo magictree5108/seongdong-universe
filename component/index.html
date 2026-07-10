@@ -154,7 +154,7 @@ function stSend(type, data) {
 }
 function stSetValue(v) { stSend("streamlit:setComponentValue", { value: v, dataType: "json" }); }
 
-let scene, camera, renderer, docPoints, entPoints, edgeLines, hiPoints;
+let scene, camera, renderer, docPoints, entPoints, polPoints, edgeLines, ontoLines, hiPoints;
 let N = 0, basePos = null, drawPos = null, phase = null, vis = null;
 let state = { mode: "idle", cards: [], centroid: [0,0,0], spread: 0 };
 let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
@@ -167,9 +167,10 @@ raycaster.params.Points = { threshold: 0.22 };
 const pointerNdc = new THREE.Vector2(-2, -2);
 
 const CAT_COLOR = { consulting: 0xff9d45, notice: 0x4fd8ff, ordinance: 0xb18bff,
-                    org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8 };
+                    org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8,
+                    policy: 0xffe28a };
 const CAT_SHORT = { consulting: "선례", notice: "공고", ordinance: "조례",
-                    org: "부서", news: "소식", entity: "개체" };
+                    org: "부서", news: "소식", entity: "개체", policy: "사업" };
 
 function spriteTexture(diamond) {
   const c = document.createElement("canvas"); c.width = c.height = 64;
@@ -289,7 +290,7 @@ function showDetail(i) {
 function updateHover() {
   if (!nodesRef || pointerNdc.x < -1.5 || dragging) { hideTip(); return; }
   raycaster.setFromCamera(pointerNdc, camera);
-  const hits = raycaster.intersectObjects([docPoints, entPoints].filter(Boolean));
+  const hits = raycaster.intersectObjects([docPoints, entPoints, polPoints].filter(Boolean));
   let id = -1;
   if (hits.length) {
     const h = hits[0];
@@ -340,13 +341,14 @@ function buildGeometry(nodes, edges) {
   N = nodes.x.length;
   basePos = new Float32Array(N * 3); drawPos = new Float32Array(N * 3);
   phase = new Float32Array(N); vis = nodes.vis;
-  const docIdx = [], entIdx = [];
+  const docIdx = [], entIdx = [], polIdx = [];
   for (let i = 0; i < N; i++) {
     basePos[i*3] = nodes.x[i]; basePos[i*3+1] = nodes.y[i]; basePos[i*3+2] = nodes.z[i];
     phase[i] = (i * 2654435761 % 6283) / 1000.0;
-    (nodes.kind[i] === 1 ? entIdx : docIdx).push(i);
+    (nodes.kind[i] === 2 ? polIdx : nodes.kind[i] === 1 ? entIdx : docIdx).push(i);
   }
-  [docPoints, entPoints, edgeLines, hiPoints].forEach(o => { if (o) scene.remove(o); });
+  [docPoints, entPoints, polPoints, edgeLines, ontoLines, hiPoints]
+    .forEach(o => { if (o) scene.remove(o); });
 
   function makePoints(idx, diamond, size, opacity) {
     const geo = new THREE.BufferGeometry();
@@ -371,14 +373,21 @@ function buildGeometry(nodes, edges) {
   }
   docPoints = makePoints(docIdx, false, 0.55, 0.6);
   entPoints = makePoints(entIdx, true, 1.5, 0.85);
+  polPoints = makePoints(polIdx, true, 0.95, 0.9);   // 사업: 작은 골드 다이아몬드
 
-  const epos = new Float32Array(edges.length * 6);
-  const egeo = new THREE.BufferGeometry();
-  egeo.setAttribute("position", new THREE.BufferAttribute(epos, 3));
-  edgeLines = new THREE.LineSegments(egeo, new THREE.LineBasicMaterial({
-    color: 0x7896ff, transparent: true, opacity: 0.07 }));
-  edgeLines.userData.edges = edges;
-  scene.add(edgeLines);
+  function makeLines(eds, color, opacity) {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position",
+      new THREE.BufferAttribute(new Float32Array(eds.length * 6), 3));
+    const lines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
+      color, transparent: true, opacity }));
+    lines.userData.edges = eds;
+    scene.add(lines);
+    return lines;
+  }
+  // 엣지 3번째 원소: 1 = 온톨로지 링크(담당·근거·언급) → 골드로 구분
+  edgeLines = makeLines(edges.filter(e => !e[2]), 0x7896ff, 0.07);
+  ontoLines = makeLines(edges.filter(e => e[2]), 0xffd166, 0.13);
 
   const hgeo = new THREE.BufferGeometry();
   hgeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(60), 3));
@@ -393,7 +402,9 @@ function applyStateVisuals() {
   const focus = state.mode === "results";
   if (docPoints) docPoints.material.opacity = focus ? 0.18 : 0.6;
   if (entPoints) entPoints.material.opacity = focus ? 0.25 : 0.85;
+  if (polPoints) polPoints.material.opacity = focus ? 0.28 : 0.9;
   if (edgeLines) edgeLines.material.opacity = focus ? 0.03 : 0.07;
+  if (ontoLines) ontoLines.material.opacity = focus ? 0.05 : 0.13;
   document.getElementById("searchWrap").classList.toggle("hidden", focus);
   document.getElementById("loading").style.display = "none";
   document.getElementById("noMatch").style.display =
@@ -484,21 +495,23 @@ function tick(t) {
     drawPos[i*3+1] = basePos[i*3+1] + Math.sin(time * 0.35 + p * 1.7) * 0.09;
     drawPos[i*3+2] = basePos[i*3+2] + Math.cos(time * 0.42 + p) * 0.09;
   }
-  [docPoints, entPoints].forEach(pts => {
+  [docPoints, entPoints, polPoints].forEach(pts => {
     const idx = pts.userData.idx, arr = pts.geometry.attributes.position.array;
     idx.forEach((ni, k) => {
       arr[k*3] = drawPos[ni*3]; arr[k*3+1] = drawPos[ni*3+1]; arr[k*3+2] = drawPos[ni*3+2];
     });
     pts.geometry.attributes.position.needsUpdate = true;
   });
-  const eArr = edgeLines.geometry.attributes.position.array,
-        eds = edgeLines.userData.edges;
-  for (let e = 0; e < eds.length; e++) {
-    const a = eds[e][0], b = eds[e][1];
-    eArr[e*6]   = drawPos[a*3]; eArr[e*6+1] = drawPos[a*3+1]; eArr[e*6+2] = drawPos[a*3+2];
-    eArr[e*6+3] = drawPos[b*3]; eArr[e*6+4] = drawPos[b*3+1]; eArr[e*6+5] = drawPos[b*3+2];
-  }
-  edgeLines.geometry.attributes.position.needsUpdate = true;
+  [edgeLines, ontoLines].forEach(lines => {
+    const eArr = lines.geometry.attributes.position.array,
+          eds = lines.userData.edges;
+    for (let e = 0; e < eds.length; e++) {
+      const a = eds[e][0], b = eds[e][1];
+      eArr[e*6]   = drawPos[a*3]; eArr[e*6+1] = drawPos[a*3+1]; eArr[e*6+2] = drawPos[a*3+2];
+      eArr[e*6+3] = drawPos[b*3]; eArr[e*6+4] = drawPos[b*3+1]; eArr[e*6+5] = drawPos[b*3+2];
+    }
+    lines.geometry.attributes.position.needsUpdate = true;
+  });
 
   if (state.mode === "results") {             // 결과 노드 하이라이트
     const hArr = hiPoints.geometry.attributes.position.array;

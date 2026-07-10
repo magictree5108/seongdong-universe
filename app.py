@@ -35,6 +35,7 @@ CATEGORY_STYLE = {
     "ordinance":  {"label": "성동구 자치법규",       "color": "#b18bff"},
     "org":        {"label": "조직·업무분장",         "color": "#2dd4bf"},
     "news":       {"label": "보도·소식·감사결과",    "color": "#f472b6"},
+    "policy":     {"label": "정책·사업 (예산)",      "color": "#ffe28a"},
 }
 ENTITY_STYLE = {
     "dept":  {"label": "담당 부서",        "color": "#6ee7a8"},
@@ -112,7 +113,8 @@ def component_payload():
         "x": [round(n["x"] / COORD_SCALE, 3) for n in nodes],
         "y": [round(n["y"] / COORD_SCALE, 3) for n in nodes],
         "z": [round(n["z"] / COORD_SCALE, 3) for n in nodes],
-        "kind": [1 if n["kind"] == "entity" else 0 for n in nodes],
+        "kind": [2 if n["kind"] == "policy" else 1 if n["kind"] == "entity" else 0
+                 for n in nodes],
         # 호버 툴팁·클릭 상세용 노드 정보
         "title": [html.escape(n["title"][:90]) for n in nodes],
         "src": [html.escape(n["source_label"][:44]) for n in nodes],
@@ -123,7 +125,8 @@ def component_payload():
     # 개체 색은 컴포넌트 CAT_COLOR에서 etype 이름 대신 'entity' 키를 쓰므로 치환
     payload_nodes["cat"] = ["entity" if n["kind"] == "entity" else n["category"]
                             for n in nodes]
-    payload_edges = [[e[0], e[1]] for e in edges]
+    # 3번째 원소: 온톨로지 링크(담당·근거·언급) 여부 — 컴포넌트가 골드로 그린다
+    payload_edges = [[e[0], e[1], 1 if e[3] == "onto" else 0] for e in edges]
     sig = f'{meta["built_at"]}::{meta["total_nodes"]}'
     return payload_nodes, payload_edges, sig
 
@@ -273,7 +276,7 @@ def local_candidates(query: str,
             if matched:
                 scored.append((matched, i, float(sims[i])))
     scored.sort(key=lambda t: (-t[0], -t[2]))
-    cat_cap = {"news": 10, "notice": 12}
+    cat_cap = {"news": 10, "notice": 12, "policy": 8}
     cat_counts: dict[str, int] = {}
     gated: list[tuple[int, float]] = []
     for _m2, i, s in scored:
@@ -427,6 +430,7 @@ def _meta_html(query, mode, expanded, laws, meta, n_results) -> str:
             parts.append(f'<div class="laws">국가 법령 (법제처 실시간)</div>{lines}')
     else:
         parts.append(f'문서 {meta["total_docs"]:,} · 개체 {meta["total_entities"]}'
+                     f' · 사업 {meta.get("total_policies", 0):,}'
                      f' · 연결 {meta["total_edges"]:,} · 데이터 {meta["built_at"][:10]}')
         parts.append("공개 행정데이터 데모 — 적법성·정확성을 보증하지 않습니다.")
     return "<br>".join(parts)
@@ -470,7 +474,7 @@ def _render_detail_board(nodes, results, laws, expanded, mode, query):
     style_map = {**{k: v for k, v in CATEGORY_STYLE.items()},
                  "entity": {"label": "개체", "color": "#6ee7a8"}}
     short_map = {"consulting": "선례", "notice": "공고", "ordinance": "조례",
-                 "org": "부서", "news": "소식", "entity": "개체"}
+                 "org": "부서", "news": "소식", "entity": "개체", "policy": "사업"}
     for rank, (i, score) in enumerate(results, start=1):
         n = nodes[i]
         cat = "entity" if n["kind"] == "entity" else n["category"]
@@ -530,9 +534,11 @@ def main():
 
     with st.sidebar:
         st.markdown("### 레이어")
+        cat_counts = dict(meta["categories"])
+        cat_counts["policy"] = meta.get("total_policies", 0)
         active_cats = {slug for slug, style in CATEGORY_STYLE.items()
                        if st.checkbox(f'{style["label"]} '
-                                      f'({meta["categories"].get(slug, 0):,})',
+                                      f'({cat_counts.get(slug, 0):,})',
                                       value=True, key=f"cat_{slug}")}
         st.markdown("### 온톨로지")
         active_etypes = {et for et, style in ENTITY_STYLE.items()
@@ -587,7 +593,9 @@ def main():
         nodes=payload_nodes, edges=payload_edges, data_sig=sig, state=state,
         title="성동 UNIVERSE",
         subtitle=(f'성동구 공공데이터 3D 의미 우주 · 문서 {meta["total_docs"]:,}'
-                  f' · 개체 {meta["total_entities"]} · {model_choice.split(" —")[0]}'),
+                  f' · 개체 {meta["total_entities"]}'
+                  f' · 사업 {meta.get("total_policies", 0):,}'
+                  f' · {model_choice.split(" —")[0]}'),
         meta_html=meta_html,
         legend_html=_legend_html(active_cats, active_etypes),
         key="universe", default=None)
