@@ -18,7 +18,7 @@ from typing import Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 
 
 # ── Object Types (8) ─────────────────────────────────────────────
@@ -38,6 +38,9 @@ class Policy(SDObject):
 
     type: Literal["Policy"] = "Policy"
     department: Optional[str] = Field(None, description="소관부서")
+    dept_code: Optional[str] = Field(
+        None, description="부서코드 (지방재정365 dept_cd — 부서명 정합은 3단계)"
+    )
     field: Optional[str] = Field(None, description="분야 (예: 주택, 환경, 복지)")
     budget_current: Optional[int] = Field(None, description="예산현액 (원)")
     expenditure: Optional[int] = Field(None, description="지출액 (원)")
