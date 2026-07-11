@@ -205,7 +205,7 @@ let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
     camTargetFocus = new THREE.Vector3(0,0,0);
 let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
 let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
-let ontoAdj = {};
+let ontoAdj = {}, lastAnswerQuery = "";
 let hoverId = -1, downX = 0, downY = 0, moved = false;
 const raycaster = new THREE.Raycaster();
 raycaster.params.Points = { threshold: 0.22 };
@@ -271,18 +271,7 @@ function initScene() {
     const chip = e.target.closest(".nbr");
     if (chip) pivotTo(parseInt(chip.dataset.node, 10));
   });
-  document.getElementById("scrollHint").addEventListener("click", () => {
-    // 같은 출처(iframe)라 부모 문서의 상세 보드 앵커로 직접 스크롤할 수 있다
-    try {
-      const anchor = window.parent.document.getElementById("board");
-      if (!anchor) return;
-      anchor.scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(() => {   // smooth가 막히는 환경(탭 스로틀 등) 대비 즉시 이동 폴백
-        if (anchor.getBoundingClientRect().top > 200)
-          anchor.scrollIntoView({ behavior: "auto", block: "start" });
-      }, 800);
-    } catch (e) { /* 교차 출처 배포 환경이면 무시 */ }
-  });
+  document.getElementById("scrollHint").addEventListener("click", () => scrollToBoard(0));
   st.addEventListener("wheel", e => {
     e.preventDefault();
     camTargetDist = Math.max(3, Math.min(60, camTargetDist * (e.deltaY > 0 ? 1.1 : 0.9)));
@@ -365,6 +354,23 @@ function pivotTo(i) {
   camTargetFocus.set(basePos[i*3], basePos[i*3+1], basePos[i*3+2]);
   camTargetDist = Math.min(camTargetDist, 9);
   showDetail(i);
+}
+
+// 부모 문서의 상세 보드(#board)로 스크롤 — 같은 출처(iframe)라 직접 접근 가능.
+// 보드가 아직 렌더 전이면 잠시 재시도한다 (컴포넌트가 보드보다 먼저 그려지므로).
+function scrollToBoard(attempt) {
+  try {
+    const anchor = window.parent.document.getElementById("board");
+    if (!anchor) {
+      if (attempt < 8) setTimeout(() => scrollToBoard(attempt + 1), 350);
+      return;
+    }
+    anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => {   // smooth가 막히는 환경(탭 스로틀 등) 대비 즉시 이동 폴백
+      if (anchor.getBoundingClientRect().top > 200)
+        anchor.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 800);
+  } catch (e) { /* 교차 출처 배포 환경이면 무시 */ }
 }
 
 function showDetail(i) {
@@ -649,6 +655,21 @@ window.addEventListener("message", ev => {
   document.getElementById("meta").innerHTML = args.meta_html || "";
   document.getElementById("legend").innerHTML = args.legend_html || "";
   applyStateVisuals();
+
+  // AI 답변(성공/실패)이 도착하면 스크롤 버튼 문구를 바꾸고 자동으로 보여준다 —
+  // 답변이 화면 아래에 렌더되어 "답을 안 한 것처럼" 보이는 문제 방지.
+  const hint = document.getElementById("scrollHint");
+  if (args.answer_state && args.answer_query) {
+    hint.textContent = args.answer_state === "ok"
+      ? "▼ AI 답변 보러 내려가기 ▼" : "▼ 답변 생성 실패 — 사유 보기 ▼";
+    if (args.answer_query !== lastAnswerQuery) {
+      lastAnswerQuery = args.answer_query;
+      scrollToBoard(0);
+    }
+  } else {
+    hint.textContent = "▼ 상세 결과·법령 보러 내려가기 ▼";
+    if (!args.answer_query) lastAnswerQuery = "";
+  }
 });
 stSend("streamlit:componentReady", { apiVersion: 1 });
 stSend("streamlit:setFrameHeight", { height: 860 });

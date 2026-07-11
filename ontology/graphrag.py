@@ -19,7 +19,6 @@ import argparse
 import os
 import re
 import sys
-import tomllib
 from pathlib import Path
 
 from .promote import DEFAULT_DB
@@ -95,6 +94,9 @@ def _api_key(explicit: str | None = None) -> str:
     if not key:
         secrets = ROOT / ".streamlit" / "secrets.toml"
         if secrets.exists():
+            # tomllib은 3.11+ 전용 — 로컬 CLI 폴백에서만 지연 임포트한다
+            # (배포 앱은 api_key를 명시 전달하므로 이 경로를 타지 않는다)
+            import tomllib
             key = tomllib.loads(secrets.read_text(encoding="utf-8")).get("ANTHROPIC_API_KEY")
     if not key:
         raise RuntimeError("ANTHROPIC_API_KEY가 없습니다.")

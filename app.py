@@ -386,24 +386,35 @@ _QUESTION_RE = re.compile(
     r"추이|변화|변했|현황은|뭐 하|하나요|인가요|인지|되나|됐나|맞아")
 
 
-def graph_answer(query: str) -> dict | None:
+def graph_answer(query: str) -> dict:
     """온톨로지 GraphRAG 답변. 근거 객체 id·원문 URL이 달려 온다.
 
     st.cache_data 대신 session_state에 수동 캐시한다 — 워커 스레드에서
     돌릴 수 있어야 하고(문서 검색과 동시 실행), 레이어 토글 등 rerun마다
-    재호출되면 안 되기 때문."""
+    재호출되면 안 되기 때문.
+
+    절대 조용히 실패하지 않는다: 실패하면 error를 담아 돌려주고 서버 로그에
+    전체 traceback을 남긴다 — 사용자는 실패 사실과 사유를 볼 수 있어야 한다."""
+    fail = {"answer": None, "sources": [], "seeds": [], "stats": {}}
     key = _api_key()
-    if not key or not (DATA_DIR / "ontology.db").exists():
-        return None
-    from ontology.graphrag import answer_question
+    if not key:
+        return {**fail, "error": "ANTHROPIC_API_KEY가 설정되어 있지 않습니다."}
+    if not (DATA_DIR / "ontology.db").exists():
+        return {**fail, "error": "온톨로지 DB(data/ontology.db)를 찾을 수 없습니다."}
     try:
+        from ontology.graphrag import answer_question
         return answer_question(query, db_path=DATA_DIR / "ontology.db", api_key=key)
-    except Exception:  # noqa: BLE001 — 답변 실패는 검색만으로 진행
-        return None
+    except Exception as e:  # noqa: BLE001 — 사유를 UI·로그로 반드시 드러낸다
+        import traceback
+        traceback.print_exc()
+        return {**fail, "error": f"{type(e).__name__}: {e}"}
 
 
 def _onto_node_map(nodes) -> dict[str, int]:
-    """온톨로지 객체 id → 우주 노드 인덱스 (원천이 같아 정확 매핑)."""
+    """온톨로지 객체 id → 우주 노드 인덱스 (원천이 같아 정확 매핑).
+
+    국가법령(law:*)은 우주에 전용 노드가 없어 이름으로 법령 개체 다이아몬드에
+    잇는다 — 'lawname:<법령명>' 보조 키."""
     m: dict[str, int] = {}
     for i, n in enumerate(nodes):
         d = n["doc_id"]
@@ -415,6 +426,8 @@ def _onto_node_map(nodes) -> dict[str, int]:
             m["press:" + d.split("sd/board/", 1)[1]] = i
         elif d.startswith("sd/org/"):
             m["department:" + d.rsplit("/", 1)[-1]] = i
+        elif n.get("etype") == "law":
+            m["lawname:" + n["title"]] = i
     return m
 
 
@@ -678,13 +691,20 @@ def main():
         results, mode, expanded = run_search(uq, ai_model)
         if ga_future is not None:
             ganswer = ga_future.result()
-            ga_cache.clear()            # 직전 질의 것만 유지 (메모리 관리)
-            ga_cache[uq] = ganswer
+            if ganswer.get("answer"):   # 실패는 캐시하지 않는다 — 재시도 가능해야
+                ga_cache.clear()        # 직전 질의 것만 유지 (메모리 관리)
+                ga_cache[uq] = ganswer
         if ganswer and ganswer.get("sources"):
             # 답변의 근거 객체를 우주에서 하이라이트 — 결과 최상단에 고정
             omap = _onto_node_map(nodes)
             have = {i for i, _s in results}
-            srcs = [omap[s["id"]] for s in ganswer["sources"] if s["id"] in omap]
+            srcs = []
+            for s in ganswer["sources"]:
+                idx = omap.get(s["id"])
+                if idx is None and s["type"] == "NationalLaw":
+                    idx = omap.get("lawname:" + s["name"])
+                if idx is not None:
+                    srcs.append(idx)
             results = [(i, 1.0) for i in dict.fromkeys(srcs) if i not in have] + results
             results = results[:TOP_K]
         results = [(i, s) for i, s in results if _visible(nodes[i])]
@@ -712,13 +732,25 @@ def main():
                   f' · {model_choice.split(" —")[0]}'),
         meta_html=meta_html,
         legend_html=_legend_html(active_cats, active_etypes),
+        answer_state=(("ok" if ganswer.get("answer") else "fail") if ganswer else None),
+        answer_query=(uq if ganswer else ""),
         key="universe", default=None)
 
     # 우주 아래 — 전폭 스크롤: AI 답변(질문형) + 상세 결과 (법령 포함)
     if uq and ganswer:
         st.markdown('<div class="board-anchor" id="board"></div>',
                     unsafe_allow_html=True)
-        _render_answer_card(ganswer, uq)
+        if ganswer.get("answer"):
+            _render_answer_card(ganswer, uq)
+        else:
+            # 질문으로 인식했으면 실패도 반드시 알린다 — 조용히 사라지지 않게
+            st.markdown(
+                f'<div class="board-card" style="border-color:rgba(255,140,120,0.55);">'
+                f'<div class="bc-meta" style="color:#ffb4a2;">◆ 질문으로 인식했지만 '
+                f'AI 답변 생성에 실패했습니다 — 아래는 문서 검색 결과만 표시됩니다.</div>'
+                f'<div class="bc-snip">사유: {html.escape(ganswer.get("error") or "알 수 없음")}'
+                f'<br>같은 질문을 다시 시도하거나, 잠시 후 이용해 주세요.</div>'
+                f'</div>', unsafe_allow_html=True)
     if uq and results:
         _render_detail_board(nodes, results, laws, expanded, mode, uq,
                              with_anchor=ganswer is None)

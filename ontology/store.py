@@ -67,14 +67,20 @@ class OntologyStore:
         self.conn = sqlite3.connect(str(self.db_path), check_same_thread=False)
         self._lock = threading.RLock()
         self.conn.row_factory = sqlite3.Row
-        self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA foreign_keys=ON")
-        self.conn.executescript(_DDL)
-        self.conn.execute(
-            "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
-            (SCHEMA_VERSION,),
-        )
-        self.conn.commit()
+        try:
+            # 초기화 쓰기(WAL 전환·스키마·버전 기록)는 읽기 전용 배포 환경
+            # (컨테이너의 read-only 마운트 등)에서 실패할 수 있다 — 그 경우
+            # 이미 구축된 DB를 조회 전용으로 쓰는 데는 지장이 없으므로 계속한다.
+            self.conn.execute("PRAGMA journal_mode=WAL")
+            self.conn.executescript(_DDL)
+            self.conn.execute(
+                "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
+                (SCHEMA_VERSION,),
+            )
+            self.conn.commit()
+        except sqlite3.OperationalError:
+            self.conn.rollback()
 
     def close(self) -> None:
         self.conn.close()
