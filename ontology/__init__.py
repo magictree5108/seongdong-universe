@@ -16,6 +16,7 @@ from .schema import (
     Facility,
     Link,
     LinkType,
+    NationalLaw,
     Ordinance,
     Policy,
     PressRelease,
@@ -26,6 +27,6 @@ from .store import OntologyStore
 __all__ = [
     "SCHEMA_VERSION", "TYPE_LABELS", "TYPE_REGISTRY",
     "SDObject", "Policy", "Department", "Ordinance", "BudgetItem",
-    "PressRelease", "Facility", "District", "ComplaintType",
+    "PressRelease", "Facility", "District", "ComplaintType", "NationalLaw",
     "Link", "LinkType", "OntologyStore",
 ]

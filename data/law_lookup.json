@@ -1,0 +1,5481 @@
+{
+ "지방자치법": {
+  "law_id": "001656",
+  "official_name": "지방자치법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "장애인복지법": {
+  "law_id": "000187",
+  "official_name": "장애인복지법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국민기초생활 보장법": {
+  "law_id": "001973",
+  "official_name": "국민기초생활 보장법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "지방공무원법": {
+  "law_id": "001653",
+  "official_name": "지방공무원법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "민법": {
+  "law_id": "001706",
+  "official_name": "민법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2026-03-17",
+  "effective_at": "2026-03-17",
+  "exact": true
+ },
+ "지방공기업법": {
+  "law_id": "001648",
+  "official_name": "지방공기업법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "국가유공자 등 예우 및 지원에 관한 법률": {
+  "law_id": "001713",
+  "official_name": "국가유공자 등 예우 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "재난 및 안전관리 기본법": {
+  "law_id": "009640",
+  "official_name": "재난 및 안전관리 기본법",
+  "kind": "법률",
+  "ministry": "소방청,해양경찰청,행정안전부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-06-11",
+  "exact": true
+ },
+ "한부모가족지원법": {
+  "law_id": "000184",
+  "official_name": "한부모가족지원법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2025-12-04",
+  "exact": true
+ },
+ "지방재정법": {
+  "law_id": "001652",
+  "official_name": "지방재정법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "아동복지법": {
+  "law_id": "000190",
+  "official_name": "아동복지법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "사회복지사업법": {
+  "law_id": "000202",
+  "official_name": "사회복지사업법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-10-02",
+  "exact": true
+ },
+ "영유아보육법": {
+  "law_id": "000191",
+  "official_name": "영유아보육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "고등교육법": {
+  "law_id": "000899",
+  "official_name": "고등교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2026-03-01",
+  "exact": true
+ },
+ "초·중등교육법": {
+  "law_id": "000900",
+  "official_name": "초ㆍ중등교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-03-01",
+  "exact": true
+ },
+ "도로법": {
+  "law_id": "001821",
+  "official_name": "도로법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "국토의 계획 및 이용에 관한 법률": {
+  "law_id": "009294",
+  "official_name": "국토의 계획 및 이용에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "질서위반행위규제법": {
+  "law_id": "010592",
+  "official_name": "질서위반행위규제법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2020-12-29",
+  "effective_at": "2021-01-01",
+  "exact": true
+ },
+ "행정절차법": {
+  "law_id": "001362",
+  "official_name": "행정절차법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-01-11",
+  "effective_at": "2023-03-24",
+  "exact": true
+ },
+ "건축법": {
+  "law_id": "001823",
+  "official_name": "건축법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-08-26",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "노인복지법": {
+  "law_id": "001777",
+  "official_name": "노인복지법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2026-01-24",
+  "exact": true
+ },
+ "지방자치단체 기금관리기본법": {
+  "law_id": "009996",
+  "official_name": "지방자치단체 기금관리기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-04-09",
+  "effective_at": "2026-04-09",
+  "exact": true
+ },
+ "공유재산 및 물품 관리법": {
+  "law_id": "010000",
+  "official_name": "공유재산 및 물품 관리법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-01-09",
+  "effective_at": "2024-07-10",
+  "exact": true
+ },
+ "유아교육법": {
+  "law_id": "009621",
+  "official_name": "유아교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "공공기관의 정보공개에 관한 법률": {
+  "law_id": "001357",
+  "official_name": "공공기관의 정보공개에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-05-16",
+  "effective_at": "2023-11-17",
+  "exact": true
+ },
+ "개인정보 보호법": {
+  "law_id": "011357",
+  "official_name": "개인정보 보호법",
+  "kind": "법률",
+  "ministry": "개인정보보호위원회",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-10-02",
+  "exact": true
+ },
+ "도로교통법": {
+  "law_id": "001638",
+  "official_name": "도로교통법",
+  "kind": "법률",
+  "ministry": "경찰청",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방자치단체 보조금 관리에 관한 법률": {
+  "law_id": "013988",
+  "official_name": "지방자치단체 보조금 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-04-11",
+  "effective_at": "2023-10-12",
+  "exact": true
+ },
+ "의료법": {
+  "law_id": "001788",
+  "official_name": "의료법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2026-04-07",
+  "effective_at": "2026-04-07",
+  "exact": true
+ },
+ "근로기준법": {
+  "law_id": "001872",
+  "official_name": "근로기준법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-10-23",
+  "exact": true
+ },
+ "민원 처리에 관한 법률": {
+  "law_id": "001359",
+  "official_name": "민원 처리에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-01-11",
+  "effective_at": "2022-07-12",
+  "exact": true
+ },
+ "중소기업기본법": {
+  "law_id": "001477",
+  "official_name": "중소기업기본법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방세기본법": {
+  "law_id": "011177",
+  "official_name": "지방세기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-05",
+  "effective_at": "2026-02-05",
+  "exact": true
+ },
+ "지방자치단체를 당사자로 하는 계약에 관한 법률": {
+  "law_id": "010002",
+  "official_name": "지방자치단체를 당사자로 하는 계약에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-08-16",
+  "effective_at": "2024-02-17",
+  "exact": true
+ },
+ "공무원 여비 규정": {
+  "law_id": "009402",
+  "official_name": "공무원 여비 규정",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-06-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방회계법": {
+  "law_id": "012559",
+  "official_name": "지방회계법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률": {
+  "law_id": "012024",
+  "official_name": "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "산업안전보건법": {
+  "law_id": "001766",
+  "official_name": "산업안전보건법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2026-07-07",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "전통시장 및 상점가 육성을 위한 특별법": {
+  "law_id": "009767",
+  "official_name": "전통시장 및 상점가 육성을 위한 특별법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-16",
+  "effective_at": "2026-06-17",
+  "exact": true
+ },
+ "양성평등기본법": {
+  "law_id": "000185",
+  "official_name": "양성평등기본법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "초ㆍ중등교육법": {
+  "law_id": "000900",
+  "official_name": "초ㆍ중등교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-03-01",
+  "exact": true
+ },
+ "지방자치법 시행령": {
+  "law_id": "005092",
+  "official_name": "지방자치법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "감염병의 예방 및 관리에 관한 법률": {
+  "law_id": "001792",
+  "official_name": "감염병의 예방 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "식품위생법": {
+  "law_id": "001805",
+  "official_name": "식품위생법",
+  "kind": "법률",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "공공기관의 운영에 관한 법률": {
+  "law_id": "010375",
+  "official_name": "공공기관의 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지방공무원 수당 등에 관한 규정": {
+  "law_id": "005048",
+  "official_name": "지방공무원 수당 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "공직자윤리법": {
+  "law_id": "001718",
+  "official_name": "공직자윤리법",
+  "kind": "법률",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "비영리민간단체 지원법": {
+  "law_id": "002031",
+  "official_name": "비영리민간단체 지원법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-04-26",
+  "effective_at": "2023-04-27",
+  "exact": true
+ },
+ "문화예술진흥법": {
+  "law_id": "000836",
+  "official_name": "문화예술진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2025-11-11",
+  "exact": true
+ },
+ "지방재정법 시행령": {
+  "law_id": "005098",
+  "official_name": "지방재정법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지방세법": {
+  "law_id": "001649",
+  "official_name": "지방세법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-31",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "도시공원 및 녹지 등에 관한 법률": {
+  "law_id": "001813",
+  "official_name": "도시공원 및 녹지 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "평생교육법": {
+  "law_id": "000851",
+  "official_name": "평생교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "모자보건법": {
+  "law_id": "000183",
+  "official_name": "모자보건법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-04-01",
+  "exact": true
+ },
+ "지역보건법": {
+  "law_id": "000236",
+  "official_name": "지역보건법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2024-09-20",
+  "effective_at": "2025-06-21",
+  "exact": true
+ },
+ "협동조합 기본법": {
+  "law_id": "011528",
+  "official_name": "협동조합 기본법",
+  "kind": "법률",
+  "ministry": "기획예산처",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "유통산업발전법": {
+  "law_id": "001469",
+  "official_name": "유통산업발전법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "소상공인 보호 및 지원에 관한 법률": {
+  "law_id": "000360",
+  "official_name": "소상공인 보호 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "청소년복지 지원법": {
+  "law_id": "009681",
+  "official_name": "청소년복지 지원법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "청소년 기본법": {
+  "law_id": "000816",
+  "official_name": "청소년 기본법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2026-04-28",
+  "effective_at": "2026-04-28",
+  "exact": true
+ },
+ "청소년기본법": {
+  "law_id": "000816",
+  "official_name": "청소년 기본법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2026-04-28",
+  "effective_at": "2026-04-28",
+  "exact": true
+ },
+ "청원경찰법": {
+  "law_id": "000979",
+  "official_name": "청원경찰법",
+  "kind": "법률",
+  "ministry": "경찰청",
+  "promulgated_at": "2022-11-15",
+  "effective_at": "2022-11-15",
+  "exact": true
+ },
+ "주민등록법": {
+  "law_id": "001655",
+  "official_name": "주민등록법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-07-22",
+  "exact": true
+ },
+ "공동주택관리법": {
+  "law_id": "012345",
+  "official_name": "공동주택관리법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "자연재해대책법": {
+  "law_id": "000959",
+  "official_name": "자연재해대책법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "저출산ㆍ고령사회기본법": {
+  "law_id": "009933",
+  "official_name": "저출산ㆍ고령사회기본법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-04-24",
+  "exact": true
+ },
+ "전자정부법": {
+  "law_id": "009199",
+  "official_name": "전자정부법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-01-07",
+  "effective_at": "2025-07-08",
+  "exact": true
+ },
+ "독립유공자예우에 관한 법률": {
+  "law_id": "001328",
+  "official_name": "독립유공자예우에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "응급의료에 관한 법률": {
+  "law_id": "000218",
+  "official_name": "응급의료에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "공유재산 및 물품 관리법 시행령": {
+  "law_id": "010146",
+  "official_name": "공유재산 및 물품 관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방자치단체의 행정기구와 정원기준 등에 관한 규정": {
+  "law_id": "005091",
+  "official_name": "지방자치단체의 행정기구와 정원기준 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "건설기술 진흥법": {
+  "law_id": "001807",
+  "official_name": "건설기술 진흥법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "자동차관리법": {
+  "law_id": "001747",
+  "official_name": "자동차관리법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-16",
+  "effective_at": "2026-06-16",
+  "exact": true
+ },
+ "공공기록물 관리에 관한 법률": {
+  "law_id": "001963",
+  "official_name": "공공기록물 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "관광진흥법": {
+  "law_id": "001744",
+  "official_name": "관광진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "지방세기본법 시행령": {
+  "law_id": "011277",
+  "official_name": "지방세기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방자치단체 출자·출연 기관의 운영에 관한 법률": {
+  "law_id": "012024",
+  "official_name": "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "대기환경보전법": {
+  "law_id": "001773",
+  "official_name": "대기환경보전법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-07-07",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "환경친화적 자동차의 개발 및 보급 촉진에 관한 법률": {
+  "law_id": "009758",
+  "official_name": "환경친화적 자동차의 개발 및 보급 촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "긴급복지지원법": {
+  "law_id": "010111",
+  "official_name": "긴급복지지원법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-04-22",
+  "effective_at": "2025-10-23",
+  "exact": true
+ },
+ "국민기초생활보장법": {
+  "law_id": "001973",
+  "official_name": "국민기초생활 보장법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "폐기물관리법": {
+  "law_id": "001771",
+  "official_name": "폐기물관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률": {
+  "law_id": "012197",
+  "official_name": "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-04-22",
+  "effective_at": "2025-10-23",
+  "exact": true
+ },
+ "학교 밖 청소년 지원에 관한 법률": {
+  "law_id": "012054",
+  "official_name": "학교 밖 청소년 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "의사상자 등 예우 및 지원에 관한 법률": {
+  "law_id": "000178",
+  "official_name": "의사상자 등 예우 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "장애인복지법 시행령": {
+  "law_id": "004628",
+  "official_name": "장애인복지법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-16",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "민방위기본법": {
+  "law_id": "001631",
+  "official_name": "민방위기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2025-06-04",
+  "exact": true
+ },
+ "주차장법": {
+  "law_id": "001814",
+  "official_name": "주차장법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "자원의 절약과 재활용촉진에 관한 법률": {
+  "law_id": "000155",
+  "official_name": "자원의 절약과 재활용촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "도시가스사업법": {
+  "law_id": "001851",
+  "official_name": "도시가스사업법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "국민건강증진법": {
+  "law_id": "000223",
+  "official_name": "국민건강증진법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2026-04-30",
+  "effective_at": "2026-04-30",
+  "exact": true
+ },
+ "공공기록물 관리에 관한 법률 시행령": {
+  "law_id": "002254",
+  "official_name": "공공기록물 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-05-20",
+  "effective_at": "2025-05-20",
+  "exact": true
+ },
+ "식품위생법 시행령": {
+  "law_id": "004097",
+  "official_name": "식품위생법 시행령",
+  "kind": "대통령령",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "주택법": {
+  "law_id": "001809",
+  "official_name": "주택법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "부패방지 및 국민권익위원회의 설치와 운영에 관한 법률": {
+  "law_id": "009221",
+  "official_name": "부패방지 및 국민권익위원회의 설치와 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-01-21",
+  "exact": true
+ },
+ "부정청탁 및 금품등 수수의 금지에 관한 법률": {
+  "law_id": "012268",
+  "official_name": "부정청탁 및 금품등 수수의 금지에 관한 법률",
+  "kind": "법률",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-01-21",
+  "exact": true
+ },
+ "국가공무원법": {
+  "law_id": "001719",
+  "official_name": "국가공무원법",
+  "kind": "법률",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "서울특별시 성동구 공무직 관리 규정": null,
+ "건설기술 진흥법 시행령": {
+  "law_id": "002111",
+  "official_name": "건설기술 진흥법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "서울특별시 성동구 지방공무원 여비 지급 조례 시행규칙": null,
+ "사회적기업 육성법": {
+  "law_id": "010365",
+  "official_name": "사회적기업 육성법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "행정업무의 운영 및 혁신에 관한 규정": {
+  "law_id": "003728",
+  "official_name": "행정업무의 운영 및 혁신에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "부가가치세법": {
+  "law_id": "001571",
+  "official_name": "부가가치세법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "은행법": {
+  "law_id": "001549",
+  "official_name": "은행법",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방세징수법": {
+  "law_id": "012708",
+  "official_name": "지방세징수법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-05",
+  "effective_at": "2026-02-05",
+  "exact": true
+ },
+ "고엽제후유의증 등 환자지원 및 단체설립에 관한 법률": {
+  "law_id": "001327",
+  "official_name": "고엽제후유의증 등 환자지원 및 단체설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-04-22",
+  "exact": true
+ },
+ "보훈보상대상자 지원에 관한 법률": {
+  "law_id": "011460",
+  "official_name": "보훈보상대상자 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "재한외국인 처우 기본법": {
+  "law_id": "010445",
+  "official_name": "재한외국인 처우 기본법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2025-01-31",
+  "exact": true
+ },
+ "국가기술자격법": {
+  "law_id": "000135",
+  "official_name": "국가기술자격법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2022-06-10",
+  "effective_at": "2022-06-10",
+  "exact": true
+ },
+ "지역문화진흥법": {
+  "law_id": "012002",
+  "official_name": "지역문화진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "대한민국헌법": {
+  "law_id": "001444",
+  "official_name": "대한민국헌법",
+  "kind": "헌법",
+  "ministry": null,
+  "promulgated_at": "1987-10-29",
+  "effective_at": "1988-02-25",
+  "exact": true
+ },
+ "다문화가족지원법": {
+  "law_id": "010718",
+  "official_name": "다문화가족지원법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "성폭력방지 및 피해자보호 등에 관한 법률": {
+  "law_id": "011185",
+  "official_name": "성폭력방지 및 피해자보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "회계관계직원 등의 책임에 관한 법률": {
+  "law_id": "000696",
+  "official_name": "회계관계직원 등의 책임에 관한 법률",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "옥외광고물 등의 관리와 옥외광고산업 진흥에 관한 법률": {
+  "law_id": "001020",
+  "official_name": "옥외광고물 등의 관리와 옥외광고산업 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-08-14",
+  "effective_at": "2026-02-15",
+  "exact": true
+ },
+ "장애인고용촉진 및 직업재활법": {
+  "law_id": "001763",
+  "official_name": "장애인고용촉진 및 직업재활법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "지방공무원 복무규정": {
+  "law_id": "009916",
+  "official_name": "지방공무원 복무규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-06-23",
+  "exact": true
+ },
+ "공직선거법": {
+  "law_id": "001725",
+  "official_name": "공직선거법",
+  "kind": "법률",
+  "ministry": "중앙선거관리위원회",
+  "promulgated_at": "2026-04-22",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국토의 계획 및 이용에 관한 법률 시행령": {
+  "law_id": "009419",
+  "official_name": "국토의 계획 및 이용에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "고압가스 안전관리법": {
+  "law_id": "001850",
+  "official_name": "고압가스 안전관리법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "치매관리법": {
+  "law_id": "011442",
+  "official_name": "치매관리법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-01-02",
+  "effective_at": "2024-07-03",
+  "exact": true
+ },
+ "공중화장실 등에 관한 법률": {
+  "law_id": "009625",
+  "official_name": "공중화장실 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2021-07-20",
+  "effective_at": "2023-07-21",
+  "exact": true
+ },
+ "국민건강증진법 시행령": {
+  "law_id": "002814",
+  "official_name": "국민건강증진법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-19",
+  "exact": true
+ },
+ "서울특별시 성동구 행정기구 설치 조례 시행규칙": null,
+ "통계법": {
+  "law_id": "000658",
+  "official_name": "통계법",
+  "kind": "법률",
+  "ministry": "국가데이터처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "금융실명거래 및 비밀보장에 관한 법률": {
+  "law_id": "000549",
+  "official_name": "금융실명거래 및 비밀보장에 관한 법률",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-04-01",
+  "exact": true
+ },
+ "소방기본법": {
+  "law_id": "009505",
+  "official_name": "소방기본법",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "감정평가 및 감정평가사에 관한 법률": {
+  "law_id": "012481",
+  "official_name": "감정평가 및 감정평가사에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2023-05-09",
+  "effective_at": "2023-08-10",
+  "exact": true
+ },
+ "공익사업을 위한 토지 등의 취득 및 보상에 관한 법률": {
+  "law_id": "009295",
+  "official_name": "공익사업을 위한 토지 등의 취득 및 보상에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-16",
+  "effective_at": "2026-06-16",
+  "exact": true
+ },
+ "건설산업기본법": {
+  "law_id": "001808",
+  "official_name": "건설산업기본법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-08-26",
+  "effective_at": "2025-11-27",
+  "exact": true
+ },
+ "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령": {
+  "law_id": "010098",
+  "official_name": "지방자치단체를 당사자로 하는 계약에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "약사법": {
+  "law_id": "001783",
+  "official_name": "약사법",
+  "kind": "법률",
+  "ministry": "보건복지부,식품의약품안전처",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-06-21",
+  "exact": true
+ },
+ "교통약자의 이동편의 증진법": {
+  "law_id": "009886",
+  "official_name": "교통약자의 이동편의 증진법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "특허법": {
+  "law_id": "001455",
+  "official_name": "특허법",
+  "kind": "법률",
+  "ministry": "지식재산처",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2025-11-11",
+  "exact": true
+ },
+ "공유재산 및 물품관리법": {
+  "law_id": "010000",
+  "official_name": "공유재산 및 물품 관리법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-01-09",
+  "effective_at": "2024-07-10",
+  "exact": true
+ },
+ "형법": {
+  "law_id": "001692",
+  "official_name": "형법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2026-03-12",
+  "effective_at": "2026-03-12",
+  "exact": true
+ },
+ "병역법": {
+  "law_id": "001622",
+  "official_name": "병역법",
+  "kind": "법률",
+  "ministry": "국방부,병무청",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "산업재해보상보험법": {
+  "law_id": "001760",
+  "official_name": "산업재해보상보험법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "자동차관리법 시행규칙": {
+  "law_id": "007928",
+  "official_name": "자동차관리법 시행규칙",
+  "kind": "국토교통부령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "산업집적활성화 및 공장설립에 관한 법률": {
+  "law_id": "001463",
+  "official_name": "산업집적활성화 및 공장설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "도시재생 활성화 및 지원에 관한 특별법": {
+  "law_id": "011869",
+  "official_name": "도시재생 활성화 및 지원에 관한 특별법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "고용보험법": {
+  "law_id": "001761",
+  "official_name": "고용보험법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "서울특별시 성동구 공유재산 및 물품 관리 조례 시행규칙": null,
+ "공직자의 이해충돌 방지법": {
+  "law_id": "014082",
+  "official_name": "공직자의 이해충돌 방지법",
+  "kind": "법률",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2021-05-18",
+  "effective_at": "2022-05-19",
+  "exact": true
+ },
+ "전기사업법": {
+  "law_id": "001854",
+  "official_name": "전기사업법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "변호사법": {
+  "law_id": "001708",
+  "official_name": "변호사법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2021-01-05",
+  "effective_at": "2021-01-05",
+  "exact": true
+ },
+ "지방세기본법 시행규칙": {
+  "law_id": "011312",
+  "official_name": "지방세기본법 시행규칙",
+  "kind": "행정안전부령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-08",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국가보훈 기본법": {
+  "law_id": "009932",
+  "official_name": "국가보훈 기본법",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2024-02-13",
+  "effective_at": "2024-02-13",
+  "exact": true
+ },
+ "학교급식법": {
+  "law_id": "000889",
+  "official_name": "학교급식법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "관공서의 공휴일에 관한 규정": {
+  "law_id": "002404",
+  "official_name": "관공서의 공휴일에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-04-30",
+  "effective_at": "2026-05-11",
+  "exact": true
+ },
+ "소음ㆍ진동관리법": {
+  "law_id": "000167",
+  "official_name": "소음ㆍ진동관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "국민건강보험법": {
+  "law_id": "001971",
+  "official_name": "국민건강보험법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "범죄피해자 보호법": {
+  "law_id": "010109",
+  "official_name": "범죄피해자 보호법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2024-09-20",
+  "effective_at": "2025-03-21",
+  "exact": true
+ },
+ "출입국관리법": {
+  "law_id": "001707",
+  "official_name": "출입국관리법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-07-22",
+  "effective_at": "2026-01-23",
+  "exact": true
+ },
+ "부동산 가격공시에 관한 법률": {
+  "law_id": "001827",
+  "official_name": "부동산 가격공시에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2020-06-09",
+  "effective_at": "2020-12-10",
+  "exact": true
+ },
+ "도로법 시행령": {
+  "law_id": "003400",
+  "official_name": "도로법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "장사 등에 관한 법률": {
+  "law_id": "001794",
+  "official_name": "장사 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2025-01-24",
+  "exact": true
+ },
+ "장애인ㆍ노인ㆍ임산부 등의 편의증진 보장에 관한 법률": {
+  "law_id": "000186",
+  "official_name": "장애인ㆍ노인ㆍ임산부 등의 편의증진 보장에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-12-20",
+  "effective_at": "2025-12-21",
+  "exact": true
+ },
+ "민원 처리에 관한 법률 시행령": {
+  "law_id": "003540",
+  "official_name": "민원 처리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-05-06",
+  "effective_at": "2026-05-06",
+  "exact": true
+ },
+ "발달장애인 권리보장 및 지원에 관한 법률": {
+  "law_id": "012046",
+  "official_name": "발달장애인 권리보장 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "행정권한의 위임 및 위탁에 관한 규정": {
+  "law_id": "005612",
+  "official_name": "행정권한의 위임 및 위탁에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "산림보호법": {
+  "law_id": "011019",
+  "official_name": "산림보호법",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "국민체육진흥법": {
+  "law_id": "001605",
+  "official_name": "국민체육진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "규제자유특구 및 지역특화발전특구에 관한 규제특례법": {
+  "law_id": "009641",
+  "official_name": "규제자유특구 및 지역특화발전특구에 관한 규제특례법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방자치단체 출자·출연기관의 운영에 관한 법률": {
+  "law_id": "012024",
+  "official_name": "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지방공무원 적극행정 운영규정": {
+  "law_id": "013533",
+  "official_name": "지방공무원 적극행정 운영규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "예비군법": {
+  "law_id": "001619",
+  "official_name": "예비군법",
+  "kind": "법률",
+  "ministry": "국방부",
+  "promulgated_at": "2025-03-18",
+  "effective_at": "2025-09-19",
+  "exact": true
+ },
+ "자연재해대책법 시행령": {
+  "law_id": "004607",
+  "official_name": "자연재해대책법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-01-27",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "노인장기요양보험법": {
+  "law_id": "010436",
+  "official_name": "노인장기요양보험법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-05-26",
+  "effective_at": "2026-05-26",
+  "exact": true
+ },
+ "서울특별시 성동구 재난관리기금 운용·관리 조례 시행규칙": null,
+ "서울특별시 성동구 재난관리기금 설치 및 운용 조례 시행규칙": null,
+ "지방공무원 보수규정": {
+  "law_id": "005046",
+  "official_name": "지방공무원 보수규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "건강가정기본법": {
+  "law_id": "009682",
+  "official_name": "건강가정기본법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-23",
+  "exact": true
+ },
+ "1인 창조기업 육성에 관한 법률": {
+  "law_id": "011370",
+  "official_name": "1인 창조기업 육성에 관한 법률",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "건설산업기본법 시행령": {
+  "law_id": "002115",
+  "official_name": "건설산업기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-06-23",
+  "exact": true
+ },
+ "산림조합법": {
+  "law_id": "001498",
+  "official_name": "산림조합법",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2026-06-16",
+  "effective_at": "2026-06-16",
+  "exact": true
+ },
+ "직업안정법": {
+  "law_id": "001765",
+  "official_name": "직업안정법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-07-24",
+  "exact": true
+ },
+ "액화석유가스의 안전관리 및 사업법": {
+  "law_id": "001849",
+  "official_name": "액화석유가스의 안전관리 및 사업법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-11-28",
+  "exact": true
+ },
+ "교육환경 보호에 관한 법률": {
+  "law_id": "012494",
+  "official_name": "교육환경 보호에 관한 법률",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "지방공무원 징계 및 소청 규정": {
+  "law_id": "005053",
+  "official_name": "지방공무원 징계 및 소청 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-06-30",
+  "effective_at": "2025-07-01",
+  "exact": true
+ },
+ "하수도법": {
+  "law_id": "001815",
+  "official_name": "하수도법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "다중이용업소의 안전관리에 관한 특별법 시행령": {
+  "law_id": "010409",
+  "official_name": "다중이용업소의 안전관리에 관한 특별법 시행령",
+  "kind": "대통령령",
+  "ministry": "소방청",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "전기공사업법": {
+  "law_id": "000285",
+  "official_name": "전기공사업법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-05-27",
+  "effective_at": "2025-11-28",
+  "exact": true
+ },
+ "보안업무규정 시행규칙": null,
+ "서울특별시 성동구 공간정보 보안관리 규정": null,
+ "북한이탈주민의 보호 및 정착지원에 관한 법률": {
+  "law_id": "001432",
+  "official_name": "북한이탈주민의 보호 및 정착지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "통일부",
+  "promulgated_at": "2025-04-08",
+  "effective_at": "2025-10-09",
+  "exact": true
+ },
+ "형사소송법": {
+  "law_id": "001671",
+  "official_name": "형사소송법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "노동조합 및 노동관계조정법": {
+  "law_id": "000143",
+  "official_name": "노동조합 및 노동관계조정법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-09-09",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "근로자참여 및 협력증진에 관한 법률": {
+  "law_id": "000141",
+  "official_name": "근로자참여 및 협력증진에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2022-06-10",
+  "effective_at": "2022-12-11",
+  "exact": true
+ },
+ "기간제 및 단시간근로자 보호 등에 관한 법률": {
+  "law_id": "010356",
+  "official_name": "기간제 및 단시간근로자 보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2021-05-18",
+  "effective_at": "2021-05-18",
+  "exact": true
+ },
+ "5·18민주유공자예우 및 단체설립에 관한 법률": {
+  "law_id": "009289",
+  "official_name": "5ㆍ18민주유공자예우 및 단체설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "중소기업진흥에 관한 법률": {
+  "law_id": "001476",
+  "official_name": "중소기업진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "고용정책 기본법": {
+  "law_id": "000123",
+  "official_name": "고용정책 기본법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "조세특례제한법": {
+  "law_id": "001584",
+  "official_name": "조세특례제한법",
+  "kind": "법률",
+  "ministry": "재정경제부,행정안전부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "공익법인의 설립ㆍ운영에 관한 법률": {
+  "law_id": "001263",
+  "official_name": "공익법인의 설립ㆍ운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2017-12-12",
+  "effective_at": "2017-12-12",
+  "exact": true
+ },
+ "사도법": {
+  "law_id": "000248",
+  "official_name": "사도법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2018-12-18",
+  "effective_at": "2019-01-19",
+  "exact": true
+ },
+ "서울특별시 성동구 구유재산 및 물품관리 조례 시행규칙": null,
+ "서울특별시성동구벤처기업육성및창업지원센터설치운영에관한조례시행규칙": null,
+ "공익신고자 보호법": {
+  "law_id": "011358",
+  "official_name": "공익신고자 보호법",
+  "kind": "법률",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "공직자의 이해충돌 방지법 시행령": {
+  "law_id": "014214",
+  "official_name": "공직자의 이해충돌 방지법 시행령",
+  "kind": "대통령령",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "택시운송사업의 발전에 관한 법률": {
+  "law_id": "012003",
+  "official_name": "택시운송사업의 발전에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "교통안전법": {
+  "law_id": "001755",
+  "official_name": "교통안전법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2023-08-16",
+  "effective_at": "2024-08-17",
+  "exact": true
+ },
+ "공공감사에 관한 법률": {
+  "law_id": "011170",
+  "official_name": "공공감사에 관한 법률",
+  "kind": "법률",
+  "ministry": "감사원",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "신용보증기금법": {
+  "law_id": "001523",
+  "official_name": "신용보증기금법",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "서울특별시 성동구 구세 기본 조례 시행규칙": null,
+ "지방세징수법 시행령": {
+  "law_id": "012834",
+  "official_name": "지방세징수법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-05",
+  "effective_at": "2026-02-05",
+  "exact": true
+ },
+ "국세징수법": {
+  "law_id": "001585",
+  "official_name": "국세징수법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "지방회계법 시행령": {
+  "law_id": "012678",
+  "official_name": "지방회계법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "참전유공자 예우 및 단체설립에 관한 법률": {
+  "law_id": "001326",
+  "official_name": "참전유공자 예우 및 단체설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-05-20",
+  "exact": true
+ },
+ "특수임무유공자 예우 및 단체설립에 관한 법률": {
+  "law_id": "009631",
+  "official_name": "특수임무유공자 예우 및 단체설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-04-22",
+  "exact": true
+ },
+ "5ㆍ18민주유공자예우 및 단체설립에 관한 법률": {
+  "law_id": "009289",
+  "official_name": "5ㆍ18민주유공자예우 및 단체설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "근로복지기본법": {
+  "law_id": "009252",
+  "official_name": "근로복지기본법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2022-06-10",
+  "effective_at": "2023-06-11",
+  "exact": true
+ },
+ "산업표준화법": {
+  "law_id": "001460",
+  "official_name": "산업표준화법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "보안업무규정": {
+  "law_id": "003649",
+  "official_name": "보안업무규정",
+  "kind": "대통령령",
+  "ministry": "국가정보원",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법": {
+  "law_id": "014152",
+  "official_name": "기후위기 대응을 위한 탄소중립ㆍ녹색성장 기본법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "지방자치단체 기금관리기본법 시행령": {
+  "law_id": "010094",
+  "official_name": "지방자치단체 기금관리기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "감사원법": {
+  "law_id": "001372",
+  "official_name": "감사원법",
+  "kind": "법률",
+  "ministry": "감사원",
+  "promulgated_at": "2020-10-20",
+  "effective_at": "2020-10-20",
+  "exact": true
+ },
+ "노사관계 발전 지원에 관한 법률": {
+  "law_id": "011203",
+  "official_name": "노사관계 발전 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2016-01-27",
+  "effective_at": "2016-01-27",
+  "exact": true
+ },
+ "서울특별시성동구노인복지기금설치및운용조례시행규칙": null,
+ "녹색제품 구매촉진에 관한 법률": {
+  "law_id": "009845",
+  "official_name": "녹색제품 구매촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "건설폐기물의 재활용촉진에 관한 법률": {
+  "law_id": "009592",
+  "official_name": "건설폐기물의 재활용촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부,기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "에너지이용 합리화법": {
+  "law_id": "001867",
+  "official_name": "에너지이용 합리화법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부,산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-05-28",
+  "exact": true
+ },
+ "담배사업법 시행규칙": {
+  "law_id": "007030",
+  "official_name": "담배사업법 시행규칙",
+  "kind": "재정경제부령",
+  "ministry": "재정경제부",
+  "promulgated_at": "2026-04-01",
+  "effective_at": "2026-04-01",
+  "exact": true
+ },
+ "담배사업법": {
+  "law_id": "000583",
+  "official_name": "담배사업법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-04-24",
+  "exact": true
+ },
+ "전기통신기본법": {
+  "law_id": "001734",
+  "official_name": "전기통신기본법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2018-12-24",
+  "effective_at": "2019-06-25",
+  "exact": true
+ },
+ "수도법": {
+  "law_id": "001818",
+  "official_name": "수도법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "집단에너지사업법": {
+  "law_id": "001866",
+  "official_name": "집단에너지사업법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "에너지법": {
+  "law_id": "010164",
+  "official_name": "에너지법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부,산업통상부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "서울특별시 성동구 도로굴착복구기금 설치 및 운용 조례 시행규칙": null,
+ "도로법 시행규칙": {
+  "law_id": "007081",
+  "official_name": "도로법 시행규칙",
+  "kind": "국토교통부령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-12",
+  "effective_at": "2026-03-12",
+  "exact": true
+ },
+ "행정대집행법": {
+  "law_id": "001365",
+  "official_name": "행정대집행법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2015-05-18",
+  "effective_at": "2015-11-19",
+  "exact": true
+ },
+ "동물보호법": {
+  "law_id": "000412",
+  "official_name": "동물보호법",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2026-07-07",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "성폭력범죄의 처벌 등에 관한 특례법": {
+  "law_id": "011187",
+  "official_name": "성폭력범죄의 처벌 등에 관한 특례법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "마약류 관리에 관한 법률": {
+  "law_id": "002025",
+  "official_name": "마약류 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부,식품의약품안전처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "화학물질관리법": {
+  "law_id": "000162",
+  "official_name": "화학물질관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "여객자동차 운수사업법 시행령": {
+  "law_id": "004175",
+  "official_name": "여객자동차 운수사업법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-07-07",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "축산물 위생관리법": {
+  "law_id": "001507",
+  "official_name": "축산물 위생관리법",
+  "kind": "법률",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "농업협동조합법": {
+  "law_id": "001519",
+  "official_name": "농업협동조합법",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "보조금 관리에 관한 법률": {
+  "law_id": "000729",
+  "official_name": "보조금 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "기획예산처",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "사회복지사업법 시행규칙": {
+  "law_id": "007339",
+  "official_name": "사회복지사업법 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-03-04",
+  "effective_at": "2026-03-04",
+  "exact": true
+ },
+ "정신건강증진 및 정신질환자 복지서비스 지원에 관한 법률": {
+  "law_id": "000222",
+  "official_name": "정신건강증진 및 정신질환자 복지서비스 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-02-12",
+  "exact": true
+ },
+ "서울특별시 성동구 생명존중문화 조성 및 자살예방에 관한 조례 시행규칙": null,
+ "상법": {
+  "law_id": "001702",
+  "official_name": "상법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2026-03-06",
+  "effective_at": "2026-03-06",
+  "exact": true
+ },
+ "여성폭력방지기본법": {
+  "law_id": "013219",
+  "official_name": "여성폭력방지기본법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지역신용보증재단법": {
+  "law_id": "002005",
+  "official_name": "지역신용보증재단법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2025-12-02",
+  "exact": true
+ },
+ "스토킹방지 및 피해자보호 등에 관한 법률": {
+  "law_id": "014392",
+  "official_name": "스토킹방지 및 피해자보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "가정폭력방지 및 피해자보호 등에 관한 법률": {
+  "law_id": "000182",
+  "official_name": "가정폭력방지 및 피해자보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2026-04-07",
+  "effective_at": "2026-07-08",
+  "exact": true
+ },
+ "성매매방지 및 피해자보호 등에 관한 법률": {
+  "law_id": "009679",
+  "official_name": "성매매방지 및 피해자보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "서울특별시 성동구 실무공무원 대외직명제 운영 규정": null,
+ "어린이놀이시설 안전관리법": {
+  "law_id": "010384",
+  "official_name": "어린이놀이시설 안전관리법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-27",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "건축사법": {
+  "law_id": "000254",
+  "official_name": "건축사법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "건축법 시행령": {
+  "law_id": "002118",
+  "official_name": "건축법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-08-26",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "주거기본법": {
+  "law_id": "012314",
+  "official_name": "주거기본법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "서울특별시 성동구 유료광고에 관한 조례 시행규칙": null,
+ "독점규제 및 공정거래에 관한 법률": {
+  "law_id": "001591",
+  "official_name": "독점규제 및 공정거래에 관한 법률",
+  "kind": "법률",
+  "ministry": "공정거래위원회",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "농수산물 유통 및 가격안정에 관한 법률": {
+  "law_id": "000433",
+  "official_name": "농수산물 유통 및 가격안정에 관한 법률",
+  "kind": "법률",
+  "ministry": "농림축산식품부,해양수산부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "폐기물관리법 시행규칙": {
+  "law_id": "008567",
+  "official_name": "폐기물관리법 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-06-22",
+  "effective_at": "2026-06-22",
+  "exact": true
+ },
+ "가맹사업거래의 공정화에 관한 법률": {
+  "law_id": "009367",
+  "official_name": "가맹사업거래의 공정화에 관한 법률",
+  "kind": "법률",
+  "ministry": "공정거래위원회",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2025-01-21",
+  "exact": true
+ },
+ "도서관법": {
+  "law_id": "000830",
+  "official_name": "도서관법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "장기등 이식에 관한 법률": {
+  "law_id": "001998",
+  "official_name": "장기등 이식에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-02-20",
+  "effective_at": "2025-08-21",
+  "exact": true
+ },
+ "인체조직안전 및 관리 등에 관한 법률": {
+  "law_id": "009609",
+  "official_name": "인체조직안전 및 관리 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부,식품의약품안전처",
+  "promulgated_at": "2024-03-19",
+  "effective_at": "2024-03-19",
+  "exact": true
+ },
+ "장애인차별금지 및 권리구제 등에 관한 법률": {
+  "law_id": "010420",
+  "official_name": "장애인차별금지 및 권리구제 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2025-11-11",
+  "exact": true
+ },
+ "장애인복지법 시행규칙": {
+  "law_id": "007972",
+  "official_name": "장애인복지법 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-31",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "서울특별시 성동구 재난 및 안전관리 기본조례 시행규칙": null,
+ "재난 및 안전관리 기본법 시행령": {
+  "law_id": "009708",
+  "official_name": "재난 및 안전관리 기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "소방청,해양경찰청,행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "청년기본법": {
+  "law_id": "013672",
+  "official_name": "청년기본법",
+  "kind": "법률",
+  "ministry": "국무조정실",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "행정 효율과 협업 촉진에 관한 규정": null,
+ "도로교통법 시행규칙": {
+  "law_id": "007079",
+  "official_name": "도로교통법 시행규칙",
+  "kind": "행정안전부령",
+  "ministry": "경찰청",
+  "promulgated_at": "2026-04-01",
+  "effective_at": "2026-04-02",
+  "exact": true
+ },
+ "주민조례발안에 관한 법률": {
+  "law_id": "014171",
+  "official_name": "주민조례발안에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-08-16",
+  "effective_at": "2024-02-17",
+  "exact": true
+ },
+ "주차장법 시행규칙": {
+  "law_id": "008238",
+  "official_name": "주차장법 시행규칙",
+  "kind": "국토교통부령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-09-30",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "공무원연금법": {
+  "law_id": "001717",
+  "official_name": "공무원연금법",
+  "kind": "법률",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "한국방송통신대학교 설립 및 운영에 관한 법률": {
+  "law_id": "013985",
+  "official_name": "한국방송통신대학교 설립 및 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2022-10-18",
+  "effective_at": "2023-04-19",
+  "exact": true
+ },
+ "공무용 차량 관리 규정": {
+  "law_id": "002525",
+  "official_name": "공무용 차량 관리 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-07-02",
+  "effective_at": "2024-07-02",
+  "exact": true
+ },
+ "공무원보수규정": {
+  "law_id": "002298",
+  "official_name": "공무원보수규정",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-07-07",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "제대군인지원에 관한 법률": {
+  "law_id": "001325",
+  "official_name": "제대군인지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2023-07-11",
+  "effective_at": "2024-01-12",
+  "exact": true
+ },
+ "사회보장기본법": {
+  "law_id": "000204",
+  "official_name": "사회보장기본법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "청소년복지 지원법 시행령": {
+  "law_id": "009908",
+  "official_name": "청소년복지 지원법 시행령",
+  "kind": "대통령령",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2026-06-16",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "서울특별시 성동구 청원경찰 징계규정": null,
+ "청원법": {
+  "law_id": "001428",
+  "official_name": "청원법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2020-12-22",
+  "effective_at": "2022-12-23",
+  "exact": true
+ },
+ "상훈법": {
+  "law_id": "001427",
+  "official_name": "상훈법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "서울특별시 성동구 홍보물 심의와 보급에 관한 조례 시행규칙": null,
+ "서울특별시 성동구 환경미화원자녀학자금대여기금 설치 및 운용 조례 시행규칙": null,
+ "도시숲 등의 조성 및 관리에 관한 법률": {
+  "law_id": "013794",
+  "official_name": "도시숲 등의 조성 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2024-12-20",
+  "effective_at": "2025-06-21",
+  "exact": true
+ },
+ "산림보호법 시행령": {
+  "law_id": "011163",
+  "official_name": "산림보호법 시행령",
+  "kind": "대통령령",
+  "ministry": "산림청",
+  "promulgated_at": "2026-01-30",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "가사근로자의 고용개선 등에 관한 법률": {
+  "law_id": "014099",
+  "official_name": "가사근로자의 고용개선 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2021-06-15",
+  "effective_at": "2022-06-16",
+  "exact": true
+ },
+ "고압가스 안전관리법 시행령": {
+  "law_id": "002246",
+  "official_name": "고압가스 안전관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "개인정보 보호법 시행령": {
+  "law_id": "011468",
+  "official_name": "개인정보 보호법 시행령",
+  "kind": "대통령령",
+  "ministry": "개인정보보호위원회",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "조세범 처벌법": {
+  "law_id": "001583",
+  "official_name": "조세범 처벌법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2020-12-29",
+  "effective_at": "2021-01-01",
+  "exact": true
+ },
+ "관세법": {
+  "law_id": "001556",
+  "official_name": "관세법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "하수도법 시행령": {
+  "law_id": "005369",
+  "official_name": "하수도법 시행령",
+  "kind": "대통령령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "어린이 놀이시설 안전관리법": {
+  "law_id": "010384",
+  "official_name": "어린이놀이시설 안전관리법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-02-27",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "건축물관리법": {
+  "law_id": "013478",
+  "official_name": "건축물관리법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2025-06-04",
+  "exact": true
+ },
+ "건축물관리법 시행령": {
+  "law_id": "013742",
+  "official_name": "건축물관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-24",
+  "exact": true
+ },
+ "시설물의 안전 및 유지관리에 관한 특별법": {
+  "law_id": "000237",
+  "official_name": "시설물의 안전 및 유지관리에 관한 특별법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2025-12-04",
+  "exact": true
+ },
+ "건축법시행령": {
+  "law_id": "002118",
+  "official_name": "건축법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-08-26",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "자연재해대책법시행령": {
+  "law_id": "004607",
+  "official_name": "자연재해대책법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-01-27",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "정보통신공사업법": {
+  "law_id": "001445",
+  "official_name": "정보통신공사업법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "소방시설공사업법": {
+  "law_id": "009500",
+  "official_name": "소방시설공사업법",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2024-01-30",
+  "effective_at": "2025-01-31",
+  "exact": true
+ },
+ "국가유산수리 등에 관한 법률": {
+  "law_id": "011151",
+  "official_name": "국가유산수리 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가유산청",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "건설기술관리법": null,
+ "엔지니어링산업 진흥법": {
+  "law_id": "000758",
+  "official_name": "엔지니어링산업 진흥법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "조달사업에 관한 법률": {
+  "law_id": "000705",
+  "official_name": "조달사업에 관한 법률",
+  "kind": "법률",
+  "ministry": "재정경제부,조달청",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지방계약법 시행령": null,
+ "전자서명법": {
+  "law_id": "009413",
+  "official_name": "전자서명법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2021-10-19",
+  "effective_at": "2022-10-20",
+  "exact": true
+ },
+ "전자문서 및 전자거래 기본법": {
+  "law_id": "002000",
+  "official_name": "전자문서 및 전자거래 기본법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부,법무부",
+  "promulgated_at": "2021-10-19",
+  "effective_at": "2022-10-20",
+  "exact": true
+ },
+ "저출산·고령사회기본법": {
+  "law_id": "009933",
+  "official_name": "저출산ㆍ고령사회기본법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-04-24",
+  "exact": true
+ },
+ "고향사랑 기부금에 관한 법률": {
+  "law_id": "014170",
+  "official_name": "고향사랑 기부금에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-02-20",
+  "effective_at": "2025-01-01",
+  "exact": true
+ },
+ "고향사랑 기부금에 관한 법률 시행령": {
+  "law_id": "014333",
+  "official_name": "고향사랑 기부금에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-03-25",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "지방자치단체 기금관리 기본법": {
+  "law_id": "009996",
+  "official_name": "지방자치단체 기금관리기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-04-09",
+  "effective_at": "2026-04-09",
+  "exact": true
+ },
+ "국가공간정보 기본법": {
+  "law_id": "010916",
+  "official_name": "국가공간정보 기본법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "국가공간정보 기본법 시행령": {
+  "law_id": "011060",
+  "official_name": "국가공간정보 기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-01-27",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "공공디자인의 진흥에 관한 법률": {
+  "law_id": "012496",
+  "official_name": "공공디자인의 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "공공보건의료에 관한 법률": {
+  "law_id": "002019",
+  "official_name": "공공보건의료에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2022-06-10",
+  "effective_at": "2023-06-11",
+  "exact": true
+ },
+ "모자보건법 시행령": {
+  "law_id": "003476",
+  "official_name": "모자보건법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-06-20",
+  "effective_at": "2025-06-21",
+  "exact": true
+ },
+ "북한이탈주민의 보호 및 정착지원에 관한 법률 시행령": {
+  "law_id": "003693",
+  "official_name": "북한이탈주민의 보호 및 정착지원에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "통일부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "공휴일에 관한 법률": {
+  "law_id": "014112",
+  "official_name": "공휴일에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부,인사혁신처",
+  "promulgated_at": "2026-02-10",
+  "effective_at": "2026-05-11",
+  "exact": true
+ },
+ "공동주택관리법 시행령": {
+  "law_id": "012644",
+  "official_name": "공동주택관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방공무원 교육훈련법": {
+  "law_id": "001014",
+  "official_name": "지방공무원 교육훈련법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2021-10-08",
+  "effective_at": "2022-01-13",
+  "exact": true
+ },
+ "국제과학기술협력 규정": {
+  "law_id": "002931",
+  "official_name": "국제과학기술협력 규정",
+  "kind": "대통령령",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2020-12-29",
+  "effective_at": "2021-01-01",
+  "exact": true
+ },
+ "서울특별시성동구공무국외여행규정": null,
+ "서울특별시 성동구 구민 제안제도 운영 조례 시행규칙": null,
+ "실용신안법": {
+  "law_id": "001454",
+  "official_name": "실용신안법",
+  "kind": "법률",
+  "ministry": "지식재산처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "디자인보호법": {
+  "law_id": "001871",
+  "official_name": "디자인보호법",
+  "kind": "법률",
+  "ministry": "지식재산처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-11-28",
+  "exact": true
+ },
+ "발명진흥법": {
+  "law_id": "000312",
+  "official_name": "발명진흥법",
+  "kind": "법률",
+  "ministry": "지식재산처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "부정청탁 및 금품등 수수의 금지에 관한 법률 시행령": {
+  "law_id": "012661",
+  "official_name": "부정청탁 및 금품등 수수의 금지에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2026-06-30",
+  "effective_at": "2026-06-30",
+  "exact": true
+ },
+ "공무원의 노동조합 설립 및 운영 등에 관한 법률": {
+  "law_id": "009884",
+  "official_name": "공무원의 노동조합 설립 및 운영 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2022-06-10",
+  "effective_at": "2023-12-11",
+  "exact": true
+ },
+ "특정범죄 가중처벌 등에 관한 법률": {
+  "law_id": "001676",
+  "official_name": "특정범죄 가중처벌 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-07-02",
+  "exact": true
+ },
+ "공무원직장협의회의 설립ㆍ운영에 관한 법률": {
+  "law_id": "001344",
+  "official_name": "공무원직장협의회의 설립ㆍ운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-04-26",
+  "effective_at": "2022-10-27",
+  "exact": true
+ },
+ "공무원 직장협의회의 설립ㆍ운영에 관한 법률": {
+  "law_id": "001344",
+  "official_name": "공무원직장협의회의 설립ㆍ운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-04-26",
+  "effective_at": "2022-10-27",
+  "exact": true
+ },
+ "자동차손해배상 보장법": {
+  "law_id": "001746",
+  "official_name": "자동차손해배상 보장법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "교통사고처리 특례법": {
+  "law_id": "001131",
+  "official_name": "교통사고처리 특례법",
+  "kind": "법률",
+  "ministry": "경찰청,법무부",
+  "promulgated_at": "2025-01-07",
+  "effective_at": "2025-06-04",
+  "exact": true
+ },
+ "외국인투자 촉진법": {
+  "law_id": "000660",
+  "official_name": "외국인투자 촉진법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "산업입지 및 개발에 관한 법률": {
+  "law_id": "001839",
+  "official_name": "산업입지 및 개발에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "도시 및 주거환경정비법": {
+  "law_id": "009410",
+  "official_name": "도시 및 주거환경정비법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "벤처기업육성에 관한 특별법": {
+  "law_id": "001471",
+  "official_name": "벤처기업육성에 관한 특별법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국유림의 경영 및 관리에 관한 법률 시행령": {
+  "law_id": "010266",
+  "official_name": "국유림의 경영 및 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "산림청",
+  "promulgated_at": "2024-07-23",
+  "effective_at": "2024-07-24",
+  "exact": true
+ },
+ "지역 산업위기 대응 및 지역경제 회복을 위한 특별법": {
+  "law_id": "014138",
+  "official_name": "지역 산업위기 대응 및 지역경제 회복을 위한 특별법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "기업활동 규제완화에 관한 특별조치법": {
+  "law_id": "001470",
+  "official_name": "기업활동 규제완화에 관한 특별조치법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "기부금품의 모집 및 사용에 관한 법률": null,
+ "서울특별시 성동구 구유재산 관리조례 시행규칙": null,
+ "서울특별시 성동구 물품관리조례 시행규칙": null,
+ "서울특별시 성동구 구유재산관리조례 시행규칙": null,
+ "하도급거래 공정화에 관한 법률": {
+  "law_id": "001590",
+  "official_name": "하도급거래 공정화에 관한 법률",
+  "kind": "법률",
+  "ministry": "공정거래위원회",
+  "promulgated_at": "2025-09-16",
+  "effective_at": "2025-12-17",
+  "exact": true
+ },
+ "공중화장실 등에 관한 법률 시행령": {
+  "law_id": "009739",
+  "official_name": "공중화장실 등에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-11-16",
+  "effective_at": "2023-11-16",
+  "exact": true
+ },
+ "장애인ㆍ노인ㆍ임산부 등의 편의증진 보장에 관한 법률 시행규칙": {
+  "law_id": "007970",
+  "official_name": "장애인ㆍ노인ㆍ임산부 등의 편의증진 보장에 관한 법률 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-04-01",
+  "effective_at": "2026-07-02",
+  "exact": true
+ },
+ "공중화장실 등에 관한 법률 시행규칙": {
+  "law_id": "009738",
+  "official_name": "공중화장실 등에 관한 법률 시행규칙",
+  "kind": "행정안전부령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-02-05",
+  "effective_at": "2025-08-06",
+  "exact": true
+ },
+ "공직자윤리법 시행령": {
+  "law_id": "002384",
+  "official_name": "공직자윤리법 시행령",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "공직자윤리법 시행규칙": {
+  "law_id": "006367",
+  "official_name": "공직자윤리법 시행규칙",
+  "kind": "총리령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-06-30",
+  "effective_at": "2026-06-30",
+  "exact": true
+ },
+ "지방교육재정교부금법": {
+  "law_id": "000880",
+  "official_name": "지방교육재정교부금법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-01-01",
+  "exact": true
+ },
+ "지방자치단체의 교육경비 보조에 관한 규정": {
+  "law_id": "004071",
+  "official_name": "지방자치단체의 교육경비 보조에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "교육부",
+  "promulgated_at": "2023-12-05",
+  "effective_at": "2024-01-01",
+  "exact": true
+ },
+ "사립학교법": {
+  "law_id": "000888",
+  "official_name": "사립학교법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "여객자동차 운수사업법": {
+  "law_id": "001749",
+  "official_name": "여객자동차 운수사업법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-05-29",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "화물자동차 운수사업법": {
+  "law_id": "001748",
+  "official_name": "화물자동차 운수사업법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-05-29",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방세특례제한법": {
+  "law_id": "011178",
+  "official_name": "지방세특례제한법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "지방세특례제한법 시행령": {
+  "law_id": "011278",
+  "official_name": "지방세특례제한법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방세특례제한법 시행규칙": {
+  "law_id": "011311",
+  "official_name": "지방세특례제한법 시행규칙",
+  "kind": "행정안전부령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-31",
+  "effective_at": "2026-01-01",
+  "exact": true
+ },
+ "세무사법": {
+  "law_id": "000639",
+  "official_name": "세무사법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "서울특별시 성동구 구세 징수 조례 시행규칙": null,
+ "한국은행 통화안정증권법": {
+  "law_id": "000577",
+  "official_name": "한국은행 통화안정증권법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2016-03-02",
+  "effective_at": "2016-06-03",
+  "exact": true
+ },
+ "자본시장과 금융투자업에 관한 법률": {
+  "law_id": "010513",
+  "official_name": "자본시장과 금융투자업에 관한 법률",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-09-16",
+  "effective_at": "2026-03-17",
+  "exact": true
+ },
+ "지방세법 시행령": {
+  "law_id": "005077",
+  "official_name": "지방세법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국가유공자 등 단체설립에 관한 법률": {
+  "law_id": "001711",
+  "official_name": "국가유공자 등 단체 설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-05-20",
+  "exact": true
+ },
+ "대한민국국기법": {
+  "law_id": "010381",
+  "official_name": "대한민국국기법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2014-01-28",
+  "effective_at": "2014-01-28",
+  "exact": true
+ },
+ "국어기본법": {
+  "law_id": "009877",
+  "official_name": "국어기본법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-04-08",
+  "effective_at": "2025-10-09",
+  "exact": true
+ },
+ "옥외광고물 등 관리법 시행령": null,
+ "재난 및 안전관리기본법": {
+  "law_id": "009640",
+  "official_name": "재난 및 안전관리 기본법",
+  "kind": "법률",
+  "ministry": "소방청,해양경찰청,행정안전부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-06-11",
+  "exact": true
+ },
+ "산업안전보건법 시행규칙": {
+  "law_id": "007364",
+  "official_name": "산업안전보건법 시행규칙",
+  "kind": "고용노동부령",
+  "ministry": "고용노동부",
+  "promulgated_at": "2024-06-28",
+  "effective_at": "2026-06-26",
+  "exact": true
+ },
+ "토양환경보전법": {
+  "law_id": "000160",
+  "official_name": "토양환경보전법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "잔류성오염물질 관리법": {
+  "law_id": "010383",
+  "official_name": "잔류성오염물질 관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "대기관리권역의 대기환경개선에 관한 특별법": {
+  "law_id": "013458",
+  "official_name": "대기관리권역의 대기환경개선에 관한 특별법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "도시교통정비 촉진법": {
+  "law_id": "001754",
+  "official_name": "도시교통정비 촉진법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방자치단체의 기금관리기본법": null,
+ "행정소송법": {
+  "law_id": "001218",
+  "official_name": "행정소송법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "민사소송법": {
+  "law_id": "001700",
+  "official_name": "민사소송법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2023-07-11",
+  "effective_at": "2025-07-12",
+  "exact": true
+ },
+ "음악산업진흥에 관한 법률": {
+  "law_id": "010197",
+  "official_name": "음악산업진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-03-25",
+  "effective_at": "2025-06-26",
+  "exact": true
+ },
+ "음악산업진흥에 관한 법률 시행령": {
+  "law_id": "010308",
+  "official_name": "음악산업진흥에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2023-12-12",
+  "effective_at": "2023-12-12",
+  "exact": true
+ },
+ "수도권 대기환경개선에 관한 특별법": null,
+ "환경기술 및 환경산업 지원법": {
+  "law_id": "001774",
+  "official_name": "환경기술 및 환경산업 지원법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "청소년보호법": {
+  "law_id": "000815",
+  "official_name": "청소년 보호법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "대한노인회 지원에 관한 법률": {
+  "law_id": "011362",
+  "official_name": "대한노인회 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2016-02-03",
+  "effective_at": "2016-08-04",
+  "exact": true
+ },
+ "대한적십자사 조직법": {
+  "law_id": "000207",
+  "official_name": "대한적십자사 조직법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "데이터기반행정 활성화에 관한 법률": {
+  "law_id": "013792",
+  "official_name": "데이터기반행정 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-05-16",
+  "effective_at": "2023-11-17",
+  "exact": true
+ },
+ "데이터기반행정 활성화에 관한 법률 시행령": {
+  "law_id": "013909",
+  "official_name": "데이터기반행정 활성화에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-11-07",
+  "effective_at": "2023-11-17",
+  "exact": true
+ },
+ "송유관 안전관리법": {
+  "law_id": "000289",
+  "official_name": "송유관 안전관리법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "수도사업법": null,
+ "서울특별시 성동구 도로관리심의회 설치 및 운영 규정": null,
+ "송유관안전관리법": {
+  "law_id": "000289",
+  "official_name": "송유관 안전관리법",
+  "kind": "법률",
+  "ministry": "산업통상부",
+  "promulgated_at": "2026-03-10",
+  "effective_at": "2026-03-10",
+  "exact": true
+ },
+ "위험물안전관리법": {
+  "law_id": "009502",
+  "official_name": "위험물안전관리법",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2024-02-06",
+  "effective_at": "2025-08-07",
+  "exact": true
+ },
+ "유해화학물질 관리법": null,
+ "도시철도법": {
+  "law_id": "001751",
+  "official_name": "도시철도법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2024-01-09",
+  "effective_at": "2024-01-09",
+  "exact": true
+ },
+ "측량ㆍ수로조사 및 지적에 관한 법률 시행령": null,
+ "서울특별시성동구도로굴착복구기금설치및운용조례시행규칙": null,
+ "국유재산법 시행령": {
+  "law_id": "002907",
+  "official_name": "국유재산법 시행령",
+  "kind": "대통령령",
+  "ministry": "재정경제부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "행정절차법 시행령": {
+  "law_id": "005625",
+  "official_name": "행정절차법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-08-01",
+  "effective_at": "2023-08-01",
+  "exact": true
+ },
+ "조경진흥법": {
+  "law_id": "012225",
+  "official_name": "조경진흥법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "산림자원의 조성 및 관리에 관한 법률 시행령": {
+  "law_id": "010265",
+  "official_name": "산림자원의 조성 및 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "산림청",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-24",
+  "exact": true
+ },
+ "도시재생 활성화 및 지원에 관한 특별법 시행령": {
+  "law_id": "011942",
+  "official_name": "도시재생 활성화 및 지원에 관한 특별법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "독서문화진흥법": {
+  "law_id": "010360",
+  "official_name": "독서문화진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "동물보호법 시행규칙": {
+  "law_id": "010623",
+  "official_name": "동물보호법 시행규칙",
+  "kind": "농림축산식품부령",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2025-08-07",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "동물보호법 시행령": {
+  "law_id": "010624",
+  "official_name": "동물보호법 시행령",
+  "kind": "대통령령",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2025-06-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "드론 활용의 촉진 및 기반조성에 관한 법률": {
+  "law_id": "013479",
+  "official_name": "드론 활용의 촉진 및 기반조성에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "아동ㆍ청소년의 성보호에 관한 법률": {
+  "law_id": "002044",
+  "official_name": "아동ㆍ청소년의 성보호에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "주세법": {
+  "law_id": "001566",
+  "official_name": "주세법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2024-12-31",
+  "effective_at": "2025-01-01",
+  "exact": true
+ },
+ "철도안전법": {
+  "law_id": "009766",
+  "official_name": "철도안전법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-03-03",
+  "exact": true
+ },
+ "부동산 가격공시 및 감정평가에 관한 법률": null,
+ "문화기본법": {
+  "law_id": "011953",
+  "official_name": "문화기본법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-03-25",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "지방문화원진흥법": {
+  "law_id": "000832",
+  "official_name": "지방문화원진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2020-06-09",
+  "effective_at": "2021-01-01",
+  "exact": true
+ },
+ "지방문화원진흥법 시행령": {
+  "law_id": "005067",
+  "official_name": "지방문화원진흥법 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2020-12-22",
+  "effective_at": "2021-01-01",
+  "exact": true
+ },
+ "수도법 시행규칙": {
+  "law_id": "007531",
+  "official_name": "수도법 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-06-26",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "서울특별시 성동구 물가대책위원회 설치 및 운영에 관한 조례 시행규칙": null,
+ "민주평화통일자문회의법": {
+  "law_id": "001378",
+  "official_name": "민주평화통일자문회의법",
+  "kind": "법률",
+  "ministry": "민주평화통일자문회의사무처",
+  "promulgated_at": "2023-03-28",
+  "effective_at": "2023-03-28",
+  "exact": true
+ },
+ "바르게살기운동조직 육성법": {
+  "law_id": "000999",
+  "official_name": "바르게살기운동조직 육성법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2017-07-26",
+  "effective_at": "2017-07-26",
+  "exact": true
+ },
+ "수의사법": {
+  "law_id": "001501",
+  "official_name": "수의사법",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-07-24",
+  "exact": true
+ },
+ "벤처기업육성에 관한 특별조치법": null,
+ "병역명문가 선정 및 표창 운영 규정": null,
+ "보건의료기본법": {
+  "law_id": "002029",
+  "official_name": "보건의료기본법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "심뇌혈관질환의 예방 및 관리에 관한 법률": {
+  "law_id": "012574",
+  "official_name": "심뇌혈관질환의 예방 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2024-01-30",
+  "effective_at": "2025-07-31",
+  "exact": true
+ },
+ "전기사업법 시행규칙": {
+  "law_id": "008038",
+  "official_name": "전기사업법 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "군사기지 및 군사시설 보호법": {
+  "law_id": "010596",
+  "official_name": "군사기지 및 군사시설 보호법",
+  "kind": "법률",
+  "ministry": "국방부",
+  "promulgated_at": "2024-01-16",
+  "effective_at": "2024-07-17",
+  "exact": true
+ },
+ "보호관찰 등에 관한 법률": {
+  "law_id": "001123",
+  "official_name": "보호관찰 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "국가유공자 등 단체 설립에 관한 법률": {
+  "law_id": "001711",
+  "official_name": "국가유공자 등 단체 설립에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-05-20",
+  "exact": true
+ },
+ "부동산 가격공시에 관한 법률 시행령": {
+  "law_id": "005036",
+  "official_name": "부동산 가격공시에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "전기공사업법 시행령": {
+  "law_id": "004686",
+  "official_name": "전기공사업법 시행령",
+  "kind": "대통령령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-01-02",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "정보통신공사업법 시행령": {
+  "law_id": "004704",
+  "official_name": "정보통신공사업법 시행령",
+  "kind": "대통령령",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-24",
+  "exact": true
+ },
+ "소방시설공사업법 시행령": {
+  "law_id": "009695",
+  "official_name": "소방시설공사업법 시행령",
+  "kind": "대통령령",
+  "ministry": "소방청",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "국가유산수리 등에 관한 법률 시행령": {
+  "law_id": "011335",
+  "official_name": "국가유산수리 등에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국가유산청",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-17",
+  "exact": true
+ },
+ "부패방지 및 국민권익위원회의 설치와 운영에 관한 법률 시행령": {
+  "law_id": "009258",
+  "official_name": "부패방지 및 국민권익위원회의 설치와 운영에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국민권익위원회",
+  "promulgated_at": "2026-03-03",
+  "effective_at": "2026-03-03",
+  "exact": true
+ },
+ "한옥 등 건축자산의 진흥에 관한 법률": {
+  "law_id": "012068",
+  "official_name": "한옥 등 건축자산의 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2023-09-14",
+  "effective_at": "2024-09-15",
+  "exact": true
+ },
+ "빈집 및 소규모주택 정비에 관한 특례법": {
+  "law_id": "012805",
+  "official_name": "빈집 및 소규모주택 정비에 관한 특례법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "빈집 및 소규모주택 정비에 관한 특례법 시행령": {
+  "law_id": "013079",
+  "official_name": "빈집 및 소규모주택 정비에 관한 특례법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률 시행령": {
+  "law_id": "012322",
+  "official_name": "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-05-06",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "사회복지사 등의 처우 및 지위 향상을 위한 법률": {
+  "law_id": "011363",
+  "official_name": "사회복지사 등의 처우 및 지위 향상을 위한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "고독사 예방 및 관리에 관한 법률": {
+  "law_id": "013719",
+  "official_name": "고독사 예방 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2023-09-14",
+  "effective_at": "2024-03-15",
+  "exact": true
+ },
+ "임신ㆍ출산 관련 서비스 통합처리에 관한 규정": null,
+ "대한민국국기법 시행령": {
+  "law_id": "010496",
+  "official_name": "대한민국국기법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2017-07-26",
+  "effective_at": "2017-07-26",
+  "exact": true
+ },
+ "새마을운동조직 육성법": {
+  "law_id": "001000",
+  "official_name": "새마을운동조직 육성법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2019-12-10",
+  "effective_at": "2019-12-10",
+  "exact": true
+ },
+ "정부조직법": {
+  "law_id": "001720",
+  "official_name": "정부조직법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "서울특별시성동구생명존중문화 조성 및 자살예방에 관한 조례 시행규칙": null,
+ "소음·진동관리법 시행규칙": {
+  "law_id": "007520",
+  "official_name": "소음ㆍ진동관리법 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-06-22",
+  "effective_at": "2026-06-22",
+  "exact": true
+ },
+ "소음·진동관리법": {
+  "law_id": "000167",
+  "official_name": "소음ㆍ진동관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "악취방지법": {
+  "law_id": "009680",
+  "official_name": "악취방지법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "보험업법": {
+  "law_id": "001532",
+  "official_name": "보험업법",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2024-09-20",
+  "effective_at": "2025-01-31",
+  "exact": true
+ },
+ "한국지방재정공제회법": {
+  "law_id": "009493",
+  "official_name": "한국지방재정공제회법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2018-10-16",
+  "effective_at": "2019-04-17",
+  "exact": true
+ },
+ "석면안전관리법": {
+  "law_id": "011384",
+  "official_name": "석면안전관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "석면안전관리법 시행규칙": {
+  "law_id": "011602",
+  "official_name": "석면안전관리법 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-12-25",
+  "exact": true
+ },
+ "석면안전관리법 시행령": {
+  "law_id": "011601",
+  "official_name": "석면안전관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "청소년활동진흥법": {
+  "law_id": "009684",
+  "official_name": "청소년활동 진흥법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "출입국관리법 시행령": {
+  "law_id": "005256",
+  "official_name": "출입국관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "법무부",
+  "promulgated_at": "2025-05-27",
+  "effective_at": "2025-06-01",
+  "exact": true
+ },
+ "국가 유공자 등 예우 및 지원에 관한 법률": {
+  "law_id": "001713",
+  "official_name": "국가유공자 등 예우 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "다문화 가족지원법": {
+  "law_id": "010718",
+  "official_name": "다문화가족지원법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "지역사랑상품권 이용 활성화에 관한 법률": {
+  "law_id": "013749",
+  "official_name": "지역사랑상품권 이용 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-08-26",
+  "effective_at": "2026-02-27",
+  "exact": true
+ },
+ "전자금융거래법": {
+  "law_id": "010199",
+  "official_name": "전자금융거래법",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-12-16",
+  "effective_at": "2025-12-16",
+  "exact": true
+ },
+ "여신전문금융업법": {
+  "law_id": "000536",
+  "official_name": "여신전문금융업법",
+  "kind": "법률",
+  "ministry": "금융위원회",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "사행산업통합감독위원회법": {
+  "law_id": "010382",
+  "official_name": "사행산업통합감독위원회법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "복권 및 복권기금법": {
+  "law_id": "009632",
+  "official_name": "복권 및 복권기금법",
+  "kind": "법률",
+  "ministry": "기획예산처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "영육아보육법": null,
+ "중소기업협동조합법": {
+  "law_id": "001482",
+  "official_name": "중소기업협동조합법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "성폭력범죄의처벌등에관한특례법": {
+  "law_id": "011187",
+  "official_name": "성폭력범죄의 처벌 등에 관한 특례법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "소상공인기본법": {
+  "law_id": "013671",
+  "official_name": "소상공인기본법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-02",
+  "effective_at": "2026-06-03",
+  "exact": true
+ },
+ "채무자 회생 및 파산에 관한 법률": {
+  "law_id": "009930",
+  "official_name": "채무자 회생 및 파산에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2024-12-20",
+  "effective_at": "2026-03-01",
+  "exact": true
+ },
+ "민사집행법": {
+  "law_id": "009290",
+  "official_name": "민사집행법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "국가를 당사자로 하는 소송에 관한 법률": {
+  "law_id": "001221",
+  "official_name": "국가를 당사자로 하는 소송에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2009-01-30",
+  "effective_at": "2009-01-30",
+  "exact": true
+ },
+ "문화유산의 보존 및 활용에 관한 법률 시행령": {
+  "law_id": "003506",
+  "official_name": "문화유산의 보존 및 활용에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "국가유산청",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-17",
+  "exact": true
+ },
+ "스포츠클럽법": {
+  "law_id": "014096",
+  "official_name": "스포츠클럽법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-07-24",
+  "exact": true
+ },
+ "스포츠클럽법 시행령": {
+  "law_id": "014301",
+  "official_name": "스포츠클럽법 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-03-25",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "식품등 기부 활성화에 관한 법률": {
+  "law_id": "010180",
+  "official_name": "식품등 기부 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2019-04-23",
+  "effective_at": "2019-04-23",
+  "exact": true
+ },
+ "식품등 기부 활성화에 관한 법률 시행령": {
+  "law_id": "010290",
+  "official_name": "식품등 기부 활성화에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2019-07-09",
+  "effective_at": "2019-07-09",
+  "exact": true
+ },
+ "건강기능식품에 관한 법률": {
+  "law_id": "009353",
+  "official_name": "건강기능식품에 관한 법률",
+  "kind": "법률",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2025-01-03",
+  "exact": true
+ },
+ "건강기능식품에 관한 법률 시행령": {
+  "law_id": "009581",
+  "official_name": "건강기능식품에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2024-12-31",
+  "effective_at": "2025-01-03",
+  "exact": true
+ },
+ "같은 법 시행령": null,
+ "초중등교육법": null,
+ "법률구조법": {
+  "law_id": "001270",
+  "official_name": "법률구조법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2022-01-11",
+  "effective_at": "2023-01-12",
+  "exact": true
+ },
+ "아동의 빈곤예방 및 지원 등에 관한 법률": {
+  "law_id": "011418",
+  "official_name": "아동의 빈곤예방 및 지원 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-10-02",
+  "exact": true
+ },
+ "아동학대범죄의 처벌 등에 관한 특례법": {
+  "law_id": "011997",
+  "official_name": "아동학대범죄의 처벌 등에 관한 특례법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "안전보건교육규정": null,
+ "외국인근로자의 고용 등에 관한 법률": {
+  "law_id": "009542",
+  "official_name": "외국인근로자의 고용 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "체육시설의 설치ㆍ이용에 관한 법률 시행령": {
+  "law_id": "005234",
+  "official_name": "체육시설의 설치ㆍ이용에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-03-25",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "성별영향평가법": {
+  "law_id": "011459",
+  "official_name": "성별영향평가법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "가족친화 사회환경의 조성 촉진에 관한 법률": {
+  "law_id": "010583",
+  "official_name": "가족친화 사회환경의 조성 촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "여성발전기본법": null,
+ "학원의 설립·운영 및 과외교습에 관한 법률": {
+  "law_id": "000850",
+  "official_name": "학원의 설립ㆍ운영 및 과외교습에 관한 법률",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2023-04-18",
+  "effective_at": "2023-10-19",
+  "exact": true
+ },
+ "어린이 식생활안전관리 특별법": {
+  "law_id": "010709",
+  "official_name": "어린이 식생활안전관리 특별법",
+  "kind": "법률",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2023-08-08",
+  "effective_at": "2024-02-09",
+  "exact": true
+ },
+ "노인ㆍ장애인 등 사회복지시설의 급식안전 지원에 관한 법률": {
+  "law_id": "014127",
+  "official_name": "노인ㆍ장애인 등 사회복지시설의 급식안전 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2023-08-08",
+  "effective_at": "2024-02-09",
+  "exact": true
+ },
+ "어린이식생활법": null,
+ "사회복지시설급식법": null,
+ "어린이식생활법 시행령": null,
+ "사회복지시설급식법 시행령": null,
+ "어린이놀이시설 안전관리법 시행령": {
+  "law_id": "010575",
+  "official_name": "어린이놀이시설 안전관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-12-17",
+  "effective_at": "2025-06-18",
+  "exact": true
+ },
+ "녹색건축물 조성 지원법": {
+  "law_id": "011557",
+  "official_name": "녹색건축물 조성 지원법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "신에너지 및 재생에너지 개발·이용·보급 촉진법": {
+  "law_id": "000299",
+  "official_name": "신에너지 및 재생에너지 개발ㆍ이용ㆍ보급 촉진법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부,산업통상부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "공공기관 에너지이용 합리화 추진에 관한 규정": null,
+ "녹색건축물 조성 지원법 시행규칙": {
+  "law_id": "011770",
+  "official_name": "녹색건축물 조성 지원법 시행규칙",
+  "kind": "국토교통부령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2024-12-23",
+  "effective_at": "2025-01-01",
+  "exact": true
+ },
+ "여성의 경제활동 촉진과 경력단절 예방법": {
+  "law_id": "010761",
+  "official_name": "여성의 경제활동 촉진과 경력단절 예방법",
+  "kind": "법률",
+  "ministry": "고용노동부,성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률": {
+  "law_id": "000130",
+  "official_name": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부,성평등가족부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "영유아보육법 시행령": {
+  "law_id": "004216",
+  "official_name": "영유아보육법 시행령",
+  "kind": "대통령령",
+  "ministry": "교육부",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-24",
+  "exact": true
+ },
+ "영유아보육법 시행규칙": {
+  "law_id": "007739",
+  "official_name": "영유아보육법 시행규칙",
+  "kind": "교육부령",
+  "ministry": "교육부",
+  "promulgated_at": "2026-05-08",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "예방접종업무의 위탁에 관한 규정": null,
+ "감염병의 예방 및 관리에 관한 법률 시행령": {
+  "law_id": "004750",
+  "official_name": "감염병의 예방 및 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2026-05-06",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "의약품 부작용 피해구제에 관한 규정": {
+  "law_id": "012189",
+  "official_name": "의약품 부작용 피해구제에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "예술인 복지법 시행령": {
+  "law_id": "011711",
+  "official_name": "예술인 복지법 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-01-23",
+  "effective_at": "2024-02-09",
+  "exact": true
+ },
+ "옥외광고물 등의 관리와 옥외광고산업 진흥에 관한 법률 시행령": {
+  "law_id": "004242",
+  "official_name": "옥외광고물 등의 관리와 옥외광고산업 진흥에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-01-27",
+  "effective_at": "2026-01-27",
+  "exact": true
+ },
+ "민원처리에 관한 법률 시행령": {
+  "law_id": "003540",
+  "official_name": "민원 처리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-05-06",
+  "effective_at": "2026-05-06",
+  "exact": true
+ },
+ "자격기본법": {
+  "law_id": "000866",
+  "official_name": "자격기본법",
+  "kind": "법률",
+  "ministry": "고용노동부,교육부",
+  "promulgated_at": "2022-12-27",
+  "effective_at": "2023-06-28",
+  "exact": true
+ },
+ "공연법": {
+  "law_id": "001613",
+  "official_name": "공연법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-04-23",
+  "exact": true
+ },
+ "국적법": {
+  "law_id": "001435",
+  "official_name": "국적법",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2022-09-15",
+  "effective_at": "2022-10-01",
+  "exact": true
+ },
+ "다문화가족지원법 시행령": {
+  "law_id": "010842",
+  "official_name": "다문화가족지원법 시행령",
+  "kind": "대통령령",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "위기 임신 및 보호출산 지원과 아동 보호에 관한 특별법": {
+  "law_id": "014531",
+  "official_name": "위기 임신 및 보호출산 지원과 아동 보호에 관한 특별법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "지방자치단체 지방보조금 관리에 관한 법률": null,
+ "산림교육의 활성화에 관한 법률": {
+  "law_id": "011437",
+  "official_name": "산림교육의 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2021-06-15",
+  "effective_at": "2021-12-16",
+  "exact": true
+ },
+ "산림교육의 활성화에 관한 법률 시행령": {
+  "law_id": "011660",
+  "official_name": "산림교육의 활성화에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "산림청",
+  "promulgated_at": "2026-01-02",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "산림복지 진흥에 관한 법률": {
+  "law_id": "012270",
+  "official_name": "산림복지 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "유통산업발전법 시행규칙": {
+  "law_id": "007843",
+  "official_name": "유통산업발전법 시행규칙",
+  "kind": "산업통상부령",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "야생생물 보호 및 관리에 관한 법률": {
+  "law_id": "009683",
+  "official_name": "야생생물 보호 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "야생생물 보호 및 관리에 관한 법률 시행규칙": {
+  "law_id": "009890",
+  "official_name": "야생생물 보호 및 관리에 관한 법률 시행규칙",
+  "kind": "기후에너지환경부령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "문화유산의 보존 및 활용에 관한 법률": {
+  "law_id": "001607",
+  "official_name": "문화유산의 보존 및 활용에 관한 법률",
+  "kind": "법률",
+  "ministry": "국가유산청",
+  "promulgated_at": "2026-02-10",
+  "effective_at": "2026-06-24",
+  "exact": true
+ },
+ "폐기물관리법 시행령": {
+  "law_id": "005353",
+  "official_name": "폐기물관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "식품위생법 시행규칙": {
+  "law_id": "007634",
+  "official_name": "식품위생법 시행규칙",
+  "kind": "총리령",
+  "ministry": "식품의약품안전처",
+  "promulgated_at": "2026-01-02",
+  "effective_at": "2026-03-01",
+  "exact": true
+ },
+ "청년고용촉진 특별법": {
+  "law_id": "009636",
+  "official_name": "청년고용촉진 특별법",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2023-12-31",
+  "effective_at": "2023-12-31",
+  "exact": true
+ },
+ "의료급여법": {
+  "law_id": "001780",
+  "official_name": "의료급여법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2023-07-18",
+  "effective_at": "2025-07-19",
+  "exact": true
+ },
+ "의료급여법 시행규칙": {
+  "law_id": "007867",
+  "official_name": "의료급여법 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-07-10",
+  "effective_at": "2026-07-10",
+  "exact": true
+ },
+ "의료급여법 시행령": {
+  "law_id": "004487",
+  "official_name": "의료급여법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2026-01-01",
+  "exact": true
+ },
+ "의용소방대 설치 및 운영에 관한 법률": {
+  "law_id": "011998",
+  "official_name": "의용소방대 설치 및 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2025-08-14",
+  "effective_at": "2025-08-14",
+  "exact": true
+ },
+ "게임산업진흥에 관한 법률": {
+  "law_id": "010196",
+  "official_name": "게임산업진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-10-23",
+  "exact": true
+ },
+ "인감증명법 시행령": {
+  "law_id": "004508",
+  "official_name": "인감증명법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2024-12-27",
+  "exact": true
+ },
+ "헌법": null,
+ "학원의 설립ㆍ운영 및 과외교습에 관한 법률 시행령": {
+  "law_id": "005397",
+  "official_name": "학원의 설립ㆍ운영 및 과외교습에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "교육부",
+  "promulgated_at": "2026-03-24",
+  "effective_at": "2026-03-24",
+  "exact": true
+ },
+ "자원봉사활동 기본법": {
+  "law_id": "010001",
+  "official_name": "자원봉사활동 기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-08-16",
+  "effective_at": "2024-02-17",
+  "exact": true
+ },
+ "자원순환기본법": null,
+ "자율방범대 설치 및 운영에 관한 법률 시행령": {
+  "law_id": "014431",
+  "official_name": "자율방범대 설치 및 운영에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "경찰청",
+  "promulgated_at": "2023-04-25",
+  "effective_at": "2023-04-27",
+  "exact": true
+ },
+ "자율방범대 설치 및 운영에 관한 법률": {
+  "law_id": "014274",
+  "official_name": "자율방범대 설치 및 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "경찰청",
+  "promulgated_at": "2025-08-14",
+  "effective_at": "2026-02-15",
+  "exact": true
+ },
+ "자연재해대책법 시행규칙": {
+  "law_id": "007950",
+  "official_name": "자연재해대책법 시행규칙",
+  "kind": "행정안전부령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-17",
+  "effective_at": "2025-10-17",
+  "exact": true
+ },
+ "자전거 이용 활성화에 관한 법률": {
+  "law_id": "000993",
+  "official_name": "자전거 이용 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-01-03",
+  "effective_at": "2023-07-04",
+  "exact": true
+ },
+ "국가경찰과 자치경찰의 조직 및 운영에 관한 법률": {
+  "law_id": "000992",
+  "official_name": "국가경찰과 자치경찰의 조직 및 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "경찰청",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "법제업무 운영규정": {
+  "law_id": "003613",
+  "official_name": "법제업무 운영규정",
+  "kind": "대통령령",
+  "ministry": "법제처",
+  "promulgated_at": "2026-03-31",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "서울특별시 성동구 자치회관 설치 및 운영 조례 시행규칙": null,
+ "국민기초생활 보장법 시행령": {
+  "law_id": "002820",
+  "official_name": "국민기초생활 보장법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "작은도서관 진흥법": {
+  "law_id": "011551",
+  "official_name": "작은도서관 진흥법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2025-08-01",
+  "exact": true
+ },
+ "노인장기요양보험법 시행규칙": {
+  "law_id": "010537",
+  "official_name": "노인장기요양보험법 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-12",
+  "effective_at": "2025-12-12",
+  "exact": true
+ },
+ "장애인연금법": {
+  "law_id": "011181",
+  "official_name": "장애인연금법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "장애인·노인 등을 위한 보조기기 지원 및 활용촉진에 관한 법률": {
+  "law_id": "012442",
+  "official_name": "장애인ㆍ노인 등을 위한 보조기기 지원 및 활용촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2024-10-22",
+  "exact": true
+ },
+ "장애인·노인 등을 위한 보조기기 지원 및 활용촉진에 관한 법률 시행규칙": {
+  "law_id": "012775",
+  "official_name": "장애인ㆍ노인 등을 위한 보조기기 지원 및 활용촉진에 관한 법률 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-05-31",
+  "effective_at": "2024-05-31",
+  "exact": true
+ },
+ "개인정보보호법": {
+  "law_id": "011357",
+  "official_name": "개인정보 보호법",
+  "kind": "법률",
+  "ministry": "개인정보보호위원회",
+  "promulgated_at": "2025-04-01",
+  "effective_at": "2025-10-02",
+  "exact": true
+ },
+ "국민기초생활보장법 시행령": {
+  "law_id": "002820",
+  "official_name": "국민기초생활 보장법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "중증장애인생산품 우선구매 특별법": {
+  "law_id": "010710",
+  "official_name": "중증장애인생산품 우선구매 특별법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2025-11-11",
+  "exact": true
+ },
+ "체육시설의 설치·이용에 관한 법률": {
+  "law_id": "000820",
+  "official_name": "체육시설의 설치ㆍ이용에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-04-23",
+  "exact": true
+ },
+ "국민체육진흥법시행령": {
+  "law_id": "002845",
+  "official_name": "국민체육진흥법 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "공익법인 설립ㆍ운영에 관한 법률": null,
+ "방송통신발전 기본법": {
+  "law_id": "011172",
+  "official_name": "방송통신발전 기본법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부,방송미디어통신위원회",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "사회재난 구호 및 복구비용 부담 기준 등에 관한 규정": {
+  "law_id": "012396",
+  "official_name": "사회재난 구호 및 복구 비용 부담기준 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-11-27",
+  "effective_at": "2025-11-28",
+  "exact": true
+ },
+ "사회재난 구호 및 복구 비용 부담기준 등에 관한 규정": {
+  "law_id": "012396",
+  "official_name": "사회재난 구호 및 복구 비용 부담기준 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-11-27",
+  "effective_at": "2025-11-28",
+  "exact": true
+ },
+ "기술보증기금법": {
+  "law_id": "000506",
+  "official_name": "기술보증기금법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "수산업협동조합법": {
+  "law_id": "001487",
+  "official_name": "수산업협동조합법",
+  "kind": "법률",
+  "ministry": "해양수산부",
+  "promulgated_at": "2026-03-31",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "국민연금법": {
+  "law_id": "001781",
+  "official_name": "국민연금법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-16",
+  "effective_at": "2026-06-17",
+  "exact": true
+ },
+ "서울특별시 성동구 재난 및 안전관리기구의 구성·운영 조례 시행규칙": null,
+ "서울특별시 성동구 재난관리기금 운용ㆍ관리 조례 시행규칙": null,
+ "급경사지 재해예방에 관한 법률": {
+  "law_id": "010491",
+  "official_name": "급경사지 재해예방에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-02-13",
+  "effective_at": "2024-08-14",
+  "exact": true
+ },
+ "재난문자방송 기준 및 운영규정": null,
+ "재해구호법": {
+  "law_id": "000179",
+  "official_name": "재해구호법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-01-30",
+  "effective_at": "2024-07-31",
+  "exact": true
+ },
+ "지역문화진흥법 시행령": {
+  "law_id": "012107",
+  "official_name": "지역문화진흥법 시행령",
+  "kind": "대통령령",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "대한민국재향군인회법": {
+  "law_id": "000906",
+  "official_name": "대한민국재향군인회법",
+  "kind": "법률",
+  "ministry": "국가보훈부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "국민건강보험법 시행령": {
+  "law_id": "002813",
+  "official_name": "국민건강보험법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-02-19",
+  "exact": true
+ },
+ "기초연금법": {
+  "law_id": "012045",
+  "official_name": "기초연금법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "서울특별시 적극행정 면책제도 운영규정": null,
+ "서울특별시 성동구 관용심사위원회의 설치 및 운영에 관한 규정": null,
+ "전기통신금융사기 피해 방지 및 피해금 환급에 관한 특별법": {
+  "law_id": "011359",
+  "official_name": "전기통신금융사기 피해 방지 및 피해금 환급에 관한 특별법",
+  "kind": "법률",
+  "ministry": "경찰청,금융위원회",
+  "promulgated_at": "2024-02-27",
+  "effective_at": "2024-08-28",
+  "exact": true
+ },
+ "유통산업발전법 시행령": {
+  "law_id": "004388",
+  "official_name": "유통산업발전법 시행령",
+  "kind": "대통령령",
+  "ministry": "산업통상부",
+  "promulgated_at": "2025-12-23",
+  "effective_at": "2025-12-23",
+  "exact": true
+ },
+ "전통시장 및 상점가 육성을 위한 특별법 시행령": {
+  "law_id": "009897",
+  "official_name": "전통시장 및 상점가 육성을 위한 특별법 시행령",
+  "kind": "대통령령",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2026-06-16",
+  "effective_at": "2026-06-17",
+  "exact": true
+ },
+ "전통시장 및 상점가 육성을 위한 특별법 시행규칙": {
+  "law_id": "009899",
+  "official_name": "전통시장 및 상점가 육성을 위한 특별법 시행규칙",
+  "kind": "중소벤처기업부령",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2026-06-17",
+  "effective_at": "2026-06-17",
+  "exact": true
+ },
+ "본인서명사실 확인 등에 관한 법률": {
+  "law_id": "011541",
+  "official_name": "본인서명사실 확인 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-12-26",
+  "effective_at": "2024-12-27",
+  "exact": true
+ },
+ "점자법": {
+  "law_id": "012561",
+  "official_name": "점자법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-08-14",
+  "effective_at": "2025-08-14",
+  "exact": true
+ },
+ "수목원ㆍ정원의 조성 및 진흥에 관한 법률": {
+  "law_id": "009201",
+  "official_name": "수목원ㆍ정원의 조성 및 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "산림청",
+  "promulgated_at": "2026-03-31",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "서울특별시성동구종합자료실운영규정": null,
+ "지방자치분권 및 지역균형발전에 관한 특별법": null,
+ "주민투표법": {
+  "law_id": "009629",
+  "official_name": "주민투표법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-04-26",
+  "effective_at": "2023-04-27",
+  "exact": true
+ },
+ "도로명주소법": {
+  "law_id": "010300",
+  "official_name": "도로명주소법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-02-20",
+  "effective_at": "2025-02-21",
+  "exact": true
+ },
+ "주차장법 시행령": {
+  "law_id": "004946",
+  "official_name": "주차장법 시행령",
+  "kind": "대통령령",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-08-14",
+  "effective_at": "2025-08-17",
+  "exact": true
+ },
+ "5.18민주유공자예우 및 단체설립에 관한 법률": null,
+ "도로교통법 시행령": {
+  "law_id": "003395",
+  "official_name": "도로교통법 시행령",
+  "kind": "대통령령",
+  "ministry": "경찰청",
+  "promulgated_at": "2026-06-09",
+  "effective_at": "2026-06-09",
+  "exact": true
+ },
+ "한국은행법": {
+  "law_id": "001550",
+  "official_name": "한국은행법",
+  "kind": "법률",
+  "ministry": "재정경제부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "장애인ㆍ노인ㆍ임산부 등의 편의증진보장에 관한 법률 시행령": {
+  "law_id": "004627",
+  "official_name": "장애인ㆍ노인ㆍ임산부 등의 편의증진 보장에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "소방시설 설치 및 관리에 관한 법률 시행령": {
+  "law_id": "009694",
+  "official_name": "소방시설 설치 및 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "소방청",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "전세사기피해자 지원 및 주거안정에 관한 특별법": {
+  "law_id": "014450",
+  "official_name": "전세사기피해자 지원 및 주거안정에 관한 특별법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-05-12",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "주택임대차보호법": {
+  "law_id": "001248",
+  "official_name": "주택임대차보호법",
+  "kind": "법률",
+  "ministry": "국토교통부,법무부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "중대재해 처벌 등에 관한 법률": {
+  "law_id": "013993",
+  "official_name": "중대재해 처벌 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부,공정거래위원회,국토교통부,기후에너지환경부,법무부,산업통상부,중소벤처기업부",
+  "promulgated_at": "2021-01-26",
+  "effective_at": "2022-01-27",
+  "exact": true
+ },
+ "중대재해 처벌 등에 관한 법률 시행령": {
+  "law_id": "014159",
+  "official_name": "중대재해 처벌 등에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "고용노동부,공정거래위원회,국토교통부,기후에너지환경부,법무부,산업통상부,중소벤처기업부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "중소기업기본법 시행령": {
+  "law_id": "004958",
+  "official_name": "중소기업기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "대ㆍ중소기업 상생협력 촉진에 관한 법률": {
+  "law_id": "010165",
+  "official_name": "대ㆍ중소기업 상생협력 촉진에 관한 법률",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "장애인활동 지원에 관한 법률": {
+  "law_id": "011330",
+  "official_name": "장애인활동 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-12-20",
+  "effective_at": "2024-12-20",
+  "exact": true
+ },
+ "지능정보화 기본법": {
+  "law_id": "000028",
+  "official_name": "지능정보화 기본법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2025-01-21",
+  "effective_at": "2026-01-22",
+  "exact": true
+ },
+ "지능정보화 기본법 시행령": {
+  "law_id": "004798",
+  "official_name": "지능정보화 기본법 시행령",
+  "kind": "대통령령",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2025-12-31",
+  "effective_at": "2026-01-22",
+  "exact": true
+ },
+ "소프트웨어산업 진흥법": null,
+ "소프트웨어 진흥법": {
+  "law_id": "000751",
+  "official_name": "소프트웨어 진흥법",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-04-23",
+  "exact": true
+ },
+ "전자정부법 시행령": {
+  "law_id": "009213",
+  "official_name": "전자정부법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "공간정보의 구축 및 관리 등에 관한 법률": {
+  "law_id": "011023",
+  "official_name": "공간정보의 구축 및 관리 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2026-03-05",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "지방공무원 명예퇴직수당 등 지급규정": {
+  "law_id": "005045",
+  "official_name": "지방공무원 명예퇴직수당 등 지급 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-01-02",
+  "effective_at": "2024-01-02",
+  "exact": true
+ },
+ "지방공무원 명예퇴직수당 등 지급 규정": {
+  "law_id": "005045",
+  "official_name": "지방공무원 명예퇴직수당 등 지급 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-01-02",
+  "effective_at": "2024-01-02",
+  "exact": true
+ },
+ "지방연구직 및 지도직공무원의 임용 등에 관한 규정": {
+  "law_id": "005084",
+  "official_name": "지방 연구직 및 지도직공무원의 임용 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-03-17",
+  "effective_at": "2026-03-17",
+  "exact": true
+ },
+ "지방자치단체의 개방형직위 및 공모직위의 운영 등에 관한 규정": {
+  "law_id": "009214",
+  "official_name": "지방자치단체의 개방형직위 및 공모직위의 운영 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2025-12-30",
+  "exact": true
+ },
+ "지방전문경력관 규정": {
+  "law_id": "011931",
+  "official_name": "지방전문경력관 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-09-10",
+  "effective_at": "2024-09-10",
+  "exact": true
+ },
+ "지방자치단체 보조금 관리에 관한 법률 시행령": {
+  "law_id": "014114",
+  "official_name": "지방자치단체 보조금 관리에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2023-10-04",
+  "effective_at": "2023-10-12",
+  "exact": true
+ },
+ "특정 금융거래정보의 보고 및 이용 등에 관한 법률": {
+  "law_id": "009244",
+  "official_name": "특정 금융거래정보의 보고 및 이용 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "금융위원회,법무부",
+  "promulgated_at": "2023-07-18",
+  "effective_at": "2024-07-19",
+  "exact": true
+ },
+ "지속가능발전 기본법": {
+  "law_id": "014217",
+  "official_name": "지속가능발전 기본법",
+  "kind": "법률",
+  "ministry": "국무조정실",
+  "promulgated_at": "2022-01-04",
+  "effective_at": "2022-07-05",
+  "exact": true
+ },
+ "의료ㆍ요양 등 지역 돌봄의 통합지원에 관한 법률": {
+  "law_id": "014633",
+  "official_name": "의료ㆍ요양 등 지역 돌봄의 통합지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-09-20",
+  "effective_at": "2026-03-27",
+  "exact": true
+ },
+ "의료·요양 등 지역 돌봄의 통합지원에 관한 법률": {
+  "law_id": "014633",
+  "official_name": "의료ㆍ요양 등 지역 돌봄의 통합지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-09-20",
+  "effective_at": "2026-03-27",
+  "exact": true
+ },
+ "지역상권 상생 및 활성화에 관한 법률": {
+  "law_id": "014125",
+  "official_name": "지역상권 상생 및 활성화에 관한 법률",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "영화 및 비디오물의 진흥에 관한 법률": {
+  "law_id": "010200",
+  "official_name": "영화 및 비디오물의 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "의료법 시행규칙": {
+  "law_id": "007863",
+  "official_name": "의료법 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2026-06-12",
+  "effective_at": "2026-06-12",
+  "exact": true
+ },
+ "지역보건법 시행령": {
+  "law_id": "005128",
+  "official_name": "지역보건법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2024-07-02",
+  "effective_at": "2024-07-03",
+  "exact": true
+ },
+ "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률 시행규칙": {
+  "law_id": "012327",
+  "official_name": "사회보장급여의 이용ㆍ제공 및 수급권자 발굴에 관한 법률 시행규칙",
+  "kind": "보건복지부령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-07-02",
+  "effective_at": "2024-07-03",
+  "exact": true
+ },
+ "지적재조사에 관한 특별법": {
+  "law_id": "011463",
+  "official_name": "지적재조사에 관한 특별법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "지진ㆍ화산재해대책법": {
+  "law_id": "010726",
+  "official_name": "지진ㆍ화산재해대책법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-02-27",
+  "effective_at": "2025-08-28",
+  "exact": true
+ },
+ "실내공기질 관리법": {
+  "law_id": "000161",
+  "official_name": "실내공기질 관리법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-03-26",
+  "exact": true
+ },
+ "지진재해대책법": null,
+ "지하안전관리에 관한 특별법": {
+  "law_id": "012468",
+  "official_name": "지하안전관리에 관한 특별법",
+  "kind": "법률",
+  "ministry": "국토교통부",
+  "promulgated_at": "2025-05-27",
+  "effective_at": "2025-05-27",
+  "exact": true
+ },
+ "집합건물의 소유 및 관리에 관한 법률": {
+  "law_id": "001262",
+  "official_name": "집합건물의 소유 및 관리에 관한 법률",
+  "kind": "법률",
+  "ministry": "법무부",
+  "promulgated_at": "2023-03-28",
+  "effective_at": "2023-09-29",
+  "exact": true
+ },
+ "인성교육진흥법": {
+  "law_id": "012237",
+  "official_name": "인성교육진흥법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "교육기본법": {
+  "law_id": "000901",
+  "official_name": "교육기본법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2026-05-06",
+  "effective_at": "2026-05-06",
+  "exact": true
+ },
+ "문화예술교육 지원법": {
+  "law_id": "010085",
+  "official_name": "문화예술교육 지원법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2024-10-22",
+  "exact": true
+ },
+ "진로교육법": {
+  "law_id": "012309",
+  "official_name": "진로교육법",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2021-07-20",
+  "effective_at": "2022-07-21",
+  "exact": true
+ },
+ "중소기업창업 지원법": {
+  "law_id": "001472",
+  "official_name": "중소기업창업 지원법",
+  "kind": "법률",
+  "ministry": "중소벤처기업부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "청소년 보호법": {
+  "law_id": "000815",
+  "official_name": "청소년 보호법",
+  "kind": "법률",
+  "ministry": "성평등가족부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "청원경찰법 시행령": {
+  "law_id": "005214",
+  "official_name": "청원경찰법 시행령",
+  "kind": "대통령령",
+  "ministry": "경찰청",
+  "promulgated_at": "2026-05-19",
+  "effective_at": "2026-05-19",
+  "exact": true
+ },
+ "지방공무원 징계 및 소청규정": {
+  "law_id": "005053",
+  "official_name": "지방공무원 징계 및 소청 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-06-30",
+  "effective_at": "2025-07-01",
+  "exact": true
+ },
+ "서울특별시성동구청원경찰징계규정": null,
+ "청원법 시행령": {
+  "law_id": "014202",
+  "official_name": "청원법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2021-12-21",
+  "effective_at": "2022-12-23",
+  "exact": true
+ },
+ "지방자치단체 출자·출연 기관의 운영에 관한 법률 시행령": {
+  "law_id": "012147",
+  "official_name": "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-02-06",
+  "effective_at": "2024-02-06",
+  "exact": true
+ },
+ "사이버안보 업무규정": {
+  "law_id": "013942",
+  "official_name": "사이버안보 업무규정",
+  "kind": "대통령령",
+  "ministry": "국가정보원",
+  "promulgated_at": "2024-03-05",
+  "effective_at": "2025-01-01",
+  "exact": true
+ },
+ "도시농업의 육성 및 지원에 관한 법률": {
+  "law_id": "011494",
+  "official_name": "도시농업의 육성 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "곤충산업의 육성 및 지원에 관한 법률": {
+  "law_id": "011155",
+  "official_name": "곤충산업의 육성 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2018-12-31",
+  "effective_at": "2019-07-01",
+  "exact": true
+ },
+ "통계법 시행령": {
+  "law_id": "005288",
+  "official_name": "통계법 시행령",
+  "kind": "대통령령",
+  "ministry": "국가데이터처",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "통합방위법": {
+  "law_id": "000920",
+  "official_name": "통합방위법",
+  "kind": "법률",
+  "ministry": "국방부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "물환경보전법": {
+  "law_id": "000166",
+  "official_name": "물환경보전법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2026-02-19",
+  "effective_at": "2026-02-19",
+  "exact": true
+ },
+ "필수업무 지정 및 종사자 보호ㆍ지원에 관한 법률": {
+  "law_id": "014081",
+  "official_name": "필수업무 지정 및 종사자 보호ㆍ지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "고용노동부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "농수산물 품질관리법": {
+  "law_id": "001978",
+  "official_name": "농수산물 품질관리법",
+  "kind": "법률",
+  "ministry": "농림축산식품부,식품의약품안전처,해양수산부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "친환경농어업 육성 및 유기식품 등의 관리ㆍ지원에 관한 법률": {
+  "law_id": "000419",
+  "official_name": "친환경농어업 육성 및 유기식품 등의 관리ㆍ지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "농림축산식품부,해양수산부",
+  "promulgated_at": "2021-08-17",
+  "effective_at": "2023-01-01",
+  "exact": true
+ },
+ "축산법": {
+  "law_id": "001509",
+  "official_name": "축산법",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2025-07-22",
+  "effective_at": "2026-01-23",
+  "exact": true
+ },
+ "식품산업진흥법": {
+  "law_id": "010607",
+  "official_name": "식품산업진흥법",
+  "kind": "법률",
+  "ministry": "농림축산식품부",
+  "promulgated_at": "2022-12-27",
+  "effective_at": "2023-06-28",
+  "exact": true
+ },
+ "학교폭력예방 및 대책에 관한 법률": {
+  "law_id": "009620",
+  "official_name": "학교폭력예방 및 대책에 관한 법률",
+  "kind": "법률",
+  "ministry": "교육부",
+  "promulgated_at": "2026-06-02",
+  "effective_at": "2026-06-02",
+  "exact": true
+ },
+ "한국수화언어법": {
+  "law_id": "012491",
+  "official_name": "한국수화언어법",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-05-12",
+  "exact": true
+ },
+ "한국자유총연맹 육성에 관한 법률": {
+  "law_id": "000777",
+  "official_name": "한국자유총연맹 육성에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2017-07-26",
+  "effective_at": "2017-07-26",
+  "exact": true
+ },
+ "한의약 육성법": {
+  "law_id": "009543",
+  "official_name": "한의약 육성법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2024-02-06",
+  "effective_at": "2024-08-07",
+  "exact": true
+ },
+ "지방자치단체에 대한 행정감사규정": {
+  "law_id": "005605",
+  "official_name": "지방자치단체에 대한 행정감사규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2021-12-16",
+  "effective_at": "2022-01-13",
+  "exact": true
+ },
+ "정보통신망 이용촉진 및 정보보호 등에 관한 법률": {
+  "law_id": "000030",
+  "official_name": "정보통신망 이용촉진 및 정보보호 등에 관한 법률",
+  "kind": "법률",
+  "ministry": "과학기술정보통신부,방송미디어통신위원회",
+  "promulgated_at": "2026-01-06",
+  "effective_at": "2026-07-07",
+  "exact": true
+ },
+ "공공감사에 관한 법률 시행령": {
+  "law_id": "011250",
+  "official_name": "공공감사에 관한 법률 시행령",
+  "kind": "대통령령",
+  "ministry": "감사원",
+  "promulgated_at": "2024-03-29",
+  "effective_at": "2024-05-27",
+  "exact": true
+ },
+ "모범공무원규정": {
+  "law_id": "003474",
+  "official_name": "모범공무원 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-03-03",
+  "effective_at": "2026-03-03",
+  "exact": true
+ },
+ "정부표창규정": {
+  "law_id": "004826",
+  "official_name": "정부 표창 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2024-04-30",
+  "effective_at": "2024-04-30",
+  "exact": true
+ },
+ "국토계획 및 이용에 관한 법률": null,
+ "의료기기법": {
+  "law_id": "009514",
+  "official_name": "의료기기법",
+  "kind": "법률",
+  "ministry": "보건복지부,식품의약품안전처",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "건강검진기본법": {
+  "law_id": "010708",
+  "official_name": "건강검진기본법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2025-11-11",
+  "effective_at": "2026-02-12",
+  "exact": true
+ },
+ "서울특별시성동구벤처기업육성및창업지원센터설치·운영에관한조례시행규칙": null,
+ "서울특별시 성동구 성수 수제화 공동판매장 관리운영규정": null,
+ "국가유산기본법": {
+  "law_id": "014443",
+  "official_name": "국가유산기본법",
+  "kind": "법률",
+  "ministry": "국가유산청",
+  "promulgated_at": "2026-04-28",
+  "effective_at": "2026-05-17",
+  "exact": true
+ },
+ "전통사찰의 보존 및 지원에 관한 법률": {
+  "law_id": "000784",
+  "official_name": "전통사찰의 보존 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-02-13",
+  "effective_at": "2025-02-14",
+  "exact": true
+ },
+ "혈액관리법 시행령": {
+  "law_id": "005646",
+  "official_name": "혈액관리법 시행령",
+  "kind": "대통령령",
+  "ministry": "보건복지부",
+  "promulgated_at": "2025-12-30",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "혈액관리법": {
+  "law_id": "001784",
+  "official_name": "혈액관리법",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2021-12-21",
+  "effective_at": "2023-06-22",
+  "exact": true
+ },
+ "서울특별시 성동구 간행물 심의 및 보급에 관한 조례 시행규칙": null,
+ "재난안전산업 진흥법": {
+  "law_id": "014215",
+  "official_name": "재난안전산업 진흥법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2022-01-04",
+  "effective_at": "2023-01-05",
+  "exact": true
+ },
+ "소방산업의 진흥에 관한 법률": {
+  "law_id": "010758",
+  "official_name": "소방산업의 진흥에 관한 법률",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2023-12-26",
+  "effective_at": "2023-12-26",
+  "exact": true
+ },
+ "국민 안전교육 진흥 기본법": {
+  "law_id": "012571",
+  "official_name": "국민 안전교육 진흥 기본법",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2020-01-29",
+  "effective_at": "2020-01-29",
+  "exact": true
+ },
+ "소방의 화재조사에 관한 법률": {
+  "law_id": "014090",
+  "official_name": "소방의 화재조사에 관한 법률",
+  "kind": "법률",
+  "ministry": "소방청",
+  "promulgated_at": "2025-01-31",
+  "effective_at": "2026-02-01",
+  "exact": true
+ },
+ "환경정책기본법": {
+  "law_id": "000173",
+  "official_name": "환경정책기본법",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "서울특별시성동구환경미화원자녀학자금대여기금설치조례시행규칙": null,
+ "환경교육의 활성화 및 지원에 관한 법률": {
+  "law_id": "010712",
+  "official_name": "환경교육의 활성화 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "환경범죄 등의 단속 및 가중처벌에 관한 법률": {
+  "law_id": "001143",
+  "official_name": "환경범죄 등의 단속 및 가중처벌에 관한 법률",
+  "kind": "법률",
+  "ministry": "기후에너지환경부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2025-10-01",
+  "exact": true
+ },
+ "환경오염행위 신고 및 포상금 지급 규정": null,
+ "서울특별시 성동구 성동 글로벌 체험센터 설치 및 운영 조례 시행규칙": null,
+ "서울특별시 성동구 공공자금통합관리기금 설치 및 운용 조례 시행규칙": null,
+ "서울특별시 성동구 통합재정안정화기금 설치 및 운용 조례 시행규칙": null,
+ "효행 장려 및 지원에 관한 법률": {
+  "law_id": "010509",
+  "official_name": "효행 장려 및 지원에 관한 법률",
+  "kind": "법률",
+  "ministry": "보건복지부",
+  "promulgated_at": "2017-12-12",
+  "effective_at": "2017-12-12",
+  "exact": true
+ },
+ "희귀질환관리법": {
+  "law_id": "012443",
+  "official_name": "희귀질환관리법",
+  "kind": "법률",
+  "ministry": "보건복지부,질병관리청",
+  "promulgated_at": "2024-12-03",
+  "effective_at": "2025-06-04",
+  "exact": true
+ },
+ "직업안정법 시행규칙": {
+  "law_id": "008381",
+  "official_name": "직업안정법 시행규칙",
+  "kind": "고용노동부령",
+  "ministry": "고용노동부",
+  "promulgated_at": "2024-06-12",
+  "effective_at": "2024-06-12",
+  "exact": true
+ },
+ "서울특별시 성동구 정책자문단 설치 및 운영 규정": null,
+ "지방공기업법 시행령": {
+  "law_id": "005042",
+  "official_name": "지방공기업법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-03-31",
+  "effective_at": "2026-03-31",
+  "exact": true
+ },
+ "지방자치단체 출자ㆍ출연기관의 운영에 관한 법률": {
+  "law_id": "012024",
+  "official_name": "지방자치단체 출자ㆍ출연 기관의 운영에 관한 법률",
+  "kind": "법률",
+  "ministry": "행정안전부",
+  "promulgated_at": "2025-10-01",
+  "effective_at": "2026-01-02",
+  "exact": true
+ },
+ "체육시설의 설치ㆍ이용에 관한 법률": {
+  "law_id": "000820",
+  "official_name": "체육시설의 설치ㆍ이용에 관한 법률",
+  "kind": "법률",
+  "ministry": "문화체육관광부",
+  "promulgated_at": "2024-10-22",
+  "effective_at": "2025-04-23",
+  "exact": true
+ },
+ "행정업무의 효율적 운영에 관한 규정": null,
+ "행정 효율과 협업 촉진에 관한 규정 시행규칙": null,
+ "서울특별시 성동구의회 의원 공무국외여행 규정": null,
+ "공무원 재해보상법 시행령": {
+  "law_id": "013171",
+  "official_name": "공무원 재해보상법 시행령",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-05-26",
+  "effective_at": "2026-05-28",
+  "exact": true
+ },
+ "서울특별시 성동구의회 의원연구단체 구성 및 지원 규정": null,
+ "서울특별시 성동구 공무원증 규정": null,
+ "연구직 및 지도직 공무원의 임용 등에 관한 규정": {
+  "law_id": "004189",
+  "official_name": "연구직 및 지도직공무원의 임용 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "인사혁신처",
+  "promulgated_at": "2026-06-30",
+  "effective_at": "2026-06-30",
+  "exact": true
+ },
+ "지방연구직 및 지도직 공무원의 임용 등에 관한 규정": {
+  "law_id": "005084",
+  "official_name": "지방 연구직 및 지도직공무원의 임용 등에 관한 규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-03-17",
+  "effective_at": "2026-03-17",
+  "exact": true
+ },
+ "지방공무원보수규정": {
+  "law_id": "005046",
+  "official_name": "지방공무원 보수규정",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2026-06-23",
+  "effective_at": "2026-07-01",
+  "exact": true
+ },
+ "서울특별시 성동구의회 회의록의 발간 및 보존 등에 관한 규정": null,
+ "대한민국 국기법 시행령": {
+  "law_id": "010496",
+  "official_name": "대한민국국기법 시행령",
+  "kind": "대통령령",
+  "ministry": "행정안전부",
+  "promulgated_at": "2017-07-26",
+  "effective_at": "2017-07-26",
+  "exact": true
+ },
+ "서울특별시 성동구 주차장 설치 및 관리 조례 시행규칙": null
+}

@@ -18,7 +18,7 @@ from typing import Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.2.0"
 
 
 # ── Object Types (8) ─────────────────────────────────────────────
@@ -117,9 +117,25 @@ class ComplaintType(SDObject):
     department: Optional[str] = Field(None, description="소관부서")
 
 
+class NationalLaw(SDObject):
+    """국가법령 — 조례가 인용하는 상위법 (법제처 국가법령정보 API로 실체화).
+
+    조례 원문의 「」 인용에서 발견된 법령을 law.go.kr에서 조회해 만든다.
+    부서→사업→조례→국가법령으로 이어지는 법적 근거 사슬의 마지막 칸.
+    (스키마 1.2.0에서 추가 — 원 설계서 8객체의 확장)"""
+
+    type: Literal["NationalLaw"] = "NationalLaw"
+    kind: Optional[str] = Field(None, description="법령구분 (법률/대통령령/부령 등)")
+    ministry: Optional[str] = Field(None, description="소관부처")
+    promulgated_at: Optional[str] = Field(None, description="공포일자 (YYYY-MM-DD)")
+    effective_at: Optional[str] = Field(None, description="시행일자 (YYYY-MM-DD)")
+    law_id: Optional[str] = Field(None, description="법제처 법령ID")
+    cited_count: Optional[int] = Field(None, description="성동구 조례에서 인용된 횟수")
+
+
 AnyObject = Union[
     Policy, Department, Ordinance, BudgetItem,
-    PressRelease, Facility, District, ComplaintType,
+    PressRelease, Facility, District, ComplaintType, NationalLaw,
 ]
 
 TYPE_REGISTRY: dict[str, type[SDObject]] = {
@@ -131,6 +147,7 @@ TYPE_REGISTRY: dict[str, type[SDObject]] = {
     "Facility": Facility,
     "District": District,
     "ComplaintType": ComplaintType,
+    "NationalLaw": NationalLaw,
 }
 
 TYPE_LABELS: dict[str, str] = {
@@ -142,6 +159,7 @@ TYPE_LABELS: dict[str, str] = {
     "Facility": "시설",
     "District": "행정동",
     "ComplaintType": "민원유형",
+    "NationalLaw": "국가법령",
 }
 
 
@@ -159,6 +177,7 @@ class LinkType(str, Enum):
     LOCATED_IN = "위치"         # Facility -위치→ District
     FACILITY_OWNED_BY = "시설소관"   # Facility -소관→ Department
     COMPLAINT_OWNED_BY = "민원소관"  # ComplaintType -소관→ Department
+    DELEGATES = "위임"          # NationalLaw -위임→ Ordinance (조례의 상위법 근거)
 
 
 # 링크 타입별 허용 (src_type, dst_type) — 삽입 시 검증에 사용
@@ -171,6 +190,7 @@ LINK_ENDPOINTS: dict[LinkType, tuple[str, str]] = {
     LinkType.LOCATED_IN: ("Facility", "District"),
     LinkType.FACILITY_OWNED_BY: ("Facility", "Department"),
     LinkType.COMPLAINT_OWNED_BY: ("ComplaintType", "Department"),
+    LinkType.DELEGATES: ("NationalLaw", "Ordinance"),
 }
 
 
