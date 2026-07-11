@@ -236,11 +236,17 @@ class OntologyStore:
             params.append(link_type.value)
         with self._lock:
             rows = self.conn.execute(sql, params).fetchall()
-        links = [
-            Link(type=LinkType(r["type"]), src=r["src"], dst=r["dst"],
-                 **json.loads(r["props"]))
-            for r in rows
-        ]
+        links = []
+        for r in rows:
+            try:
+                lt = LinkType(r["type"])
+            except ValueError:
+                # DB가 코드보다 새로울 수 있다(배포 프로세스가 옛 모듈을 캐시한
+                # 상태에서 DB만 갱신된 경우 등) — 모르는 링크 타입은 조회에서
+                # 건너뛰어 전체 질의가 죽지 않게 한다 (전방 호환).
+                continue
+            links.append(Link(type=lt, src=r["src"], dst=r["dst"],
+                              **json.loads(r["props"])))
         return [l for l in links if l.confidence >= min_confidence]
 
     def neighbors(
