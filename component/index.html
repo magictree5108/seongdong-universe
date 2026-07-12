@@ -208,7 +208,7 @@ let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
     camTargetFocus = new THREE.Vector3(0,0,0);
 let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
 let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
-let ontoAdj = {}, lastAnswerQuery = "";
+let ontoAdj = {}, lastAnswerQuery = "", hasInsights = false;
 let hoverId = -1, downX = 0, downY = 0, moved = false;
 const raycaster = new THREE.Raycaster();
 raycaster.params.Points = { threshold: 0.22 };
@@ -523,7 +523,16 @@ function applyStateVisuals() {
     camTargetFocus.set(0, 0, 0);
     camTargetDist = 26;
   }
-  document.getElementById("scrollHint").style.display = focus ? "block" : "none";
+  // 검색 전에도 인사이트가 있으면 내려가기 힌트를 보여준다 (첫 화면 발견성)
+  const hint = document.getElementById("scrollHint");
+  if (focus) {
+    hint.style.display = "block";
+  } else if (state.mode === "idle" && hasInsights) {
+    hint.textContent = "▼ 시스템이 찾은 인사이트 보기 ▼";
+    hint.style.display = "block";
+  } else {
+    hint.style.display = "none";
+  }
   document.getElementById("detail").style.display = "none";
   buildCards();
 }
@@ -653,6 +662,7 @@ window.addEventListener("message", ev => {
     vis = args.nodes.vis;
   }
   state = args.state;
+  hasInsights = !!args.has_insights;
   document.getElementById("appTitle").textContent = args.title || "성동 UNIVERSE";
   document.getElementById("appSub").textContent = args.subtitle || "";
   document.getElementById("meta").innerHTML = args.meta_html || "";
@@ -661,6 +671,7 @@ window.addEventListener("message", ev => {
 
   // AI 답변(성공/실패)이 도착하면 스크롤 버튼 문구를 바꾸고 자동으로 보여준다 —
   // 답변이 화면 아래에 렌더되어 "답을 안 한 것처럼" 보이는 문제 방지.
+  // (검색 전 화면의 문구는 applyStateVisuals가 인사이트 안내로 설정한다)
   const hint = document.getElementById("scrollHint");
   if (args.answer_state && args.answer_query) {
     hint.textContent = args.answer_state === "ok"
@@ -669,10 +680,10 @@ window.addEventListener("message", ev => {
       lastAnswerQuery = args.answer_query;
       scrollToBoard(0);
     }
-  } else {
+  } else if (state.mode === "results") {
     hint.textContent = "▼ 상세 결과·법령 보러 내려가기 ▼";
-    if (!args.answer_query) lastAnswerQuery = "";
   }
+  if (!args.answer_query) lastAnswerQuery = "";
 });
 stSend("streamlit:componentReady", { apiVersion: 1 });
 stSend("streamlit:setFrameHeight", { height: 860 });

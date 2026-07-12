@@ -118,6 +118,18 @@ def _safe_url(url: str | None) -> str | None:
 
 
 @st.cache_data(show_spinner=False)
+def load_insights(sig: float = 0.0) -> dict:
+    """인사이트 엔진 — 데이터 갱신(sig) 시에만 재계산한다."""
+    try:
+        from ontology.insights import compute_insights
+        return compute_insights(DATA_DIR / "ontology.db")
+    except Exception:  # noqa: BLE001 — 인사이트 실패가 우주를 죽이면 안 된다
+        import traceback
+        traceback.print_exc()
+        return {}
+
+
+@st.cache_data(show_spinner=False)
 def component_payload(data_sig: float = 0.0):
     """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지·노드 정보)은
     한 번만 만든다. 텍스트는 컴포넌트가 innerHTML로 넣으므로 여기서
@@ -522,6 +534,85 @@ _SOURCE_TYPE_KO = {
 }
 
 
+_won = lambda v: (f"{v/100_000_000:.1f}억" if v >= 100_000_000  # noqa: E731
+                  else f"{v/10_000:,.0f}만")
+
+
+def _insight_row(text: str, query: str | None, key: str) -> None:
+    """인사이트 한 줄 + '우주에서 보기' 버튼 (클릭하면 그 사업을 검색한다)."""
+    left, right = st.columns([11, 2])
+    left.markdown(f'<div class="stat-line">{text}</div>', unsafe_allow_html=True)
+    if query and right.button("우주에서 보기", key=key, use_container_width=True):
+        st.session_state.uq = query
+        st.rerun()
+
+
+def _render_insights_board(ins: dict) -> None:
+    """검색 전 첫 화면 하단 — 시스템이 먼저 짚어주는 검토 후보들."""
+    st.markdown(
+        f'<div class="board-anchor" id="board"></div>'
+        f'<h4 style="color:#eaf1ff; letter-spacing:0.06em;">💡 시스템이 찾은 인사이트 '
+        f'<span style="color:#7d8bb0; font-size:0.75rem;">'
+        f'{ins.get("year")}년 예산 · 집행은 {ins.get("asof")} 조회 기준 · '
+        f'규칙 기반 자동 분석 — 검토 후보 제시이며 원문 확인이 필요합니다</span></h4>',
+        unsafe_allow_html=True)
+
+    def _section(color: str, title: str, note: str) -> None:
+        st.markdown(
+            f'<div class="bc-meta" style="color:{color}; margin:14px 0 4px;">'
+            f'<b>{title}</b> <span style="color:#7d8bb0;">— {note}</span></div>',
+            unsafe_allow_html=True)
+
+    if ins.get("stalled"):
+        _section("#ff8787", "① 집행 부진", "연도 절반이 지났는데 집행률 5% 미만 (예산 1억 이상)")
+        for i, s in enumerate(ins["stalled"][:4]):
+            _insight_row(
+                f'{html.escape(s["name"])} — 예산 <b>{_won(s["budget"])}원</b>, '
+                f'집행 <b style="color:#ff8787;">{s["pct"]:.1f}%</b> ({s["field"] or "?"})',
+                s["name"], f"in_st_{i}")
+
+    if ins.get("exhausted"):
+        _section("#ffa94d", "② 조기 소진", "연중에 이미 집행률 98% 이상 — 추경·이월 검토 신호")
+        for i, s in enumerate(ins["exhausted"][:4]):
+            _insight_row(
+                f'{html.escape(s["name"])} — 예산 <b>{_won(s["budget"])}원</b>, '
+                f'집행 <b style="color:#ffa94d;">{s["pct"]:.0f}%</b>',
+                s["name"], f"in_ex_{i}")
+
+    if ins.get("swings"):
+        _section("#ffd43b", "③ 예산 급변", "전년 대비 3배 이상 증가 또는 3분의 1 이하로 감소")
+        for i, s in enumerate(ins["swings"][:4]):
+            arrow = "▲" if s["ratio"] > 1 else "▼"
+            _insight_row(
+                f'{html.escape(s["name"])} — {_won(s["prev"])}원 → '
+                f'<b>{_won(s["cur"])}원</b> '
+                f'<b style="color:#ffd43b;">{arrow} {s["ratio"]:.1f}배</b>',
+                s["name"], f"in_sw_{i}")
+
+    if ins.get("silent"):
+        _section("#f472b6", "④ 홍보 공백", "예산 5억 이상 자체사업인데 보도·소식 노출 0건")
+        for i, s in enumerate(ins["silent"][:4]):
+            _insight_row(
+                f'{html.escape(s["name"])} — 예산 <b>{_won(s["budget"])}원</b> '
+                f'({html.escape(s["dept"] or "?")}) · <b style="color:#f472b6;">언급 0건</b>',
+                s["name"], f"in_si_{i}")
+
+    if ins.get("law_a"):
+        _section("#b18bff", "⑤ 조례 정비 소재",
+                 f'개정·폐지된 옛 법령명 인용 {len(ins["law_a"])}종 '
+                 f'+ 표기 오류 {ins.get("law_b_count", 0)}종 (법제처 대조)')
+        for i, a in enumerate(ins["law_a"][:4]):
+            ords = html.escape((a["ordinances"] or ["?"])[0].replace("서울특별시 성동구 ", ""))
+            _insight_row(
+                f'「{html.escape(a["old"])}」 → 「{html.escape(a["new"])}」 '
+                f'<span style="color:#7d8bb0;">({ords})</span>',
+                a["ordinances"][0] if a["ordinances"] else None, f"in_law_{i}")
+        st.markdown(
+            f'<div class="stat-line" style="color:#7d8bb0;">…외 '
+            f'{max(0, len(ins["law_a"]) - 4)}종. 전체 목록은 정비 검토자료 문서 참조.</div>',
+            unsafe_allow_html=True)
+
+
 def _render_answer_card(ganswer: dict, query: str) -> None:
     """GraphRAG 답변 — 상세 보드 최상단의 골드 카드. 근거 원문 링크 포함."""
     st.markdown(
@@ -731,6 +822,7 @@ def main():
         legend_html=_legend_html(active_cats, active_etypes),
         answer_state=(("ok" if ganswer.get("answer") else "fail") if ganswer else None),
         answer_query=(uq if ganswer else ""),
+        has_insights=bool(not uq and load_insights(_data_sig())),
         key="universe", default=None)
 
     # 우주 아래 — 전폭 스크롤: AI 답변(질문형) + 상세 결과 (법령 포함)
@@ -751,6 +843,12 @@ def main():
     if uq and results:
         _render_detail_board(nodes, results, laws, expanded, mode, uq,
                              with_anchor=ganswer is None)
+
+    # 검색 전 첫 화면 — 시스템이 먼저 찾은 인사이트 (묻기 전에 짚어주는 검토 후보)
+    if not uq:
+        ins = load_insights(_data_sig())
+        if ins:
+            _render_insights_board(ins)
 
     # 컴포넌트 이벤트(검색·초기화) 처리 — nonce로 재전달 중복 제거
     if isinstance(event, dict) and event.get("nonce") \
