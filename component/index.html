@@ -263,14 +263,14 @@ function stSend(type, data) {
 }
 function stSetValue(v) { stSend("streamlit:setComponentValue", { value: v, dataType: "json" }); }
 
-let scene, camera, renderer, docPoints, entPoints, polPoints, edgeLines, ontoLines, hiPoints;
+let scene, camera, renderer, docPoints, entPoints, polPoints, eggPoints, edgeLines, ontoLines, hiPoints;
 let N = 0, basePos = null, drawPos = null, phase = null, vis = null;
 let state = { mode: "idle", cards: [], centroid: [0,0,0], spread: 0 };
 let camDist = 26, camTargetDist = 26, camFocus = new THREE.Vector3(0,0,0),
     camTargetFocus = new THREE.Vector3(0,0,0);
 let rotY = 0, userTheta = 0.6, userPhi = 1.15, dragging = false, lastX = 0, lastY = 0;
 let nodesRef = null, cardEls = [], nonce = 0, initialized = false, dataSig = "";
-let ontoAdj = {}, lastAnswerQuery = "", hasInsights = false;
+let ontoAdj = {}, lastAnswerQuery = "", hasInsights = false, eggThroneId = -1;
 let hoverId = -1, downX = 0, downY = 0, moved = false;
 const raycaster = new THREE.Raycaster();
 raycaster.params.Points = { threshold: 0.22 };
@@ -278,9 +278,9 @@ const pointerNdc = new THREE.Vector2(-2, -2);
 
 const CAT_COLOR = { consulting: 0xff9d45, notice: 0x4fd8ff, ordinance: 0xb18bff,
                     org: 0x2dd4bf, news: 0xf472b6, entity: 0x6ee7a8,
-                    policy: 0xffe28a };
+                    policy: 0xffe28a, egg: 0xfff4c0 };
 const CAT_SHORT = { consulting: "선례", notice: "공고", ordinance: "조례",
-                    org: "부서", news: "소식", entity: "태그", policy: "사업" };
+                    org: "부서", news: "소식", entity: "태그", policy: "사업", egg: "★" };
 
 function spriteTexture(diamond) {
   const c = document.createElement("canvas"); c.width = c.height = 64;
@@ -356,6 +356,16 @@ function initScene() {
     if (e.key !== "Enter") return;
     const q = e.target.value.trim();
     if (!q) return;
+    // 🥚 이름 이스터에그 — 검색 대신 각하의 별로 데려간다
+    if (/각하|킹갓|정호원|howon|제네럴|엠페리얼/i.test(q)) {
+      e.target.value = "";
+      qInput.dispatchEvent(new Event("input"));
+      launchConfetti(["👑", "🫡", "⭐", "✨", "🎉"]);
+      toast("👑 <b>킹갓제네럴엠페리얼 JUNG HOWON 각하</b>를 호출하셨습니다.<br>" +
+        "우주 최상단 옥좌로 이동합니다…", 5000);
+      if (eggThroneId >= 0) setTimeout(() => pivotTo(eggThroneId), 700);
+      return;
+    }
     const isQ = QUESTION_RE.test(q);
     const loading = document.getElementById("loading");
     loading.textContent = isQ ? "근거 자료 연결해 답변 생성 중 ··· (약 20~30초)" : "AI 선별 중 ···";
@@ -383,6 +393,28 @@ function initScene() {
   try { seen = window.localStorage.getItem("sd_guide_seen") === "1"; } catch (e) {}
   if (!seen) showGuide();
 
+  // 🥚 코나미 코드 (↑↑↓↓←→←→ B A) — 우주 전체 축포 + 각하 소환
+  const KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown",
+                  "ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+  let kseq = [];
+  window.addEventListener("keydown", e => {
+    kseq.push(e.key.length === 1 ? e.key.toLowerCase() : e.key);
+    if (kseq.length > KONAMI.length) kseq.shift();
+    if (kseq.join(",") === KONAMI.join(",")) {
+      kseq = [];
+      launchConfetti(["👑","🌟","⭐","✨","🎊","🎉","🫡","🥇"]);
+      toast("🎮 <b>코나미 코드 발동!</b> 이 우주에 각하의 축복이 임하였도다. 🎊", 5000);
+      if (eggThroneId >= 0) setTimeout(() => pivotTo(eggThroneId), 500);
+    }
+  });
+
+  // 🥚 개발자용 콘솔 인사
+  console.log("%c👑 성동 UNIVERSE", "font-size:22px;font-weight:bold;" +
+    "color:#ffe28a;text-shadow:0 0 8px rgba(255,209,102,.6);");
+  console.log("%c이 우주의 주인은 사실 킹갓제네럴엠페리얼 JUNG HOWON 각하다.\n" +
+    "탐험 팁: 검색창에 '각하' 입력 · 코나미 코드(↑↑↓↓←→←→BA) · 우주 최상단의 별을 찾아라.",
+    "color:#8ea6ff;font-size:13px;");
+
   requestAnimationFrame(tick);
 }
 
@@ -396,12 +428,69 @@ function resize() {
   });
 }
 
+/* ── 🥚 이스터에그 연출 ── */
+let confettiCooling = false;
+function launchConfetti(emojis) {
+  if (confettiCooling) return;
+  confettiCooling = true;
+  setTimeout(() => { confettiCooling = false; }, 1500);
+  const set = emojis || ["👑", "⭐", "✨", "🥇", "🎉"];
+  const stage = document.getElementById("stage");
+  for (let k = 0; k < 60; k++) {
+    const s = document.createElement("div");
+    s.textContent = set[k % set.length];
+    s.style.cssText = "position:absolute;z-index:70;pointer-events:none;" +
+      "top:-40px;font-size:" + (16 + Math.random() * 26) + "px;" +
+      "left:" + (Math.random() * 100) + "%;" +
+      "transition:transform 2.6s cubic-bezier(.3,.6,.5,1),opacity 2.6s ease;";
+    stage.appendChild(s);
+    requestAnimationFrame(() => {
+      s.style.transform = "translateY(" + (window.innerHeight + 80) + "px) rotate(" +
+        (Math.random() * 720 - 360) + "deg)";
+      s.style.opacity = "0";
+    });
+    setTimeout(() => s.remove(), 2700);
+  }
+}
+
+function toast(html, ms) {
+  let el = document.getElementById("eggToast");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "eggToast";
+    el.style.cssText = "position:absolute;left:50%;top:20%;transform:translateX(-50%);" +
+      "z-index:75;background:linear-gradient(180deg,rgba(30,24,10,0.97),rgba(20,16,6,0.97));" +
+      "border:1px solid rgba(255,209,102,0.7);border-radius:10px;padding:16px 24px;" +
+      "color:#ffe28a;font-family:inherit;font-size:0.95rem;text-align:center;" +
+      "box-shadow:0 0 40px rgba(255,209,102,0.35);max-width:80%;line-height:1.6;";
+    document.getElementById("stage").appendChild(el);
+  }
+  el.innerHTML = html;
+  el.style.display = "block";
+  el.style.opacity = "1";
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = "0";
+    setTimeout(() => { el.style.display = "none"; }, 400); }, ms || 4000);
+  el.style.transition = "opacity 0.4s ease";
+}
+
 /* ── 호버 툴팁 + 클릭 상세 ── */
 function nodeInfoHtml(i, forDetail) {
   const nr = nodesRef;
   const cat = nr.cat[i], color = "#" + (CAT_COLOR[cat] || 0x8899ff)
       .toString(16).padStart(6, "0");
   const pill = `<span class="pill" style="color:${color};">${CAT_SHORT[cat] || ""}</span>`;
+  // 🥚 이스터에그 별 — 금빛 특별 스타일
+  if (cat === "egg") {
+    if (!forDetail)
+      return `<div class="t" style="color:#ffe28a;">${nr.title[i]}</div>` +
+             `<div class="h" style="color:#ffe28a;">✨ 클릭해서 경배하라 ✨</div>`;
+    if (i === eggThroneId) launchConfetti();
+    return `<div class="t" style="color:#ffe28a; text-shadow:0 0 12px rgba(255,209,102,0.6);">` +
+           `${nr.title[i]}</div>` +
+           `<div class="m" style="color:#ffd166;">${nr.src[i]} · ${nr.date[i]}</div>` +
+           `<div class="s" style="color:#f5e6b8;">${nr.snip[i]}</div>`;
+  }
   if (!forDetail)
     return `${pill}<div class="t">${nr.title[i]}</div>` +
            `<div class="m">${nr.src[i]} · ${nr.date[i] || "날짜 미상"}</div>` +
@@ -461,7 +550,8 @@ function showDetail(i) {
 function updateHover() {
   if (!nodesRef || pointerNdc.x < -1.5 || dragging) { hideTip(); return; }
   raycaster.setFromCamera(pointerNdc, camera);
-  const hits = raycaster.intersectObjects([docPoints, entPoints, polPoints].filter(Boolean));
+  const hits = raycaster.intersectObjects(
+    [docPoints, entPoints, polPoints, eggPoints].filter(Boolean));
   let id = -1;
   if (hits.length) {
     const h = hits[0];
@@ -512,13 +602,14 @@ function buildGeometry(nodes, edges) {
   N = nodes.x.length;
   basePos = new Float32Array(N * 3); drawPos = new Float32Array(N * 3);
   phase = new Float32Array(N); vis = nodes.vis;
-  const docIdx = [], entIdx = [], polIdx = [];
+  const docIdx = [], entIdx = [], polIdx = [], eggIdx = [];
   for (let i = 0; i < N; i++) {
     basePos[i*3] = nodes.x[i]; basePos[i*3+1] = nodes.y[i]; basePos[i*3+2] = nodes.z[i];
     phase[i] = (i * 2654435761 % 6283) / 1000.0;
-    (nodes.kind[i] === 2 ? polIdx : nodes.kind[i] === 1 ? entIdx : docIdx).push(i);
+    (nodes.kind[i] === 3 ? eggIdx : nodes.kind[i] === 2 ? polIdx
+      : nodes.kind[i] === 1 ? entIdx : docIdx).push(i);
   }
-  [docPoints, entPoints, polPoints, edgeLines, ontoLines, hiPoints]
+  [docPoints, entPoints, polPoints, eggPoints, edgeLines, ontoLines, hiPoints]
     .forEach(o => { if (o) scene.remove(o); });
 
   function makePoints(idx, diamond, size, opacity) {
@@ -545,6 +636,10 @@ function buildGeometry(nodes, edges) {
   docPoints = makePoints(docIdx, false, 0.55, 0.6);
   entPoints = makePoints(entIdx, true, 1.5, 0.85);
   polPoints = makePoints(polIdx, true, 0.95, 0.9);   // 사업: 작은 골드 다이아몬드
+  eggPoints = makePoints(eggIdx, false, 2.4, 1.0);    // 🥚 각하의 별 (밝게 맥동)
+  // 각하의 별(옥좌) = 우주 최상단의 이스터에그 노드
+  eggThroneId = eggIdx.reduce((best, i) =>
+    (best < 0 || basePos[i*3+1] > basePos[best*3+1]) ? i : best, -1);
 
   function makeLines(eds, color, opacity) {
     const geo = new THREE.BufferGeometry();
@@ -683,7 +778,10 @@ function tick(t) {
     drawPos[i*3+1] = basePos[i*3+1] + Math.sin(time * 0.35 + p * 1.7) * 0.09;
     drawPos[i*3+2] = basePos[i*3+2] + Math.cos(time * 0.42 + p) * 0.09;
   }
-  [docPoints, entPoints, polPoints].forEach(pts => {
+  // 🥚 각하의 별은 은은하게 맥동하며 크기가 커졌다 작아진다 (발견 시 반짝임)
+  if (eggPoints) eggPoints.material.size = 2.4 + Math.sin(time * 2.0) * 0.9;
+  [docPoints, entPoints, polPoints, eggPoints].forEach(pts => {
+    if (!pts) return;
     const idx = pts.userData.idx, arr = pts.geometry.attributes.position.array;
     idx.forEach((ni, k) => {
       arr[k*3] = drawPos[ni*3]; arr[k*3+1] = drawPos[ni*3+1]; arr[k*3+2] = drawPos[ni*3+2];

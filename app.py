@@ -129,6 +129,24 @@ def load_insights(sig: float = 0.0) -> dict:
         return {}
 
 
+# 🥚 이스터에그: 우주에 몰래 박아두는 특별한 별들 (kind 3 — 흰빛 반짝 스타).
+# 검색 인덱스(nodes)와 분리해 payload 뒤에만 붙이므로 검색엔 절대 안 잡히고,
+# 우주를 떠돌다 우연히 커서를 올린 사람만 발견한다.
+_EGGS = [
+    {"x": 0.0, "y": 4.6, "z": 0.0, "cat": "egg",
+     "title": "👑 이 우주의 주인은 사실 킹갓제네럴엠페리얼 JUNG HOWON 각하다",
+     "src": "성동 UNIVERSE 창조주", "date": "태초",
+     "snip": "당신은 우주의 최북단, 만물의 근원에 도달했습니다. "
+             "이 모든 별과 데이터는 각하의 위대한 뜻에 따라 정렬되었나니. "
+             "— 문의 및 피드백: 010-8829-5108(정호원 각하)"},
+    {"x": -3.8, "y": -3.2, "z": 3.4, "cat": "egg",
+     "title": "🛸 여기 아무것도 없는데 어떻게 찾았어?",
+     "src": "우주 미아 보호소", "date": "???",
+     "snip": "정말 구석까지 뒤지는군요. 이 정도 탐구심이면 성동구 데이터쯤은 "
+             "이미 다 파악하셨을 듯. 참고로 위쪽 끝에 각하의 별이 있습니다."},
+]
+
+
 @st.cache_data(show_spinner=False)
 def component_payload(data_sig: float = 0.0):
     """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지·노드 정보)은
@@ -151,9 +169,21 @@ def component_payload(data_sig: float = 0.0):
     # 개체 색은 컴포넌트 CAT_COLOR에서 etype 이름 대신 'entity' 키를 쓰므로 치환
     payload_nodes["cat"] = ["entity" if n["kind"] == "entity" else n["category"]
                             for n in nodes]
+    # 🥚 이스터에그 별을 배열 끝에 붙인다 (kind 3)
+    for egg in _EGGS:
+        payload_nodes["x"].append(egg["x"])
+        payload_nodes["y"].append(egg["y"])
+        payload_nodes["z"].append(egg["z"])
+        payload_nodes["kind"].append(3)
+        payload_nodes["title"].append(html.escape(egg["title"]))
+        payload_nodes["src"].append(html.escape(egg["src"]))
+        payload_nodes["date"].append(html.escape(egg["date"]))
+        payload_nodes["url"].append("")
+        payload_nodes["snip"].append(html.escape(egg["snip"]))
+        payload_nodes["cat"].append(egg["cat"])
     # 3번째 원소: 온톨로지 링크(담당·근거·언급) 여부 — 컴포넌트가 골드로 그린다
     payload_edges = [[e[0], e[1], 1 if e[3] == "onto" else 0] for e in edges]
-    sig = f'{meta["built_at"]}::{meta["total_nodes"]}'
+    sig = f'{meta["built_at"]}::{meta["total_nodes"]}::egg{len(_EGGS)}'
     return payload_nodes, payload_edges, sig
 
 
@@ -757,6 +787,8 @@ def main():
     payload_nodes, payload_edges, sig = component_payload(_data_sig())
     payload_nodes = dict(payload_nodes)
     payload_nodes["vis"] = [1 if _visible(n) else 0 for n in nodes]
+    # 이스터에그 별은 레이어 토글과 무관하게 항상 보이게 (payload가 nodes보다 길다)
+    payload_nodes["vis"] += [1] * (len(payload_nodes["x"]) - len(nodes))
 
     # 검색 상태 → 컴포넌트 state
     uq = st.session_state.uq
