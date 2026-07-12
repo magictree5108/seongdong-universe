@@ -100,12 +100,16 @@ def _data_sig() -> float:
         return 0.0
 
 
-@st.cache_data(show_spinner=False)
+# cache_resource: 읽기 전용 대용량 데이터를 세션 공유 싱글턴으로 캐시한다.
+# cache_data는 호출마다 반환값을 '복제'하므로(노드 ~98MB·임베딩 28MB가 rerun마다
+# 사본 생성 → OOM), 절대 변형하지 않는 이 데이터엔 cache_resource가 맞다.
+@st.cache_resource(show_spinner=False)
 def load_data(sig: float = 0.0):
     nodes = json.loads((DATA_DIR / "nodes.json").read_text(encoding="utf-8"))
     edges = json.loads((DATA_DIR / "edges.json").read_text(encoding="utf-8"))
     meta = json.loads((DATA_DIR / "meta.json").read_text(encoding="utf-8"))
-    vectors = np.load(DATA_DIR / "embeddings.npy")
+    # 임베딩은 메모리맵 — 검색 시 실제로 읽는 페이지만 상주(28MB 상시 적재 방지)
+    vectors = np.load(DATA_DIR / "embeddings.npy", mmap_mode="r")
     idf = np.load(DATA_DIR / "idf.npy")
     return nodes, edges, meta, vectors, idf
 
@@ -117,7 +121,7 @@ def _safe_url(url: str | None) -> str | None:
     return None
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_resource(show_spinner=False)
 def load_insights(sig: float = 0.0) -> dict:
     """인사이트 엔진 — 데이터 갱신(sig) 시에만 재계산한다."""
     try:
@@ -147,7 +151,7 @@ _EGGS = [
 ]
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_resource(show_spinner=False)
 def component_payload(data_sig: float = 0.0):
     """컴포넌트에 매 렌더마다 넘기는 무거운 배열(좌표·엣지·노드 정보)은
     한 번만 만든다. 텍스트는 컴포넌트가 innerHTML로 넣으므로 여기서
@@ -799,21 +803,23 @@ def main():
         # 질문형이면 GraphRAG를 워커 스레드에서 문서 검색과 동시에 돌린다.
         # 결과는 질의별로 session_state에 캐시 — rerun(레이어 토글 등)마다
         # 25초짜리 답변 생성을 반복하지 않기 위해.
-        ga_future = None
+        # ThreadPoolExecutor는 반드시 with로 닫는다 — 안 닫으면 질문마다 워커
+        # 스레드가 누적돼 메모리가 계속 증가한다(OOM 원인).
         ga_cache = st.session_state.setdefault("ga_cache", {})
-        if _QUESTION_RE.search(uq):
-            if uq in ga_cache:
-                ganswer = ga_cache[uq]
-            else:
-                from concurrent.futures import ThreadPoolExecutor
-                _pool = ThreadPoolExecutor(max_workers=1)
+        need_answer = bool(_QUESTION_RE.search(uq)) and uq not in ga_cache
+        if _QUESTION_RE.search(uq) and uq in ga_cache:
+            ganswer = ga_cache[uq]
+        if need_answer:
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=1) as _pool:
                 ga_future = _pool.submit(graph_answer, uq)
-        results, mode, expanded = run_search(uq, ai_model)
-        if ga_future is not None:
-            ganswer = ga_future.result()
+                results, mode, expanded = run_search(uq, ai_model)
+                ganswer = ga_future.result()
             if ganswer.get("answer"):   # 실패는 캐시하지 않는다 — 재시도 가능해야
                 ga_cache.clear()        # 직전 질의 것만 유지 (메모리 관리)
                 ga_cache[uq] = ganswer
+        else:
+            results, mode, expanded = run_search(uq, ai_model)
         if ganswer and ganswer.get("sources"):
             # 답변의 근거 객체를 우주에서 하이라이트 — 결과 최상단에 고정
             omap = _onto_node_map(nodes)
