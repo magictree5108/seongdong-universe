@@ -626,9 +626,6 @@ def main():
       .board-card a { color: #4fd8ff; font-size: 0.76rem; text-decoration: none; }
       .board-card a:hover { text-decoration: underline; }
       .stat-line { color: #b9c4e0; font-size: 0.82rem; margin: 2px 0; }
-      .site-footer { color: #7d8bb0; text-align: center; font-size: 0.8rem;
-        letter-spacing: 0.05em; border-top: 1px solid rgba(120,150,255,0.2);
-        margin-top: 28px; padding: 14px 0 6px; }
     </style>""", unsafe_allow_html=True)
 
     nodes, edges, meta, _vectors, _idf = load_data(_data_sig())
@@ -754,10 +751,6 @@ def main():
     if uq and results:
         _render_detail_board(nodes, results, laws, expanded, mode, uq,
                              with_anchor=ganswer is None)
-
-    st.markdown(
-        '<div class="site-footer">문의 및 피드백: 010-8829-5108(정호원)</div>',
-        unsafe_allow_html=True)
 
     # 컴포넌트 이벤트(검색·초기화) 처리 — nonce로 재전달 중복 제거
     if isinstance(event, dict) and event.get("nonce") \
