@@ -34,6 +34,46 @@ html, body { width: 100%; height: 100%; overflow: hidden;
   box-shadow: 0 0 16px rgba(110,231,168,0.15); }
 #resetBtn:hover { background: rgba(110,231,168,0.15); box-shadow: 0 0 22px rgba(110,231,168,0.4); }
 
+/* 도움말 버튼 — 초기화 왼쪽, 작은 원형 (?) */
+#helpBtn { position: absolute; top: 22px; right: 128px; z-index: 40;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(12,17,32,0.85); color: #8ea6ff;
+  border: 1px solid rgba(120,170,255,0.5); cursor: pointer;
+  font-family: inherit; font-size: 1.05rem; font-weight: 700;
+  box-shadow: 0 0 16px rgba(80,130,255,0.15); }
+#helpBtn:hover { background: rgba(120,170,255,0.15); box-shadow: 0 0 22px rgba(80,130,255,0.4); }
+
+/* 처음 안내 오버레이 — 부드러운 배경 흐림 위 반투명 카드 (미관 유지) */
+#guide { position: absolute; inset: 0; z-index: 60; display: none;
+  align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(5,7,15,0.55), rgba(5,7,15,0.82));
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+#guide.show { display: flex; animation: guideIn 0.4s ease; }
+@keyframes guideIn { from { opacity: 0; } to { opacity: 1; } }
+.guide-card { width: min(560px, 88%);
+  background: linear-gradient(180deg, rgba(16,21,38,0.94), rgba(10,13,26,0.96));
+  border: 1px solid rgba(120,170,255,0.4); border-radius: 12px;
+  padding: 28px 32px 24px; box-shadow: 0 0 50px rgba(60,90,200,0.3);
+  position: relative; }
+.guide-card h2 { color: #eaf1ff; font-size: 1.35rem; font-weight: 700;
+  letter-spacing: 0.04em; margin-bottom: 4px; }
+.guide-card .gsub { color: #8ea6ff; font-size: 0.82rem; margin-bottom: 20px; }
+.grow { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.grow .gnum { flex: 0 0 30px; height: 30px; border-radius: 50%;
+  background: rgba(120,170,255,0.16); border: 1px solid rgba(120,170,255,0.5);
+  color: #8ea6ff; font-weight: 700; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center; }
+.grow .gtxt { color: #c6d2ef; font-size: 0.92rem; line-height: 1.55; }
+.grow .gtxt b { color: #eaf1ff; }
+.grow .gtxt .em { color: #ffe28a; font-weight: 700; }
+.grow .gtxt .ec { color: #6ee7a8; }
+.guide-start { display: block; width: 100%; margin-top: 8px;
+  background: linear-gradient(90deg, #4fd8ff, #6ee7a8); color: #06121a;
+  border: none; border-radius: 7px; padding: 13px; cursor: pointer;
+  font-family: inherit; font-size: 0.98rem; font-weight: 700; letter-spacing: 0.06em;
+  box-shadow: 0 0 24px rgba(79,216,255,0.4); }
+.guide-start:hover { box-shadow: 0 0 34px rgba(79,216,255,0.7); }
+
 #searchWrap { position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%); z-index: 30; width: min(620px, 82%);
   transition: opacity 0.5s ease, visibility 0s linear 0.5s; text-align: center; }
@@ -165,7 +205,29 @@ html, body { width: 100%; height: 100%; overflow: hidden;
     <div class="sub" id="appSub"></div>
     <div class="contact">문의 및 피드백: 010-8829-5108(정호원)</div>
   </div>
+  <button id="helpBtn" title="사용법 안내 다시 보기">?</button>
   <button id="resetBtn" title="검색을 초기화하고 전체 우주로 돌아갑니다">⟲ 초기화</button>
+  <div id="guide">
+    <div class="guide-card">
+      <h2>성동 UNIVERSE 사용법</h2>
+      <div class="gsub">성동구 공공데이터를 3D 우주로 — 세 가지만 알면 됩니다.</div>
+      <div class="grow"><div class="gnum">1</div><div class="gtxt">
+        <b>찾기</b> — 가운데 칸에 낱말을 넣고 Enter. 관련 사업·문서가 우주에서
+        <span class="ec">빛나며</span> 아래에 목록으로 정리됩니다. <i>(예: 재개발, 마을버스)</i>
+      </div></div>
+      <div class="grow"><div class="gnum">2</div><div class="gtxt">
+        <b>물어보기</b> — 문장으로 물으면 AI가 예산·조례·부서를 엮어 근거와 함께
+        답합니다. 끝에 <span class="em">?</span>를 붙이면 확실히 질문으로 실행돼요.
+        <i>(예: 마을버스 예산 얼마야?)</i>
+      </div></div>
+      <div class="grow"><div class="gnum">3</div><div class="gtxt">
+        <b>먼저 짚어주는 것 보기</b> — 아래로 내리면 <span class="ec">시스템이 스스로 찾은</span>
+        점검거리(집행 부진·예산 급변 등)가 있습니다. 마우스로 <b>드래그하면 회전</b>,
+        <b>휠로 확대</b>됩니다.
+      </div></div>
+      <button class="guide-start">시작하기</button>
+    </div>
+  </div>
   <div id="searchWrap">
     <input id="q" placeholder="검색하거나 질문하세요 — 예: 재개발 · 마을버스 예산 얼마야?" autocomplete="off">
     <div id="modeHint">
@@ -244,7 +306,7 @@ function initScene() {
   resize();
 
   const st = document.getElementById("stage");
-  const UI_SEL = ".card,#searchWrap,#resetBtn,#detail,#tip,#meta,#legend,#scrollHint";
+  const UI_SEL = ".card,#searchWrap,#resetBtn,#helpBtn,#guide,#detail,#tip,#meta,#legend,#scrollHint";
   st.addEventListener("pointerdown", e => {
     if (e.target.closest(UI_SEL)) return;
     dragging = true; moved = false;
@@ -306,6 +368,21 @@ function initScene() {
     document.getElementById("q").value = "";
     stSetValue({ type: "reset", nonce: Date.now() });
   });
+
+  // 처음 안내 오버레이 — 첫 방문에만 자동으로 뜨고, 이후엔 ? 버튼으로 다시 본다.
+  const guide = document.getElementById("guide");
+  const showGuide = () => guide.classList.add("show");
+  const hideGuide = () => {
+    guide.classList.remove("show");
+    try { window.localStorage.setItem("sd_guide_seen", "1"); } catch (e) {}
+  };
+  document.getElementById("helpBtn").addEventListener("click", showGuide);
+  guide.querySelector(".guide-start").addEventListener("click", hideGuide);
+  guide.addEventListener("click", e => { if (e.target === guide) hideGuide(); });
+  let seen = false;
+  try { seen = window.localStorage.getItem("sd_guide_seen") === "1"; } catch (e) {}
+  if (!seen) showGuide();
+
   requestAnimationFrame(tick);
 }
 
